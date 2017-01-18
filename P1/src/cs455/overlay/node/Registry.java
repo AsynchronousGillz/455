@@ -8,6 +8,8 @@ package cs455.overlay.node;
 
 import java.io.IOException;
 
+import cs455.overlay.node.registry.*;
+
 public class Registry {
 
 	public static void main(String [] args) {

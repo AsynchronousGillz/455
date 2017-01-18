@@ -1,5 +1,5 @@
 // File name Message.java
-package cs455.overlay.messgae;
+package cs455.overlay.node.messgae;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

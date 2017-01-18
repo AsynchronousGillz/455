@@ -1,5 +1,5 @@
 // File Name RegistryServer.java
-package cs455.overlay.node;
+package cs455.overlay.node.registry;
 
 /**
  * 
