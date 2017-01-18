@@ -13,14 +13,14 @@ import cs455.overlay.node.registry.*;
 public class Registry {
 
 	public static void main(String [] args) {
-		int port;
+		int port = 0;
 		try {
-			port = Integer.parseInt(args[0]);
+			port = Integer.parseInt(args[1]);
 		} catch (ArrayIndexOutOfBoundsException ex) {
-			port = 5555;
+			port = 60100;
 		}
 		try {
-			Thread s = new RegistryServer(port);
+			Thread s = new RegistryInterface(port);
 			s.start();
 		}catch(IOException e){
 			e.printStackTrace();

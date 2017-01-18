@@ -11,6 +11,9 @@ package cs455.overlay.node.registry;
 
 import java.net.*;
 import java.util.*;
+
+import cs455.overlay.node.NodeAddress;
+
 import java.io.*;
 
 public class RegistryServer extends Thread {
@@ -60,6 +63,7 @@ public class RegistryServer extends Thread {
 		serverSocket = new ServerSocket(port);
 		serverSocket.setSoTimeout(timeout);
 		serverList = new RegistryList();
+		this.port = port;
 	}
 	
 	// INSTANCE METHODS *************************************************
@@ -182,7 +186,7 @@ public class RegistryServer extends Thread {
 					Socket nodeSocket = serverSocket.accept();
 
 					synchronized (this) {
-						nodeSocket.getInetAddress();
+						this.nodeConnected(nodeSocket);
 						// Add connection to
 					}
 				} catch (InterruptedIOException exception) {
@@ -203,6 +207,29 @@ public class RegistryServer extends Thread {
 			connectionListener = null;
 		}
 	}
+	
+	/**
+	 * Hook method called each time a new node connection is accepted. The
+	 * default implementation does nothing.
+	 * 
+	 * @param node
+	 *            the connection connected to the node.
+	 */
+	public void nodeConnected(Socket nodeSocket) {
+		NodeAddress node = new NodeAddress(nodeSocket.getInetAddress(), nodeSocket.getPort());
+		System.out.println(node);
+		serverList.addToList(node);
+	}
+
+	/**
+	 * Hook method called each time a node disconnects.
+	 *
+	 * @param node
+	 *            the connection with the node.
+	 */
+	synchronized public void nodeDisconnected(Socket nodeSocket) {
+		System.out.println("nodeDisconnected :: Not implemented.");
+	}
 
 	/**
 	 * Hook method called when the server stops accepting connections because an
@@ -219,7 +246,7 @@ public class RegistryServer extends Thread {
 	 * Hook method called when the server starts listening for connections.
 	 */
 	public void serverStarted() {
-		System.out.println("serverStarted :: Not implemented.");
+		System.out.println("serverStarted :: "+this.getPort());
 	}
 
 	/**
@@ -231,6 +258,10 @@ public class RegistryServer extends Thread {
 	
 	public ArrayList<String> getList() {
 		return serverList.getList();
+	}
+
+	public String getHost() {
+		return (serverSocket == null)?null:serverSocket.getInetAddress().getCanonicalHostName();
 	}
 
 }

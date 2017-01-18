@@ -266,9 +266,7 @@ public class NodeServer implements Runnable {
 	}
 
 	/**
-	 * Hook method called each time a node disconnects. The default
-	 * implementation does nothing. The method may be overridden by subclasses
-	 * but should remains synchronized.
+	 * Hook method called each time a node disconnects.
 	 *
 	 * @param node
 	 *            the connection with the node.

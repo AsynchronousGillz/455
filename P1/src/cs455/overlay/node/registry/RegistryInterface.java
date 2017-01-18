@@ -6,9 +6,10 @@ import java.io.*;
  * 
  * @author G van Andel
  *
+ * @see cs455.overlay.node.Registry;
  */
 
-public class RegistryInterface {
+public class RegistryInterface extends Thread {
 	// Class variables *************************************************
 
 	final public static boolean debug = false;
@@ -36,14 +37,14 @@ public class RegistryInterface {
 
 	// Instance methods ************************************************
 	
-	public void accept() {
+	public void run() {
+		this.display("Registry Server Console");
 		try {
-
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
 			while (true) {
 				message = fromConsole.readLine();
-				if (message.trim().equals(""))
+				if (message.equals(""))
 					continue;
 				
 				getAction(message);
@@ -67,8 +68,15 @@ public class RegistryInterface {
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
 			case "getPort":
-				if (tokens.length == 2) {
+				if (tokens.length == 1) {
 					display(server.getPort());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "getHost":
+				if (tokens.length == 1) {
+					display(server.getHost());
 				} else {
 					this.invalid(message);
 				}

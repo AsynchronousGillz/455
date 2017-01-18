@@ -171,8 +171,8 @@ public  class NodeClient implements Runnable {
 	 *            the port number.
 	 */
 	final public void setPort(int port) throws IllegalArgumentException {
-		if ((port < 0) || (port > 65000))
-			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65000.");
+		if ((port < 0) || (port > 65535))
+			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
 		this.port = port;
 	}
 
@@ -219,13 +219,7 @@ public  class NodeClient implements Runnable {
 
 		try {
 			while (stopping == false) {
-				// Get data from Server and send it to the handler
-				// The thread waits indefinitely at the following
-				// statement until something is received from the server
 				msg = input.readObject();
-
-				// Concrete subclasses do what they want with the
-				// msg by implementing the following method
 				messageFromServer(msg);
 			}
 		} catch (Exception exception) {
