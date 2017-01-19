@@ -5,8 +5,7 @@ package cs455.overlay.node;
  * 
  * @author G van Andel
  *
- * @see RegistryInterface
- * @see Server
+ * @see AbstractServer
  * 
  */
 

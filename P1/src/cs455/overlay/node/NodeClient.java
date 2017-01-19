@@ -201,7 +201,7 @@ public class NodeClient implements Runnable {
 	 * only takes effect at the time of the next call to openConnection().
 	 * 
 	 * @param port
-	 *            the port number.
+	 *            the port number of the node server port.
 	 */
 	final public void setNodePort(int port) throws IllegalArgumentException {
 		if ((port < 0) || (port > 65535))
