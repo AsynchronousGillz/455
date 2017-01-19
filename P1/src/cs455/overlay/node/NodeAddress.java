@@ -27,18 +27,27 @@ public class NodeAddress {
 	private InetAddress inetAddress;
 	
 	/**
+	 * This class represents an Internet Protocol (IP) address.
+	 * 
+	 * @see java.net.InetAddress
+	 */
+	private String nodeAddress;
+
+	/**
 	 * This is to make nodes port information accessible.
 	 */
 	private int port;
 
 	public NodeAddress(InetAddress inetAddress, int port) {
-		this.nodeName = null;
 		this.inetAddress = inetAddress;
 		this.port = port;
+		setNodeAddress();
+		setNodeName();
 	}
 	
-	public void setNodeName(String nodeName) {
-		this.nodeName = nodeName;
+	public void setNodeName() {
+		String[] oc = this.nodeAddress.split("\\.");
+		this.nodeName = oc[2]+"."+oc[3]+":"+this.port;
 	}
 
 	public void setInetAddress(InetAddress inetAddress) {
@@ -56,6 +65,18 @@ public class NodeAddress {
 	public String getNodeName() {
 		return nodeName;
 	}
+	
+	public String getNodeAddress() {
+		return nodeAddress;
+	}
+
+	public void setNodeAddress() {
+		try {
+			this.nodeAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {}
+		
+	}
+
 
 	public boolean equals(Object o) {
 		if (o instanceof NodeAddress == false) {
@@ -76,7 +97,7 @@ public class NodeAddress {
 	}
 
 	public String toString() {
-		return nodeName;
+		return this.nodeName;
 	}
 
 	public void clone(NodeAddress node) {

@@ -57,16 +57,12 @@ public class NodeServer implements Runnable {
 	private boolean stopping = false;
 
 	// CONSTRUCTOR ******************************************************
-
+	
 	/**
 	 * Constructs a new server.
 	 *
-	 * @param port
-	 *            the port number on which to listen.
 	 */
-	public NodeServer(int port) {
-		this.port = port;
-
+	public NodeServer() {
 		this.nodeThreadGroup = new ThreadGroup("ConnectionTonode threads") {
 			// All uncaught exceptions in connection threads will
 			// be sent to the nodeException callback method.
@@ -88,13 +84,14 @@ public class NodeServer implements Runnable {
 	final public void listen() throws IOException {
 		if (isListening() == false) {
 			if (serverSocket == null) {
-				serverSocket = new ServerSocket(getPort(), backlog);
+				serverSocket = new ServerSocket(0, backlog);
 			}
 
 			serverSocket.setSoTimeout(timeout);
 			stopping = false;
 			connectionListener = new Thread(this);
 			connectionListener.start();
+			this.setPort(serverSocket.getLocalPort());
 		}
 	}
 
@@ -112,7 +109,7 @@ public class NodeServer implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs while closing the server socket.
 	 */
-	final synchronized public void close() throws IOException {
+	final synchronized public void stop() throws IOException {
 		if (serverSocket == null)
 			return;
 		stopListening();
@@ -130,7 +127,7 @@ public class NodeServer implements Runnable {
 				}
 			}
 			serverSocket = null;
-			serverClosed();
+			serverStopped();
 		}
 	}
 
@@ -172,6 +169,19 @@ public class NodeServer implements Runnable {
 		return nodeThreadGroup.activeCount();
 	}
 
+	/**
+	 * Returns the current ip.
+	 *
+	 * @return the current ip.
+	 */
+	final public String getHost() {
+		String serverAddress = null;
+		try {
+			serverAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {}
+		return serverAddress;
+	}
+	
 	/**
 	 * Returns the port number.
 	 *
@@ -254,6 +264,22 @@ public class NodeServer implements Runnable {
 		}
 	}
 
+
+	/**
+	 * Hook method called when the server starts listening for connections.
+	 */
+	public void serverStarted() {
+		System.out.println("serverStarted :: "+this.getHost()+":"+this.getPort());
+	}
+
+	/**
+	 * When the server is closed while still listening, serverStopped() 
+	 * will also be called.
+	 */
+	public void serverStopped() {
+		System.out.println("serverClosed :: Not implemented.");
+	}
+	
 	/**
 	 * Hook method called each time a new node connection is accepted. The
 	 * default implementation does nothing.
@@ -296,28 +322,6 @@ public class NodeServer implements Runnable {
 	 */
 	public void listeningException(Throwable exception) {
 		System.out.println("listeningException :: Not implemented.");
-	}
-
-	/**
-	 * Hook method called when the server starts listening for connections.
-	 */
-	public void serverStarted() {
-		System.out.println("serverStarted :: Not implemented.");
-	}
-
-	/**
-	 * Hook method called when the server stops accepting connections. 
-	 */
-	public void serverStopped() {
-		System.out.println("serverStopped :: Not implemented.");
-	}
-
-	/**
-	 * When the server is closed while still listening, serverStopped() 
-	 * will also be called.
-	 */
-	public void serverClosed() {
-		System.out.println("serverClosed :: Not implemented.");
 	}
 
 	/**

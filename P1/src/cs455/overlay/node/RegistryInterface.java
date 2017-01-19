@@ -1,4 +1,5 @@
-package cs455.overlay.node.registry;
+package cs455.overlay.node;
+
 
 import java.io.*;
 
@@ -31,14 +32,13 @@ public class RegistryInterface extends Thread {
 	 * 		The interface type variable.
 	 */
 
-	public RegistryInterface(int port) throws IOException {
-		server = new RegistryServer(port);
+	public RegistryInterface(RegistryServer server) throws IOException {
+		this.server = server;
 	}
 
 	// Instance methods ************************************************
 	
 	public void run() {
-		this.display("Registry Server Console");
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
@@ -67,6 +67,13 @@ public class RegistryInterface extends Thread {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
+			case "listNodes":
+				if (tokens.length == 1) {
+					System.out.println(server.getList());
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "getPort":
 				if (tokens.length == 1) {
 					display(server.getPort());
@@ -104,33 +111,14 @@ public class RegistryInterface extends Thread {
 	}
 	
 	/**
-	 * It displays an error onto the screen.
-	 *
-	 * @param message
-	 *            The string to be displayed with error format.
-	 */
-	public void error(String message) {
-		System.err.println(message);
-	}
-	
-	/**
 	 * It displays small help onto the screen.
 	 *
 	 * @param message
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: [ #quit | #stop | #close | #help ]";
+		String info = "invalid command \"" + message + "\" try: [ listNodes | getPort | getHost ]";
 		System.err.println(info);
-	}
-	
-	/**
-	 * It displays an error onto the screen.
-	 *
-	 */
-	public void help() {
-		// TODO Read usage file
-		System.err.println("");
 	}
 
 }

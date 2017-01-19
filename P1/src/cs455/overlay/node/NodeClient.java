@@ -70,17 +70,14 @@ public  class NodeClient implements Runnable {
 		this.host = host;
 		this.port = port;
 	}
-
+     
 	// INSTANCE METHODS *************************************************
 
 	/**
 	 * Opens the connection with the server. If the connection is already
 	 * opened, this call has no effect.
-	 * 
-	 * @exception IOException
-	 *                if an I/O error occurs when opening.
 	 */
-	final public void openConnection() throws IOException {
+	final public void openConnection() {
 		// Do not do anything if the connection is already open
 		if (isConnected() == true)
 			return;
@@ -94,9 +91,8 @@ public  class NodeClient implements Runnable {
 			try {
 				closeAll();
 			} catch (Exception exc) {
+				System.err.println(exc.toString());
 			}
-
-			throw ex; // Rethrow the exception.
 		}
 
 		nodeReader = new Thread(this); // Create the data reader thread
@@ -210,6 +206,10 @@ public  class NodeClient implements Runnable {
 	 * <code>messageFromServer()</code>. Not to be explicitly called.
 	 */
 	final public void run() {
+		// Open the connection
+		openConnection();
+		
+		// Additional setting up
 		connectionEstablished();
 
 		// The message from the server
@@ -252,7 +252,7 @@ public  class NodeClient implements Runnable {
 	 *            the exception raised.
 	 */
 	protected void connectionException(Exception exception) {
-		System.out.println("connectionException :: Not implemented.");
+		System.out.println("connectionException :: " + exception.getLocalizedMessage());
 	}
 
 	/**

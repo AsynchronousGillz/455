@@ -1,5 +1,5 @@
 // File Name RegistryServer.java
-package cs455.overlay.node.registry;
+package cs455.overlay.node;
 
 /**
  * 
@@ -11,9 +11,6 @@ package cs455.overlay.node.registry;
 
 import java.net.*;
 import java.util.*;
-
-import cs455.overlay.node.NodeAddress;
-
 import java.io.*;
 
 public class RegistryServer extends Thread {
@@ -217,7 +214,7 @@ public class RegistryServer extends Thread {
 	 */
 	public void nodeConnected(Socket nodeSocket) {
 		NodeAddress node = new NodeAddress(nodeSocket.getInetAddress(), nodeSocket.getPort());
-		System.out.println(node);
+		System.out.println("Node connected from: "+node);
 		serverList.addToList(node);
 	}
 
@@ -228,7 +225,11 @@ public class RegistryServer extends Thread {
 	 *            the connection with the node.
 	 */
 	synchronized public void nodeDisconnected(Socket nodeSocket) {
-		System.out.println("nodeDisconnected :: Not implemented.");
+		NodeAddress node = serverList.getNode(nodeSocket.getInetAddress(), nodeSocket.getPort());
+		System.out.println("Node connected from: "+node);
+		try {
+			serverList.removeFromList(node);
+		} catch (Exception e) {}
 	}
 
 	/**
@@ -239,7 +240,8 @@ public class RegistryServer extends Thread {
 	 *            the exception raised.
 	 */
 	public void listeningException(Throwable exception) {
-		System.out.println("listeningException :: Not implemented.");
+		System.out.println("listeningException :: "+exception.toString());
+		System.exit(1);
 	}
 
 	/**
@@ -253,7 +255,7 @@ public class RegistryServer extends Thread {
 	 * Hook method called when the server stops accepting connections. 
 	 */
 	public void serverStopped() {
-		System.out.println("serverStopped :: Not implemented.");
+		System.out.println("serverStopped :: Exitting.");
 	}
 	
 	public ArrayList<String> getList() {
@@ -261,7 +263,11 @@ public class RegistryServer extends Thread {
 	}
 
 	public String getHost() {
-		return (serverSocket == null)?null:serverSocket.getInetAddress().getCanonicalHostName();
+		String serverAddress = null;
+		try {
+			InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {}
+		return serverAddress;
 	}
 
 }

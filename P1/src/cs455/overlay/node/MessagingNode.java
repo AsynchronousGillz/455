@@ -1,14 +1,14 @@
 package cs455.overlay.node;
 
+import java.io.IOException;
+
 /**
  * 
  * @author G van Andel
  *
- * @see cs455.overlay.registry.RegistryInterface
+ * @see cs455.overlay.node
  * 
  */
-
-import java.io.*;
 
 public class MessagingNode {
 
@@ -20,28 +20,30 @@ public class MessagingNode {
 		String registryIP = null;
 		
 		try {
-			registryIP = args[1];
+			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
 			registryIP = "127.0.0.1";
 		}
 		
 		try {
-			registryPort = Integer.parseInt(args[2]);
+			registryPort = Integer.parseInt(args[1]);
 		} catch (IndexOutOfBoundsException ex) {
 			registryPort = 60100;
+		}
+		
+		NodeServer ns = new NodeServer();
+
+		try {
+			ns.listen();
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
 		}
 		
 		NodeClient nc = new NodeClient(registryIP, registryPort);
 		nc.run();
 		
-		
-		int serverPort = 60101;	
-		NodeServer ns = new NodeServer(serverPort);
-		try {
-			ns.listen();
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+		NodeInterface ni = new NodeInterface(nc, ns);
+		ni.run();
 		
 	}
 	
