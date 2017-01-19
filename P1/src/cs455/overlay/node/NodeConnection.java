@@ -30,16 +30,16 @@ public class NodeConnection extends Thread {
 	/**
 	 * Stream used to read from the node.
 	 * 
-	 * @see java.io.ObjectInputStream
+	 * @see java.io.DataOutputStream
 	 */
-	private ObjectInputStream input;
+	private DataInputStream input;
 
 	/**
 	 * Stream used to write to the node.
 	 * 
-	 * @see java.io.ObjectOutputStream
+	 * @see java.io.DataOutputStream
 	 */
-	private ObjectOutputStream output;
+	private DataOutputStream output;
 
 	/**
 	 * Indicates if the thread is ready to stop. Set to true when closing of the
@@ -79,8 +79,8 @@ public class NodeConnection extends Thread {
 
 		// Initialize the objects streams
 		try {
-			input = new ObjectInputStream(nodeSocket.getInputStream());
-			output = new ObjectOutputStream(nodeSocket.getOutputStream());
+			input = new DataInputStream(nodeSocket.getInputStream());
+			output = new DataOutputStream(nodeSocket.getOutputStream());
 		} catch (IOException ex) {
 			try {
 				closeAll();
@@ -107,8 +107,8 @@ public class NodeConnection extends Thread {
 	final public void sendToNode(Object msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
-
-		output.writeObject(msg);
+		byte[] bytes = convertToBytes(msg);
+		output.write(bytes);
 	}
 
 	/**
@@ -162,12 +162,14 @@ public class NodeConnection extends Thread {
 		server.nodeConnected(this);
 
 		try {
-			Object msg;
+			byte[] bytes = null;
+			Object msg = null;
 
 			while (stopping == false) {
 				// This block waits until it reads a message from the node
 				// and then sends it for handling by the server
-				msg = input.readObject();
+				input.read(bytes);
+				msg = convertBytes(bytes);
 				server.receiveMessageFromNode(msg, this);
 			}
 		} catch (Exception exception) {
@@ -221,6 +223,48 @@ public class NodeConnection extends Thread {
 
 	public NodeAddress getAddress() {
 		return nodeAddress;
+	}
+	
+	public byte[] convertToBytes(Object o) throws IOException {
+		byte[] bytes = null;
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(o);
+            oos.flush();
+            bytes = bos.toByteArray();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+            if (bos != null) {
+                bos.close();
+            }
+        }
+        return bytes;
+	}
+	
+	public Object convertBytes(byte[] bytes) throws IOException {
+		Object obj = null;
+        ByteArrayInputStream bais = null;
+        ObjectInputStream ois = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            ois = new ObjectInputStream(bais);
+            obj = ois.readObject();
+        } catch (ClassNotFoundException e) {
+        	System.err.println("Error: Class not found");
+        }finally {
+            if (bais != null) {
+                bais.close();
+            }
+            if (ois != null) {
+                ois.close();
+            }
+        } 
+        return obj;
 	}
 }
 // EOF

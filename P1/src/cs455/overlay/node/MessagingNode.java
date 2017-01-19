@@ -40,7 +40,7 @@ public class MessagingNode {
 			System.out.println(ex.toString());
 		}
 		
-		NodeClient nc = new NodeClient(registryIP, registryPort);
+		NodeClient nc = new NodeClient(registryIP, registryPort, ns.getPort());
 		nc.run();
 		
 		NodeInterface ni = new NodeInterface(nc, ns);

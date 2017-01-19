@@ -12,7 +12,7 @@ import java.net.*;
  * @see MessagingNode.NodeMain
  */
 
-public  class NodeClient implements Runnable {
+public class NodeClient implements Runnable {
 
 	// INSTANCE VARIABLES ***********************************************
 
@@ -27,12 +27,12 @@ public  class NodeClient implements Runnable {
 	/**
 	 * The stream to handle data going to the server.
 	 */
-	private ObjectOutputStream output;
+	private DataOutputStream output;
 
 	/**
 	 * The stream to handle data from the server.
 	 */
-	private ObjectInputStream input;
+	private DataInputStream input;
 
 	/**
 	 * The thread created to read data from the server.
@@ -43,34 +43,41 @@ public  class NodeClient implements Runnable {
 	 * Indicates if the thread is ready to stop. Needed so that the loop in the
 	 * run method knows when to stop waiting for incoming messages.
 	 */
-	private boolean stopping	= false;
+	private boolean stopping = false;
 
 	/**
 	 * The server's host name.
 	 */
-	private String host;
+	private String registryIP;
 
 	/**
 	 * The port number.
 	 */
-	private int	port;
+	private int registryPort;
+
+	/**
+	 * The node server port number.
+	 */
+	private int nodePort;
 
 	// CONSTRUCTORS *****************************************************
 
 	/**
 	 * Constructs the node.
 	 * 
-	 * @param host
+	 * @param registryIP
 	 *            the server's host name.
-	 * @param port
+	 * @param registryPort
 	 *            the port number.
 	 */
-	public NodeClient(String host, int port) {
+	public NodeClient(String registryIP, int registryPort, int nodePort) {
 		// Initialize variables
-		this.host = host;
-		this.port = port;
+		this.registryIP = registryIP;
+		this.registryPort = registryPort;
+		this.nodePort = nodePort;
+		openConnection();
 	}
-     
+
 	// INSTANCE METHODS *************************************************
 
 	/**
@@ -84,15 +91,11 @@ public  class NodeClient implements Runnable {
 
 		// Create the sockets and the data streams
 		try {
-			nodeSocket = new Socket(host, port);
-			output = new ObjectOutputStream(nodeSocket.getOutputStream());
-			input = new ObjectInputStream(nodeSocket.getInputStream());
+			nodeSocket = new Socket(registryIP, registryPort);
+			output = new DataOutputStream(nodeSocket.getOutputStream());
+			input = new DataInputStream(nodeSocket.getInputStream());
 		} catch (IOException ex) {
-			try {
-				closeAll();
-			} catch (Exception exc) {
-				System.err.println(exc.toString());
-			}
+			closeConnection();
 		}
 
 		nodeReader = new Thread(this); // Create the data reader thread
@@ -112,17 +115,8 @@ public  class NodeClient implements Runnable {
 	final public void sendToServer(Object msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
-
-		output.writeObject(msg);
-	}
-
-	/**
-	 * Reset the object output stream so we can use the same
-	 * buffer repeatedly. This would not normally be used, but is necessary
-    * in some circumstances when Java refuses to send data that it thinks has been sent.
-	 */
-	final public void forceResetAfterSend() throws IOException {
-      output.reset();
+		byte[] bytes = convertToBytes(msg);
+		output.write(bytes);
 	}
 
 	/**
@@ -131,16 +125,59 @@ public  class NodeClient implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs when closing.
 	 */
-	final public void closeConnection() throws IOException {
+	final public void closeConnection() {
 		// Prevent the thread from looping any more
 		stopping = true;
 
 		try {
 			closeAll();
+		} catch (Exception exc) {
+			System.err.println(exc.toString());
 		} finally {
-			// Call the hook method
 			connectionClosed();
 		}
+	}
+	
+	final public byte[] convertToBytes(Object o) throws IOException {
+		byte[] bytes = null;
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(o);
+            oos.flush();
+            bytes = bos.toByteArray();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+            if (bos != null) {
+                bos.close();
+            }
+        }
+        return bytes;
+	}
+	
+	final public Object convertBytes(byte[] bytes) throws IOException {
+		Object obj = null;
+        ByteArrayInputStream bais = null;
+        ObjectInputStream ois = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            ois = new ObjectInputStream(bais);
+            obj = ois.readObject();
+        } catch (ClassNotFoundException e) {
+        	System.err.println("Error: Class not found");
+        }finally {
+            if (bais != null) {
+                bais.close();
+            }
+            if (ois != null) {
+                ois.close();
+            }
+        } 
+        return obj;
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -155,8 +192,28 @@ public  class NodeClient implements Runnable {
 	/**
 	 * @return the port number.
 	 */
+	final public int getNodePort() {
+		return nodePort;
+	}
+
+	/**
+	 * Sets the server port number for the next connection. The change in port
+	 * only takes effect at the time of the next call to openConnection().
+	 * 
+	 * @param port
+	 *            the port number.
+	 */
+	final public void setNodePort(int port) throws IllegalArgumentException {
+		if ((port < 0) || (port > 65535))
+			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
+		this.nodePort = port;
+	}
+
+	/**
+	 * @return the port number.
+	 */
 	final public int getPort() {
-		return port;
+		return registryPort;
 	}
 
 	/**
@@ -169,14 +226,14 @@ public  class NodeClient implements Runnable {
 	final public void setPort(int port) throws IllegalArgumentException {
 		if ((port < 0) || (port > 65535))
 			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
-		this.port = port;
+		this.registryPort = port;
 	}
 
 	/**
 	 * @return the host name.
 	 */
 	final public String getHost() {
-		return host;
+		return registryIP;
 	}
 
 	/**
@@ -187,7 +244,7 @@ public  class NodeClient implements Runnable {
 	 *            the host name.
 	 */
 	final public void setHost(String host) {
-		this.host = host;
+		this.registryIP = host;
 	}
 
 	/**
@@ -206,27 +263,26 @@ public  class NodeClient implements Runnable {
 	 * <code>messageFromServer()</code>. Not to be explicitly called.
 	 */
 	final public void run() {
-		// Open the connection
-		openConnection();
-		
 		// Additional setting up
 		connectionEstablished();
 
 		// The message from the server
-		Object msg;
+		byte[] bytes = null;
+		Object msg = null;
 
 		// Loop waiting for data
-
 		try {
 			while (stopping == false) {
-				msg = input.readObject();
+				input.read(bytes);
+				msg = convertBytes(bytes);
 				messageFromServer(msg);
 			}
 		} catch (Exception exception) {
 			if (stopping == false) {
 				try {
 					closeAll();
-				} catch (Exception ex) {}
+				} catch (Exception ex) {
+				}
 
 				connectionException(exception);
 			}
@@ -238,15 +294,8 @@ public  class NodeClient implements Runnable {
 	// METHODS DESIGNED TO BE OVERRIDDEN BY CONCRETE SUBCLASSES ---------
 
 	/**
-	 * Hook method called after the connection has been closed.
-	 */
-	protected void connectionClosed() {
-		System.out.println("connectionClosed :: Not implemented.");
-	}
-
-	/**
-	 * Hook method called each time an exception is thrown by the node's
-	 * thread that is waiting for messages from the server.
+	 * Hook method called each time an exception is thrown by the node's thread
+	 * that is waiting for messages from the server.
 	 * 
 	 * @param exception
 	 *            the exception raised.
@@ -259,7 +308,28 @@ public  class NodeClient implements Runnable {
 	 * Hook method called after a connection has been established.
 	 */
 	protected void connectionEstablished() {
-		System.out.println("connectionEstablished :: Not implemented.");
+		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
+		Message m = new Message(node);
+		m.setType("REGISTER_REQUEST");
+		try {
+			sendToServer(m);
+		} catch (IOException e) {
+			System.err.println("Could not send Registration.");
+		}
+	}
+
+	/**
+	 * Hook method called after the connection has been closed.
+	 */
+	protected void connectionClosed() {
+		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
+		Message m = new Message(node);
+		m.setType("DEREGISTER_REQUEST");
+		try {
+			sendToServer(m);
+		} catch (IOException e) {
+			System.err.println("Could not send Deregistration.");
+		}
 	}
 
 	/**
@@ -268,8 +338,11 @@ public  class NodeClient implements Runnable {
 	 * @param msg
 	 *            the message sent.
 	 */
-	protected void messageFromServer(Object msg){
-		System.out.println("messageFromServer :: Not implemented.");
+	protected void messageFromServer(Object o) {
+		if (o instanceof Message == false)
+			return;
+		Message m = (Message) o;
+		System.out.println(m);
 	}
 
 	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------

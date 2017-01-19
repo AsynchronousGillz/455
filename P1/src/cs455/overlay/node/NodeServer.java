@@ -28,8 +28,8 @@ public class NodeServer extends AbstractServer {
 		super(0);
 	}
 
-	public void nodeConnected(Socket nodeSocket) {
-		NodeAddress node = new NodeAddress(nodeSocket.getInetAddress(), nodeSocket.getPort());
+	public void nodeConnected(NodeConnection nodeConnection) {
+		NodeAddress node = nodeConnection.getAddress();
 		System.out.println("Node connected from: "+node);
 	}
 
@@ -54,8 +54,10 @@ public class NodeServer extends AbstractServer {
 
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
-		// TODO Auto-generated method stub
-		
+		if (msg instanceof Message == false)
+			return;
+		Message m = (Message) msg;
+		System.out.println(m);		
 	}
 
 }

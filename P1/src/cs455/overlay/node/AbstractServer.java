@@ -42,13 +42,13 @@ public abstract class AbstractServer implements Runnable {
 	 * The thread group associated with client threads. Each member of the
 	 * thread group is a <code> ConnectionToClient </code>.
 	 */
-	private ThreadGroup clientThreadGroup;
+	private ThreadGroup nodeThreadGroup;
 
 	/**
 	 * Indicates if the listening thread is ready to stop. Set to false by
 	 * default.
 	 */
-	private boolean readyToStop = false;
+	private boolean stop = false;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -59,7 +59,7 @@ public abstract class AbstractServer implements Runnable {
 	 *            the port number on which to listen.
 	 */
 	public AbstractServer(int port) {
-		this.clientThreadGroup = new ThreadGroup("NodeConnection threads") {
+		this.nodeThreadGroup = new ThreadGroup("NodeConnection threads") {
 			// All uncaught exceptions in connection threads will
 			// be sent to the clientException callback method.
 			public void uncaughtException(Thread thread, Throwable exception) {
@@ -87,7 +87,7 @@ public abstract class AbstractServer implements Runnable {
 			}
 
 			serverSocket.setSoTimeout(timeout);
-			readyToStop = false;
+			stop = false;
 			connectionListener = new Thread(this);
 			connectionListener.start();
 		}
@@ -97,7 +97,7 @@ public abstract class AbstractServer implements Runnable {
 	 * Causes the server to stop accepting new connections.
 	 */
 	final public void stopListening() {
-		readyToStop = true;
+		stop = true;
 	}
 
 	/**
@@ -169,9 +169,9 @@ public abstract class AbstractServer implements Runnable {
 	 *         <code>ConnectionToClient</code> instances.
 	 */
 	synchronized final public Thread[] getClientConnections() {
-		Thread[] clientThreadList = new Thread[clientThreadGroup.activeCount()];
+		Thread[] clientThreadList = new Thread[nodeThreadGroup.activeCount()];
 
-		clientThreadGroup.enumerate(clientThreadList);
+		nodeThreadGroup.enumerate(clientThreadList);
 
 		return clientThreadList;
 	}
@@ -182,7 +182,7 @@ public abstract class AbstractServer implements Runnable {
 	 * @return the number of clients currently connected.
 	 */
 	final public int getNumberOfClients() {
-		return clientThreadGroup.activeCount();
+		return nodeThreadGroup.activeCount();
 	}
 	
 	/**
@@ -256,7 +256,7 @@ public abstract class AbstractServer implements Runnable {
 		try {
 			// Repeatedly waits for a new client connection, accepts it, and
 			// starts a new thread to handle data exchange.
-			while (!readyToStop) {
+			while (stop == false) {
 				try {
 					// Wait here for new connection attempts, or a timeout
 					Socket clientSocket = serverSocket.accept();
@@ -265,7 +265,7 @@ public abstract class AbstractServer implements Runnable {
 					// the data exchange, then add it to thread group
 
 					synchronized (this) {
-						new NodeConnection(this.clientThreadGroup, clientSocket, this);
+						new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 					}
 				} catch (InterruptedIOException exception) {
 					// This will be thrown when a timeout occurs.
@@ -276,14 +276,14 @@ public abstract class AbstractServer implements Runnable {
 			// call the hook method to notify that the server has stopped
 			serverClosed();
 		} catch (IOException exception) {
-			if (!readyToStop) {
+			if (stop == false) {
 				// Closing the socket must have thrown a SocketException
 				listeningException(exception);
 			} else {
 				serverClosed();
 			}
 		} finally {
-			readyToStop = true;
+			stop = true;
 			connectionListener = null;
 		}
 	}
@@ -297,8 +297,7 @@ public abstract class AbstractServer implements Runnable {
 	 * @param client
 	 *            the connection connected to the client.
 	 */
-	protected void nodeConnected(NodeConnection client) {
-	}
+	protected abstract void nodeConnected(NodeConnection client);
 
 	/**
 	 * Hook method called each time a client disconnects. The default
@@ -381,5 +380,6 @@ public abstract class AbstractServer implements Runnable {
 	final synchronized void receiveMessageFromNode(Object msg, NodeConnection client) {
 		this.MessageFromNode(msg, client);
 	}
+
 }
 // End of AbstractServer Class
