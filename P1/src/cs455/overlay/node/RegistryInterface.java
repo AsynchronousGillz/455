@@ -76,14 +76,14 @@ public class RegistryInterface extends Thread {
 				break;
 			case "getPort":
 				if (tokens.length == 1) {
-					display(server.getPort());
+					System.out.println(server.getPort());
 				} else {
 					this.invalid(message);
 				}
 				break;
 			case "getHost":
 				if (tokens.length == 1) {
-					display(server.getHost());
+					System.out.println(server.getHost());
 				} else {
 					this.invalid(message);
 				}
@@ -98,16 +98,6 @@ public class RegistryInterface extends Thread {
 	 */
 	public void shutdown() throws IOException {
 		server.stopListening();
-	}
-	
-	/**
-	 * It displays a message onto the screen.
-	 *
-	 * @param message
-	 *            The string to be displayed.
-	 */
-	public void display(String message) {
-		System.out.println(message);
 	}
 	
 	/**

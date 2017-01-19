@@ -31,9 +31,10 @@ public class MessagingNode {
 			registryPort = 60100;
 		}
 		
-		NodeServer ns = new NodeServer();
+		NodeServer ns = null;
 
 		try {
+			ns = new NodeServer();
 			ns.listen();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());

@@ -17,7 +17,7 @@ public class NodeConnection extends Thread {
 	/**
 	 * A reference to the Server that created this instance.
 	 */
-	private NodeServer server;
+	private AbstractServer server;
 
 	/**
 	 * Sockets are used in the operating system as channels of communication
@@ -69,7 +69,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error oclcur when creating the connection.
 	 */
-	NodeConnection(ThreadGroup group, Socket nodeSocket, NodeServer server) throws IOException {
+	NodeConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
 		super(group, (Runnable) null);
 		// Initialize variables
 		this.nodeSocket = nodeSocket;
@@ -104,7 +104,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occur when sending the message.
 	 */
-	final public void sendTonode(Object msg) throws IOException {
+	final public void sendToNode(Object msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 
@@ -217,6 +217,10 @@ public class NodeConnection extends Thread {
 			closeAll();
 		} catch (IOException e) {
 		}
+	}
+
+	public NodeAddress getAddress() {
+		return nodeAddress;
 	}
 }
 // EOF
