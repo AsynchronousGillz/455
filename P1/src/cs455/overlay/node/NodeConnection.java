@@ -166,9 +166,7 @@ public class NodeConnection extends Thread {
 			Object msg = null;
 
 			while (stopping == false) {
-				// This block waits until it reads a message from the node
-				// and then sends it for handling by the server
-				input.read(bytes);
+				input.read(bytes); /// DEBUG error
 				msg = convertBytes(bytes);
 				server.receiveMessageFromNode(msg, this);
 			}

@@ -41,10 +41,9 @@ public class MessagingNode {
 		}
 		
 		NodeClient nc = new NodeClient(registryIP, registryPort, ns.getPort());
-		nc.run();
 		
 		NodeInterface ni = new NodeInterface(nc, ns);
-		ni.run();
+		ni.start();
 		
 	}
 	

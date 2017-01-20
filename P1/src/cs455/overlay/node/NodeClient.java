@@ -301,7 +301,7 @@ public class NodeClient implements Runnable {
 	 *            the exception raised.
 	 */
 	protected void connectionException(Exception exception) {
-		System.out.println("connectionException :: " + exception.getLocalizedMessage());
+		System.out.println("connectionException :: " + exception.toString());
 	}
 
 	/**

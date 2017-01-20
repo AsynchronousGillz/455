@@ -1,9 +1,8 @@
 package cs455.overlay.node;
 
 import java.net.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.*;
+import java.util.*;
 import java.io.*;
 
 public abstract class AbstractServer implements Runnable {
@@ -263,10 +262,10 @@ public abstract class AbstractServer implements Runnable {
 
 					// When a client is accepted, create a thread to handle
 					// the data exchange, then add it to thread group
-
 					synchronized (this) {
 						new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 					}
+
 				} catch (InterruptedIOException exception) {
 					// This will be thrown when a timeout occurs.
 					// The server will continue to listen if not ready to stop.
@@ -324,7 +323,8 @@ public abstract class AbstractServer implements Runnable {
 	 *            the exception thrown.
 	 */
 	synchronized protected void nodeException(NodeConnection client, Throwable exception) {
-		System.err.println(client + " has thorwn Exception: " + exception.toString());
+		System.err.println(client + " has thrown Exception: " + exception.toString());
+		exception.printStackTrace();
 	}
 
 	/**
@@ -370,7 +370,7 @@ public abstract class AbstractServer implements Runnable {
 	 * messages coming from the server. This method is synchronized to ensure
 	 * that whatever effects it has do not conflict with work being done by
 	 * other threads. The method simply calls the
-	 * <code>handleMessageFromClient</code> slot method.
+	 * <code>MessageFromNode</code> slot method.
 	 *
 	 * @param msg
 	 *            the message sent.
