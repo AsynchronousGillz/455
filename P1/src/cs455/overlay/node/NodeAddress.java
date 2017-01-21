@@ -97,7 +97,7 @@ public class NodeAddress {
 	}
 
 	public String toString() {
-		return this.nodeName;
+		return this.nodeAddress+" "+this.port;
 	}
 
 	public void clone(NodeAddress node) {

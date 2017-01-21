@@ -48,6 +48,12 @@ public abstract class AbstractServer implements Runnable {
 	 * default.
 	 */
 	private boolean stop = false;
+	
+	/**
+	 * The last two octets of the server IP address and the port. Set once
+	 * listen is called
+	 */
+	private String serverName;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -84,6 +90,7 @@ public abstract class AbstractServer implements Runnable {
 				if (getPort() == 0)
 					this.setPort(this.serverSocket.getLocalPort());
 			}
+			setName();
 
 			serverSocket.setSoTimeout(timeout);
 			stop = false;
@@ -91,7 +98,23 @@ public abstract class AbstractServer implements Runnable {
 			connectionListener.start();
 		}
 	}
-
+	
+	/**
+	 * Sets the server name.
+	 */
+	final public void setName() throws IOException {
+		String ipAddress = InetAddress.getLocalHost().getHostAddress();
+		String[] oc = ipAddress.split("\\.");
+		this.serverName = oc[2]+"."+oc[3]+":"+this.port;
+	}
+	
+	/**
+	 * Gets the server name.
+	 */
+	final public String getName(){
+		return this.serverName;
+	}
+	
 	/**
 	 * Causes the server to stop accepting new connections.
 	 */
@@ -119,10 +142,7 @@ public abstract class AbstractServer implements Runnable {
 			for (int i = 0; i < clientThreadList.length; i++) {
 				try {
 					((NodeConnection) clientThreadList[i]).close();
-				}
-				// Ignore all exceptions when closing clients.
-				catch (Exception ex) {
-				}
+				} catch (Exception ex) {}
 			}
 			serverSocket = null;
 			serverClosed();
@@ -135,7 +155,7 @@ public abstract class AbstractServer implements Runnable {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllClients(Object msg) {
+	public void sendToAllClients(Message msg) {
 		Thread[] clientThreadList = getClientConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {
@@ -165,7 +185,7 @@ public abstract class AbstractServer implements Runnable {
 	 * clients can also connect, these later will not appear in the array.
 	 *
 	 * @return an array of <code>Thread</code> containing
-	 *         <code>ConnectionToClient</code> instances.
+	 *         <code>NodeConnection</code> instances.
 	 */
 	synchronized final public Thread[] getClientConnections() {
 		Thread[] clientThreadList = new Thread[nodeThreadGroup.activeCount()];
@@ -185,14 +205,14 @@ public abstract class AbstractServer implements Runnable {
 	}
 	
 	/**
-	 * Returns the port number.
+	 * Returns the raw IP address.
 	 *
-	 * @return the port number.
+	 * @return the ip address in a String format.
 	 */
 	final public String getHost() {
 		String ret = null;
 		try {
-			InetAddress.getLocalHost().getHostAddress();
+			ret = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {}
 		return ret;
 	}

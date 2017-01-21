@@ -30,7 +30,9 @@ public class NodeServer extends AbstractServer {
 
 	public void nodeConnected(NodeConnection nodeConnection) {
 		NodeAddress node = nodeConnection.getAddress();
-		System.out.println("Node connected from: "+node);
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
 	synchronized public void nodeDisconnected(Socket nodeSocket) {
@@ -45,7 +47,7 @@ public class NodeServer extends AbstractServer {
 	}
 
 	public void serverStarted() {
-		System.out.println("serverStarted :: "+this.getPort());
+		System.out.println("Node server started "+this.getName());
 	}
 
 	protected void serverClosed() {
@@ -56,7 +58,7 @@ public class NodeServer extends AbstractServer {
 	protected void MessageFromNode(Object msg, NodeConnection client) {
 		if (msg instanceof Message == false)
 			return;
-		Message m = (Message) msg;
+		String m = (String) msg;
 		System.out.println(m);		
 	}
 

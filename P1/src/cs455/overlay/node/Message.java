@@ -1,10 +1,16 @@
 // File name Message.java
 package cs455.overlay.node;
 
+import java.io.*;
+import java.text.*;
+import java.util.*;
+
 public class Message {
 
-	public int type;
-	private Object payload;
+	private int type;
+	private long time;
+	private String message;
+
 	
 	private final String[] Types = { 
             "REGISTER_REQUEST",
@@ -18,11 +24,27 @@ public class Message {
             "TRAFFIC_SUMMARY"
 		};
 	
-	public Message(Object payload) {
-		this.payload = payload;
+	public Message(byte[] bytes) {
+		try {
+			makeObject(bytes);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+	}
+	
+	public Message(String message) {
+		this.message = message;
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		dateFormat.format(date);// 2016/11/16 12:08:43
+		time = date.getTime();
+	}
+	
+	public int getType() {
+		return type;
 	}
 
-	public String getType() {
+	public String getStringType() {
 		return Types[type];
 	}
 
@@ -39,16 +61,54 @@ public class Message {
 		this.type = index;
 	}
 
-	public Object getPayload() {
-		return payload;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
 	public String toString() {
-		return "Message [type=" + Types[type] + ", type=" + type + "]";
+		return "{ \"id\" : \""+type+"\", \"type\" : \"" + Types[type] + "\", \"message\" : \"" + message + "\" }";
+	}
+	
+	public final byte[] makeBytes() throws IOException {
+		byte[] bytes = null;
+		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
+		output.writeInt(type);
+		output.writeLong(time);
+		byte[] identifierBytes = message.getBytes();
+		int elementLength = identifierBytes.length;
+		output.writeInt(elementLength);
+		output.write(identifierBytes);
+		output.flush();
+		bytes = byteOutputStream.toByteArray();
+		byteOutputStream.close();
+		output.close();
+		return bytes;
+	}
+
+	public final void makeObject(byte[] bytes) throws IOException {
+		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
+		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
+		type = input.readInt();
+		time = input.readLong();
+		int identifierLength = input.readInt();
+		byte[] identifierBytes = new byte[identifierLength];
+		input.readFully(identifierBytes);
+		message = new String(identifierBytes);
+		byteInputStream.close();
+		input.close();
 	}
 
 }

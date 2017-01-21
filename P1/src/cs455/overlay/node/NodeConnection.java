@@ -82,10 +82,7 @@ public class NodeConnection extends Thread {
 			input = new DataInputStream(nodeSocket.getInputStream());
 			output = new DataOutputStream(nodeSocket.getOutputStream());
 		} catch (IOException ex) {
-			try {
-				closeAll();
-			} catch (Exception exc) {}
-
+			close();
 			throw ex; // Rethrow the exception.
 		}
 		
@@ -104,11 +101,12 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occur when sending the message.
 	 */
-	final public void sendToNode(Object msg) throws IOException {
+	final public void sendToNode(Message msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
-		byte[] bytes = convertToBytes(msg);
-		output.write(bytes);
+		byte[] bytes = msg.makeBytes();
+		output.writeInt(bytes.length);
+		output.write(bytes, 0, bytes.length);
 	}
 
 	/**
@@ -118,11 +116,13 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an error occurs when closing the socket.
 	 */
-	final public void close() throws IOException {
+	final public void close() {
 		stopping = true; // Set the flag that tells the thread to stop
 
 		try {
 			closeAll();
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
 		} finally {
 			server.nodeDisconnected(this);
 		}
@@ -162,22 +162,21 @@ public class NodeConnection extends Thread {
 		server.nodeConnected(this);
 
 		try {
-			byte[] bytes = null;
-			Object msg = null;
+			int byteSize;
 
 			while (stopping == false) {
-				input.read(bytes); /// DEBUG error
-				msg = convertBytes(bytes);
-				server.receiveMessageFromNode(msg, this);
+				byteSize = input.readInt();
+				
+				byte[] bytes = new byte[byteSize];
+				input.readFully(bytes, 0, byteSize);
+				server.receiveMessageFromNode(new Message(bytes), this);
 			}
-		} catch (Exception exception) {
+		} catch (EOFException ex) {
+			close();
+		} catch (Exception ex) {
 			if (stopping == false) {
-				try {
-					closeAll();
-				} catch (Exception ex) {
-				}
-
-				server.nodeException(this, exception);
+				close();
+				server.nodeException(this, ex);
 			}
 		}
 	}
@@ -222,47 +221,6 @@ public class NodeConnection extends Thread {
 	public NodeAddress getAddress() {
 		return nodeAddress;
 	}
-	
-	public byte[] convertToBytes(Object o) throws IOException {
-		byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
-        try {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(o);
-            oos.flush();
-            bytes = bos.toByteArray();
-        } finally {
-            if (oos != null) {
-                oos.close();
-            }
-            if (bos != null) {
-                bos.close();
-            }
-        }
-        return bytes;
-	}
-	
-	public Object convertBytes(byte[] bytes) throws IOException {
-		Object obj = null;
-        ByteArrayInputStream bais = null;
-        ObjectInputStream ois = null;
-        try {
-            bais = new ByteArrayInputStream(bytes);
-            ois = new ObjectInputStream(bais);
-            obj = ois.readObject();
-        } catch (ClassNotFoundException e) {
-        	System.err.println("Error: Class not found");
-        }finally {
-            if (bais != null) {
-                bais.close();
-            }
-            if (ois != null) {
-                ois.close();
-            }
-        } 
-        return obj;
-	}
+
 }
 // EOF

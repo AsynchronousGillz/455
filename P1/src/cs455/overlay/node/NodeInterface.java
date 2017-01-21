@@ -41,7 +41,6 @@ public class NodeInterface extends Thread {
 	// Instance methods ************************************************
 	
 	public void run() {
-		System.out.println(server.getHost());
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;

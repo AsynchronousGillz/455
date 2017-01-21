@@ -112,11 +112,12 @@ public class NodeClient implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final public void sendToServer(Object msg) throws IOException {
+	final public void sendToServer(Message msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
-		byte[] bytes = convertToBytes(msg);
-		output.write(bytes);
+		byte[] bytes = msg.makeBytes();
+		output.writeInt(bytes.length);
+		output.write(bytes, 0, bytes.length);
 	}
 
 	/**
@@ -136,48 +137,6 @@ public class NodeClient implements Runnable {
 		} finally {
 			connectionClosed();
 		}
-	}
-	
-	final public byte[] convertToBytes(Object o) throws IOException {
-		byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
-        try {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(o);
-            oos.flush();
-            bytes = bos.toByteArray();
-        } finally {
-            if (oos != null) {
-                oos.close();
-            }
-            if (bos != null) {
-                bos.close();
-            }
-        }
-        return bytes;
-	}
-	
-	final public Object convertBytes(byte[] bytes) throws IOException {
-		Object obj = null;
-        ByteArrayInputStream bais = null;
-        ObjectInputStream ois = null;
-        try {
-            bais = new ByteArrayInputStream(bytes);
-            ois = new ObjectInputStream(bais);
-            obj = ois.readObject();
-        } catch (ClassNotFoundException e) {
-        	System.err.println("Error: Class not found");
-        }finally {
-            if (bais != null) {
-                bais.close();
-            }
-            if (ois != null) {
-                ois.close();
-            }
-        } 
-        return obj;
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -267,23 +226,19 @@ public class NodeClient implements Runnable {
 		connectionEstablished();
 
 		// The message from the server
-		byte[] bytes = null;
-		Object msg = null;
+		int byteSize;
 
 		// Loop waiting for data
 		try {
 			while (stopping == false) {
-				input.read(bytes);
-				msg = convertBytes(bytes);
-				messageFromServer(msg);
+				byteSize = input.readInt();
+				byte[] bytes = new byte[byteSize];
+				input.readFully(bytes, 0, byteSize);
+				messageFromServer(new Message(bytes));
 			}
 		} catch (Exception exception) {
 			if (stopping == false) {
-				try {
-					closeAll();
-				} catch (Exception ex) {
-				}
-
+				close();
 				connectionException(exception);
 			}
 		} finally {
@@ -308,8 +263,10 @@ public class NodeClient implements Runnable {
 	 * Hook method called after a connection has been established.
 	 */
 	protected void connectionEstablished() {
+		if (nodeSocket == null)
+			return;
 		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
-		Message m = new Message(node);
+		Message m = new Message(node.toString());
 		m.setType("REGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -322,8 +279,10 @@ public class NodeClient implements Runnable {
 	 * Hook method called after the connection has been closed.
 	 */
 	protected void connectionClosed() {
+		if (nodeSocket == null)
+			return;
 		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
-		Message m = new Message(node);
+		Message m = new Message(node.toString());
 		m.setType("DEREGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -346,6 +305,23 @@ public class NodeClient implements Runnable {
 	}
 
 	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------
+
+	/**
+	 * Closes the node. If the connection is already closed, this call has no
+	 * effect.
+	 * 
+	 * @exception IOException
+	 *                if an error occurs when closing the socket.
+	 */
+	final public void close() {
+		stopping = true; // Set the flag that tells the thread to stop
+
+		try {
+			closeAll();
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
+		}
+	}
 
 	/**
 	 * Closes all aspects of the connection to the server.

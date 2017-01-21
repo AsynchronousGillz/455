@@ -20,11 +20,17 @@ public class RegistryServer extends AbstractServer {
 	 * The connection listener thread.
 	 */
 	private RegistryList serverList;
+	
+	/**
+	 * For debug purposes
+	 */
+	private final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
 	public RegistryServer(int port) throws IOException {
 		super(port);
+		serverList = new RegistryList();
 	}
 	
 	// INSTANCE METHODS *************************************************
@@ -32,7 +38,9 @@ public class RegistryServer extends AbstractServer {
 
 	public void nodeConnected(NodeConnection nodeConnection) {
 		NodeAddress node = nodeConnection.getAddress();
-		System.out.println("Node connected from: "+node);
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
 	synchronized public void nodeDisconnected(Socket nodeSocket) {
@@ -51,24 +59,72 @@ public class RegistryServer extends AbstractServer {
 	}
 
 	public void serverStarted() {
-		System.out.println("serverStarted :: "+this.getPort());
+		System.out.println("Registry server started "+getName());
 	}
 
 	protected void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
 	}
 	
-	public ArrayList<String> getList() {
+	public String getList() {
 		return serverList.getList();
 	}
+	
+	public void sendRegistrationResponse(boolean status, NodeConnection client) {
+		String message = (status)?"True":"False";
+		Message m = new Message(message);
+		m.setType("REGISTER_RESPONSE");
+		try {
+			client.sendToNode(m);
+		} catch (IOException e) {
+			System.err.println(e.toString());
+		}
+		if (status == false)
+			client.close();
+	}
+	
+	public void registerNode(Message m, NodeConnection client) {
+		String[] tokens = m.getMessage().split(" ");
+		String clientAddress = client.getInetAddress().getHostAddress();
+		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
+			sendRegistrationResponse(false, client);
+		int clientServer = Integer.parseInt(tokens[1]);
+		NodeAddress node = new NodeAddress(client.getInetAddress(), clientServer);
+		serverList.addToList(node);
+		sendRegistrationResponse(true, client);
+	}
+	
+	public void unregisterNode(Message m, NodeConnection client) {
+		String[] tokens = m.getMessage().split(" ");
+		String clientAddress = client.getInetAddress().getHostAddress();
+		if (tokens[0].equals(clientAddress) == false)
+			sendRegistrationResponse(false, client);
+		int clientServer = Integer.parseInt(tokens[1]);
+		NodeAddress node = new NodeAddress(client.getInetAddress(), clientServer);
+		try {
+			serverList.removeFromList(node);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+		}
+	}
+
 
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
 		if (msg instanceof Message == false)
 			return;
 		Message m = (Message) msg;
-		System.out.println(m);	
-		
+		if (debug)
+			System.out.println(m);
+		switch(m.getStringType()) {
+			case "REGISTER_REQUEST":
+				registerNode(m, client);
+				break;
+			case "DEREGISTER_REQUEST":
+				unregisterNode(m, client);
+				break;
+			default:
+		}
 	}
 
 }

@@ -17,10 +17,12 @@ public class RegistryList {
 		data = new ArrayList<>();
 	}
 
-	public ArrayList<String> getList() {
-		ArrayList<String> ret = new ArrayList<>(data.size());
+	public String getList() {
+		if (data.size() == 0) 
+			return "Node list is currently empty.";
+		String ret = "";
 		for (NodeAddress node: data) {
-			ret.add(node.toString());
+			ret += node.toString();
 		}
 		return ret;
 	}
