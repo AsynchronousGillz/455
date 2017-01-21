@@ -40,10 +40,13 @@ public class MessagingNode {
 			System.out.println(ex.toString());
 		}
 		
-		NodeClient nc = new NodeClient(registryIP, registryPort, ns.getPort());
+		NodeClient nc = new NodeClient(registryIP, registryPort);
 		
 		NodeInterface ni = new NodeInterface(nc, ns);
 		ni.start();
+		
+		NodeSignal node = new NodeSignal(ns, nc , ni);
+		node.watch();
 		
 	}
 	

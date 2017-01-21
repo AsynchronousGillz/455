@@ -43,7 +43,7 @@ public class NodeClient implements Runnable {
 	 * Indicates if the thread is ready to stop. Needed so that the loop in the
 	 * run method knows when to stop waiting for incoming messages.
 	 */
-	private boolean stopping = false;
+	private boolean stop = false;
 
 	/**
 	 * The server's host name.
@@ -60,6 +60,11 @@ public class NodeClient implements Runnable {
 	 */
 	private int nodePort;
 
+	/**
+	 * For debug purposes
+	 */
+	final private boolean debug = true;
+
 	// CONSTRUCTORS *****************************************************
 
 	/**
@@ -70,11 +75,10 @@ public class NodeClient implements Runnable {
 	 * @param registryPort
 	 *            the port number.
 	 */
-	public NodeClient(String registryIP, int registryPort, int nodePort) {
+	public NodeClient(String registryIP, int registryPort) {
 		// Initialize variables
 		this.registryIP = registryIP;
 		this.registryPort = registryPort;
-		this.nodePort = nodePort;
 		openConnection();
 	}
 
@@ -99,7 +103,7 @@ public class NodeClient implements Runnable {
 		}
 
 		nodeReader = new Thread(this); // Create the data reader thread
-		stopping = false;
+		stop = false;
 		nodeReader.start(); // Start the thread
 	}
 
@@ -128,7 +132,7 @@ public class NodeClient implements Runnable {
 	 */
 	final public void closeConnection() {
 		// Prevent the thread from looping any more
-		stopping = true;
+		stop = true;
 
 		try {
 			closeAll();
@@ -230,14 +234,14 @@ public class NodeClient implements Runnable {
 
 		// Loop waiting for data
 		try {
-			while (stopping == false) {
+			while (stop == false) {
 				byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
 				messageFromServer(new Message(bytes));
 			}
 		} catch (Exception exception) {
-			if (stopping == false) {
+			if (stop == false) {
 				close();
 				connectionException(exception);
 			}
@@ -256,7 +260,10 @@ public class NodeClient implements Runnable {
 	 *            the exception raised.
 	 */
 	protected void connectionException(Exception exception) {
-		System.out.println("connectionException :: " + exception.toString());
+		if (exception instanceof EOFException)
+			close();
+		else
+			System.out.println("connectionException :: " + exception.toString());
 	}
 
 	/**
@@ -265,7 +272,7 @@ public class NodeClient implements Runnable {
 	protected void connectionEstablished() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
+		NodeAddress node = new NodeAddress(nodeSocket, getInetAddress(), getNodePort());
 		Message m = new Message(node.toString());
 		m.setType("REGISTER_REQUEST");
 		try {
@@ -281,7 +288,7 @@ public class NodeClient implements Runnable {
 	protected void connectionClosed() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(getInetAddress(), getNodePort());
+		NodeAddress node = new NodeAddress(nodeSocket, getInetAddress(), getNodePort());
 		Message m = new Message(node.toString());
 		m.setType("DEREGISTER_REQUEST");
 		try {
@@ -289,19 +296,6 @@ public class NodeClient implements Runnable {
 		} catch (IOException e) {
 			System.err.println("Could not send Deregistration.");
 		}
-	}
-
-	/**
-	 * Handles a message sent from the server to this node.
-	 * 
-	 * @param msg
-	 *            the message sent.
-	 */
-	protected void messageFromServer(Object o) {
-		if (o instanceof Message == false)
-			return;
-		Message m = (Message) o;
-		System.out.println(m);
 	}
 
 	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------
@@ -314,7 +308,7 @@ public class NodeClient implements Runnable {
 	 *                if an error occurs when closing the socket.
 	 */
 	final public void close() {
-		stopping = true; // Set the flag that tells the thread to stop
+		stop = true; // Set the flag that tells the thread to stop
 
 		try {
 			closeAll();
@@ -350,6 +344,40 @@ public class NodeClient implements Runnable {
 			output = null;
 			input = null;
 			nodeSocket = null;
+		}
+	}
+
+	// ----------------------------------------------------------
+
+	/**
+	 * Handles a the response message sent from the server to this node.
+	 * 
+	 * @param m
+	 *            the message sent.
+	 */
+	protected void registerResponse(Message m) {
+		if (m.getMessage().equals("False")) {
+			close();
+		}
+	}
+
+	/**
+	 * Handles a message sent from the server to this node.
+	 * 
+	 * @param o
+	 *            the message sent.
+	 */
+	protected void messageFromServer(Object o) {
+		if (o instanceof Message == false)
+			return;
+		Message m = (Message) o;
+		if (debug)
+			System.out.println(m);
+		switch (m.getStringType()) {
+		case "REGISTER_RESPONSE":
+			registerResponse(m);
+			break;
+		default:
 		}
 	}
 }

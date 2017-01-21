@@ -1,6 +1,6 @@
 package cs455.overlay.node;
 
-import java.net.InetAddress;
+import java.net.*;
 import java.util.*;
 
 /**
@@ -22,23 +22,22 @@ public class RegistryList {
 			return "Node list is currently empty.";
 		String ret = "";
 		for (NodeAddress node: data) {
-			ret += node.toString();
+			ret += node.toString() + "\n";
 		}
 		return ret;
 	}
 	
-	public void addToList(NodeAddress node) {
+	public synchronized void addToList(NodeAddress node) {
 		data.add(node);
 	}
 	
-	public void removeFromList(NodeAddress node) throws Exception {
-		int index = data.indexOf(node);
-		if (index == -1)
+	public synchronized void removeFromList(NodeAddress node) throws Exception {
+		if(data.contains(node) == false)
 			throw new Exception("Node not found in registry.");
-		data.remove(node.toString());
+		data.remove(node);
 	}
 
-	public NodeAddress getNode(InetAddress inetAddress, int port) {
+	public synchronized NodeAddress getNode(InetAddress inetAddress, int port) {
 		for (NodeAddress node: data) {
 			if (node.getInetAddress().equals(inetAddress) && node.getPort() == port)
 				return node;

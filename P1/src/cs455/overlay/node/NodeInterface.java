@@ -13,6 +13,14 @@ import java.io.*;
 public class NodeInterface extends Thread {
 	// Class variables *************************************************
 
+	/**
+	 * 
+	 */
+	private boolean stop = false;
+
+	/**
+	 * 
+	 */
 	final public static boolean debug = false;
 
 	// Instance variables **********************************************
@@ -44,7 +52,7 @@ public class NodeInterface extends Thread {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
-			while (true) {
+			while (stop == false) {
 				message = fromConsole.readLine();
 				if (message.equals(""))
 					continue;
@@ -104,6 +112,10 @@ public class NodeInterface extends Thread {
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try: [ getPort | getHost ]";
 		System.err.println(info);
+	}
+
+	public void close() {
+		// TODO
 	}
 
 }

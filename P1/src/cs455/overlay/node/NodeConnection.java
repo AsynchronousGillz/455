@@ -86,7 +86,7 @@ public class NodeConnection extends Thread {
 			throw ex; // Rethrow the exception.
 		}
 		
-		this.nodeAddress = new NodeAddress(this.getInetAddress(), nodeSocket.getPort());
+		this.nodeAddress = new NodeAddress(nodeSocket, this.getInetAddress(), nodeSocket.getPort());
 		stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
@@ -139,6 +139,9 @@ public class NodeConnection extends Thread {
 		return nodeSocket == null ? null : nodeSocket.getInetAddress();
 	}
 
+	public Socket getNodeSocket() {
+		return nodeSocket;
+	}
 	/**
 	 * Returns a string representation of the node.
 	 * 

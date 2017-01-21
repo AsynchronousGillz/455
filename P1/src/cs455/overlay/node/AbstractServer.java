@@ -54,6 +54,11 @@ public abstract class AbstractServer implements Runnable {
 	 * listen is called
 	 */
 	private String serverName;
+	
+	/**
+	 * For debug purposes
+	 */
+	protected final boolean debug = false;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -130,12 +135,14 @@ public abstract class AbstractServer implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs while closing the server socket.
 	 */
-	final synchronized public void close() throws IOException {
+	final synchronized public void close() {
 		if (serverSocket == null)
 			return;
 		stopListening();
 		try {
 			serverSocket.close();
+		} catch (IOException ex) {
+			System.err.println(ex.toString());
 		} finally {
 			// Close the client sockets of the already connected clients
 			Thread[] clientThreadList = getClientConnections();
@@ -175,6 +182,15 @@ public abstract class AbstractServer implements Runnable {
 	 */
 	final public boolean isListening() {
 		return (connectionListener != null);
+	}
+	
+	/**
+	 * Returns true if the server has stopped.
+	 *
+	 * @return true if the server has stopped.
+	 */
+	final public boolean getStatus() {
+		return stop;
 	}
 
 	/**

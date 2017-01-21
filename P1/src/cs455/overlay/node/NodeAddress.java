@@ -1,6 +1,7 @@
 package cs455.overlay.node;
 
 import java.net.*;
+import java.util.ArrayList;
 
 /**
  * 
@@ -13,6 +14,12 @@ import java.net.*;
 
 public class NodeAddress {
 
+	/**
+	 * This is to make nodes easily identifiable. 
+	 * This is set to null when first created.
+	 */
+	private int nodeHash;
+	
 	/**
 	 * This is to make nodes easily identifiable. 
 	 * This is set to null when first created.
@@ -37,14 +44,35 @@ public class NodeAddress {
 	 * This is to make nodes port information accessible.
 	 */
 	private int port;
+	
+	/**
+	 * This is the list of associated nodes that are connected.
+	 */
+	private ArrayList<NodeAddress> connections;
+	/**
+	 * 
+	 * @param socket
+	 * @param inetAddress
+	 * @param port
+	 */
 
-	public NodeAddress(InetAddress inetAddress, int port) {
+	public NodeAddress(Socket socket, InetAddress inetAddress, int port) {
+		this.nodeHash = socket.hashCode();
 		this.inetAddress = inetAddress;
 		this.port = port;
+		this.connections = new ArrayList<>();
 		setNodeAddress();
 		setNodeName();
 	}
 	
+	public int getNodeHash() {
+		return nodeHash;
+	}
+
+	public void setNodeHash(Socket socket) {
+		this.nodeHash = socket.hashCode();
+	}
+
 	public void setNodeName() {
 		String[] oc = this.nodeAddress.split("\\.");
 		this.nodeName = oc[2]+"."+oc[3]+":"+this.port;
@@ -69,6 +97,10 @@ public class NodeAddress {
 	public String getNodeAddress() {
 		return nodeAddress;
 	}
+	
+	public void addNodeAddress(NodeAddress node) {
+		connections.add(node);
+	}
 
 	public void setNodeAddress() {
 		try {
@@ -77,23 +109,30 @@ public class NodeAddress {
 		
 	}
 
+	public ArrayList<NodeAddress> getConnections() {
+		return connections;
+	}
+
+	public void setConnections(ArrayList<NodeAddress> connections) {
+		this.connections = connections;
+	}
 
 	public boolean equals(Object o) {
 		if (o instanceof NodeAddress == false) {
 			return false;
 		}
 		
-		NodeAddress nodeAddress = (NodeAddress) o;
-		int hostName = inetAddress.getHostName().compareTo(nodeAddress.getInetAddress().getHostName());
-		int hostAddress = inetAddress.getHostAddress().compareTo(nodeAddress.getInetAddress().getHostAddress());
-
-		int hostCheck = (hostName == 0 || hostAddress == 0)?0:1;
+		NodeAddress node = (NodeAddress) o;
 		
-		if (port != nodeAddress.getPort() || hostCheck != 0) {
+		if (this.getNodeHash() != node.getNodeHash()) {
 			return false;
 		}
 		
 		return true;
+	}
+	
+	public int hashCode() {
+		return nodeHash + nodeAddress.hashCode() + nodeName.hashCode();
 	}
 
 	public String toString() {

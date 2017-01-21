@@ -9,7 +9,6 @@ package cs455.overlay.node;
  * 
  */
 
-import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.io.*;
@@ -20,11 +19,6 @@ public class RegistryServer extends AbstractServer {
 	 * The connection listener thread.
 	 */
 	private RegistryList serverList;
-	
-	/**
-	 * For debug purposes
-	 */
-	private final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -43,14 +37,15 @@ public class RegistryServer extends AbstractServer {
 		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
-	synchronized public void nodeDisconnected(Socket nodeSocket) {
-		NodeAddress node = serverList.getNode(nodeSocket.getInetAddress(), nodeSocket.getPort());
+	synchronized public void nodeDisconnected(NodeConnection node) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(node+" disconnected at "+dateFormat.format(date));
 		try {
-			serverList.removeFromList(node);
-		} catch (Exception e) {}
+			serverList.removeFromList(node.getAddress());
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
 
 	public void listeningException(Throwable exception) {
@@ -71,7 +66,8 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
-		String message = (status)?"True":"False";
+		String message = "False"; // DEBUG
+		// String message = (status)?"True":"False";
 		Message m = new Message(message);
 		m.setType("REGISTER_RESPONSE");
 		try {
@@ -89,7 +85,7 @@ public class RegistryServer extends AbstractServer {
 		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
 			sendRegistrationResponse(false, client);
 		int clientServer = Integer.parseInt(tokens[1]);
-		NodeAddress node = new NodeAddress(client.getInetAddress(), clientServer);
+		NodeAddress node = new NodeAddress(client.getNodeSocket(), client.getInetAddress(), clientServer);
 		serverList.addToList(node);
 		sendRegistrationResponse(true, client);
 	}
@@ -100,7 +96,7 @@ public class RegistryServer extends AbstractServer {
 		if (tokens[0].equals(clientAddress) == false)
 			sendRegistrationResponse(false, client);
 		int clientServer = Integer.parseInt(tokens[1]);
-		NodeAddress node = new NodeAddress(client.getInetAddress(), clientServer);
+		NodeAddress node = new NodeAddress(client.getNodeSocket(), client.getInetAddress(), clientServer);
 		try {
 			serverList.removeFromList(node);
 		} catch (Exception e) {

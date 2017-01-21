@@ -1,7 +1,6 @@
 // File name Server.java
 package cs455.overlay.node;
 
-import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.io.*;
@@ -35,10 +34,10 @@ public class NodeServer extends AbstractServer {
 		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
-	synchronized public void nodeDisconnected(Socket nodeSocket) {
+	synchronized public void nodeDisconnected(NodeConnection node) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println("Node disconnected at "+dateFormat.format(date));
+		System.out.println(node+" disconnected at "+dateFormat.format(date));
 	}
 
 	public void listeningException(Throwable exception) {
@@ -53,14 +52,20 @@ public class NodeServer extends AbstractServer {
 	protected void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
 	}
-
+	
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
 		if (msg instanceof Message == false)
 			return;
-		String m = (String) msg;
-		System.out.println(m);		
+		Message m = (Message) msg;
+		if (debug)
+			System.out.println(m);
+		switch(m.getStringType()) {
+			case "REGISTER_REQUEST":
+				break;
+			default:
+		}
 	}
-
+	
 }
 // End of AbstractServer Class
