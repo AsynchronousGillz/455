@@ -1,6 +1,5 @@
 package cs455.overlay.node;
 
-import java.net.*;
 import java.util.*;
 
 /**
@@ -37,9 +36,9 @@ public class RegistryList {
 		data.remove(node);
 	}
 
-	public synchronized NodeAddress getNode(InetAddress inetAddress, int port) {
+	public synchronized NodeAddress getNode(String ipAddress, int port) {
 		for (NodeAddress node: data) {
-			if (node.getInetAddress().equals(inetAddress) && node.getPort() == port)
+			if (node.getAddress().equals(ipAddress) && node.getPort() == port)
 				return node;
 		}
 		return null;

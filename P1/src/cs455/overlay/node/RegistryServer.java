@@ -85,8 +85,7 @@ public class RegistryServer extends AbstractServer {
 		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
 			sendRegistrationResponse(false, client);
 		int clientServer = Integer.parseInt(tokens[1]);
-		NodeAddress node = new NodeAddress(client.getNodeSocket(), client.getInetAddress(), clientServer);
-		serverList.addToList(node);
+		serverList.addToList(new NodeAddress(client.getNodeSocket(), clientAddress, clientServer));
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -96,9 +95,8 @@ public class RegistryServer extends AbstractServer {
 		if (tokens[0].equals(clientAddress) == false)
 			sendRegistrationResponse(false, client);
 		int clientServer = Integer.parseInt(tokens[1]);
-		NodeAddress node = new NodeAddress(client.getNodeSocket(), client.getInetAddress(), clientServer);
 		try {
-			serverList.removeFromList(node);
+			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), clientAddress, clientServer));
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}

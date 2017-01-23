@@ -85,8 +85,8 @@ public class NodeConnection extends Thread {
 			close();
 			throw ex; // Rethrow the exception.
 		}
-		
-		this.nodeAddress = new NodeAddress(nodeSocket, this.getInetAddress(), nodeSocket.getPort());
+		String clientIP = nodeSocket.getInetAddress().getHostAddress();
+		this.nodeAddress = new NodeAddress(nodeSocket, clientIP, nodeSocket.getPort());
 		stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
@@ -148,11 +148,7 @@ public class NodeConnection extends Thread {
 	 * @return the node's description.
 	 */
 	public String toString() {
-		if (nodeAddress.getNodeName() != null)
-			return nodeAddress.getNodeName();
-		if (nodeSocket != null)
-			return nodeSocket.getInetAddress().getHostName();
-		return null;
+		return nodeAddress.toString();
 	}
 
 	// RUN METHOD -------------------------------------------------------

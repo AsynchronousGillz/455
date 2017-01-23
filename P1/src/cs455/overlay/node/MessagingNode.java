@@ -31,22 +31,19 @@ public class MessagingNode {
 			registryPort = 60100;
 		}
 		
-		NodeServer ns = null;
+		NodeServer nodeServer = null;
 
 		try {
-			ns = new NodeServer();
-			ns.listen();
+			nodeServer = new NodeServer();
+			nodeServer.listen();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		}
 		
-		NodeClient nc = new NodeClient(registryIP, registryPort);
+		NodeClient nodeClient = new NodeClient(nodeServer, registryIP, registryPort);
 		
-		NodeInterface ni = new NodeInterface(nc, ns);
+		NodeInterface ni = new NodeInterface(nodeClient, nodeServer);
 		ni.start();
-		
-		NodeSignal node = new NodeSignal(ns, nc , ni);
-		node.watch();
 		
 	}
 	

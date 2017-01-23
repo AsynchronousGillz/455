@@ -54,11 +54,11 @@ public class NodeClient implements Runnable {
 	 * The port number.
 	 */
 	private int registryPort;
-
+	
 	/**
-	 * The node server port number.
+	 * The node server
 	 */
-	private int nodePort;
+	private NodeServer nodeServer;
 
 	/**
 	 * For debug purposes
@@ -75,8 +75,9 @@ public class NodeClient implements Runnable {
 	 * @param registryPort
 	 *            the port number.
 	 */
-	public NodeClient(String registryIP, int registryPort) {
+	public NodeClient(NodeServer nodeServer, String registryIP, int registryPort) {
 		// Initialize variables
+		this.nodeServer = nodeServer;
 		this.registryIP = registryIP;
 		this.registryPort = registryPort;
 		openConnection();
@@ -137,7 +138,8 @@ public class NodeClient implements Runnable {
 		try {
 			closeAll();
 		} catch (Exception exc) {
-			System.err.println(exc.toString());
+			if (debug)
+				System.err.println(exc.toString());
 		} finally {
 			connectionClosed();
 		}
@@ -155,27 +157,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * @return the port number.
 	 */
-	final public int getNodePort() {
-		return nodePort;
-	}
-
-	/**
-	 * Sets the server port number for the next connection. The change in port
-	 * only takes effect at the time of the next call to openConnection().
-	 * 
-	 * @param port
-	 *            the port number of the node server port.
-	 */
-	final public void setNodePort(int port) throws IllegalArgumentException {
-		if ((port < 0) || (port > 65535))
-			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
-		this.nodePort = port;
-	}
-
-	/**
-	 * @return the port number.
-	 */
-	final public int getPort() {
+	final public int getRegistryPort() {
 		return registryPort;
 	}
 
@@ -186,7 +168,7 @@ public class NodeClient implements Runnable {
 	 * @param port
 	 *            the port number.
 	 */
-	final public void setPort(int port) throws IllegalArgumentException {
+	final public void setRegistryPort(int port) throws IllegalArgumentException {
 		if ((port < 0) || (port > 65535))
 			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
 		this.registryPort = port;
@@ -195,7 +177,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * @return the host name.
 	 */
-	final public String getHost() {
+	final public String getRegistryHost() {
 		return registryIP;
 	}
 
@@ -206,7 +188,7 @@ public class NodeClient implements Runnable {
 	 * @param host
 	 *            the host name.
 	 */
-	final public void setHost(String host) {
+	final public void setRegistryHost(String host) {
 		this.registryIP = host;
 	}
 
@@ -272,7 +254,7 @@ public class NodeClient implements Runnable {
 	protected void connectionEstablished() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(nodeSocket, getInetAddress(), getNodePort());
+		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
 		Message m = new Message(node.toString());
 		m.setType("REGISTER_REQUEST");
 		try {
@@ -288,7 +270,7 @@ public class NodeClient implements Runnable {
 	protected void connectionClosed() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(nodeSocket, getInetAddress(), getNodePort());
+		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
 		Message m = new Message(node.toString());
 		m.setType("DEREGISTER_REQUEST");
 		try {
@@ -313,7 +295,11 @@ public class NodeClient implements Runnable {
 		try {
 			closeAll();
 		} catch (IOException ex) {
-			System.err.println(ex.toString());
+			if (debug)
+				System.err.println(ex.toString());
+		} finally {
+			System.err.println("An error occured connecting to the server. Exitting.");
+			System.exit(1);
 		}
 	}
 

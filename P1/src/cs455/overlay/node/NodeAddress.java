@@ -1,7 +1,6 @@
 package cs455.overlay.node;
 
 import java.net.*;
-import java.util.ArrayList;
 
 /**
  * 
@@ -21,34 +20,17 @@ public class NodeAddress {
 	private int nodeHash;
 	
 	/**
-	 * This is to make nodes easily identifiable. 
-	 * This is set to null when first created.
-	 */
-	private String nodeName;
-	
-	/**
 	 * This class represents an Internet Protocol (IP) address.
 	 * 
 	 * @see java.net.InetAddress
 	 */
-	private InetAddress inetAddress;
+	private String ipAddress;
 	
-	/**
-	 * This class represents an Internet Protocol (IP) address.
-	 * 
-	 * @see java.net.InetAddress
-	 */
-	private String nodeAddress;
-
 	/**
 	 * This is to make nodes port information accessible.
 	 */
 	private int port;
 	
-	/**
-	 * This is the list of associated nodes that are connected.
-	 */
-	private ArrayList<NodeAddress> connections;
 	/**
 	 * 
 	 * @param socket
@@ -56,92 +38,53 @@ public class NodeAddress {
 	 * @param port
 	 */
 
-	public NodeAddress(Socket socket, InetAddress inetAddress, int port) {
+	public NodeAddress(Socket socket, String ipAddress, int port) {
 		this.nodeHash = socket.hashCode();
-		this.inetAddress = inetAddress;
+		this.ipAddress = ipAddress;
 		this.port = port;
-		this.connections = new ArrayList<>();
-		setNodeAddress();
-		setNodeName();
 	}
 	
 	public int getNodeHash() {
 		return nodeHash;
 	}
 
-	public void setNodeHash(Socket socket) {
-		this.nodeHash = socket.hashCode();
-	}
-
-	public void setNodeName() {
-		String[] oc = this.nodeAddress.split("\\.");
-		this.nodeName = oc[2]+"."+oc[3]+":"+this.port;
-	}
-
-	public void setInetAddress(InetAddress inetAddress) {
-		this.inetAddress = inetAddress;
-	}
-
-	public InetAddress getInetAddress() {
-		return inetAddress;
+	public String getAddress() {
+		return ipAddress;
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	public String getNodeName() {
-		return nodeName;
-	}
-	
-	public String getNodeAddress() {
-		return nodeAddress;
-	}
-	
-	public void addNodeAddress(NodeAddress node) {
-		connections.add(node);
-	}
-
-	public void setNodeAddress() {
-		try {
-			this.nodeAddress = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {}
-		
-	}
-
-	public ArrayList<NodeAddress> getConnections() {
-		return connections;
-	}
-
-	public void setConnections(ArrayList<NodeAddress> connections) {
-		this.connections = connections;
-	}
-
-	public boolean equals(Object o) {
-		if (o instanceof NodeAddress == false) {
-			return false;
-		}
-		
-		NodeAddress node = (NodeAddress) o;
-		
-		if (this.getNodeHash() != node.getNodeHash()) {
-			return false;
-		}
-		
-		return true;
-	}
-	
+	@Override
 	public int hashCode() {
-		return nodeHash + nodeAddress.hashCode() + nodeName.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
+		result = prime * result + nodeHash;
+		result = prime * result + port;
+		return result;
+	}
+
+	public boolean equals(NodeAddress other) {
+		if (this == other)
+			return true;
+		if (other == null)
+			return false;
+		if (nodeHash != other.nodeHash)
+			return false;
+		if (port != other.port)
+			return false;
+		return true;
 	}
 
 	public String toString() {
-		return this.nodeAddress+" "+this.port;
+		return this.ipAddress+" "+this.port;
 	}
 
 	public void clone(NodeAddress node) {
-		this.nodeName = node.getNodeName();
-		this.inetAddress = node.getInetAddress();
+		this.nodeHash = node.getNodeHash();
+		this.ipAddress = node.getAddress();
 		this.port = node.getPort();
 	}
 }
