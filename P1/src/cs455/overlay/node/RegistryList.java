@@ -10,10 +10,40 @@ import java.util.*;
 
 public class RegistryList {
 	
+	/**
+	 * The list of node connected to the register.
+	 */
 	ArrayList<NodeAddress> data;
 	
-	public RegistryList() {
+	/**
+	 * The number of connections for each node.
+	 */
+	private int numberOfConnections;
+
+	/**
+	 * The list of connections to other nodes
+	 */
+	ArrayList<NodeAddress[]> overlay;
+	
+	public RegistryList(int numberOfConnections) {
+		this.numberOfConnections = numberOfConnections;
 		data = new ArrayList<>();
+	}
+	
+	/**
+	 * Return the number of connections for each node.
+	 * @return the number of connections in int format
+	 */
+	public int getNumberOfConnections() {
+		return numberOfConnections;
+	}
+
+	/**
+	 * Set the number of connections for each node.
+	 * @param numberOfConnections
+	 */
+	public void setNumberOfConnections(int numberOfConnections) {
+		this.numberOfConnections = numberOfConnections;
 	}
 
 	public String getList() {
@@ -21,7 +51,7 @@ public class RegistryList {
 			return "Node list is currently empty.";
 		String ret = "";
 		for (NodeAddress node: data) {
-			ret += node.toString() + "\n";
+			ret += node.getInfo() + "\n";
 		}
 		return ret;
 	}
@@ -40,6 +70,16 @@ public class RegistryList {
 				return node;
 		}
 		return null;
+	}
+	
+	public synchronized void buildOverlay() {
+		overlay = new ArrayList<>();
+		for(int nodeNumber = 0; nodeNumber < data.size(); nodeNumber++) {
+			int[] randomList = new int[numberOfConnections];
+			for (int i = 0; i < numberOfConnections; i++) {
+				// get random numbers
+			}
+		}
 	}
 
 }

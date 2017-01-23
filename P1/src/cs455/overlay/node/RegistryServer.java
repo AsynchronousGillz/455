@@ -24,7 +24,7 @@ public class RegistryServer extends AbstractServer {
 
 	public RegistryServer(int port) throws IOException {
 		super(port);
-		serverList = new RegistryList();
+		serverList = new RegistryList(4);
 	}
 	
 	// INSTANCE METHODS *************************************************
@@ -83,8 +83,8 @@ public class RegistryServer extends AbstractServer {
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
 			sendRegistrationResponse(false, client);
-		int clientServer = Integer.parseInt(tokens[1]);
-		serverList.addToList(new NodeAddress(client.getNodeSocket(), clientAddress, clientServer));
+		int clientPort = Integer.parseInt(tokens[1]);
+		serverList.addToList(new NodeAddress(client.getNodeSocket(), tokens[0], clientPort));
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -93,9 +93,9 @@ public class RegistryServer extends AbstractServer {
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false)
 			sendRegistrationResponse(false, client);
-		int clientServer = Integer.parseInt(tokens[1]);
+		int clientPort = Integer.parseInt(tokens[1]);
 		try {
-			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), clientAddress, clientServer));
+			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), tokens[0], clientPort));
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}

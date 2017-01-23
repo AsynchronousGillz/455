@@ -63,7 +63,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = true;
+	final private boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
