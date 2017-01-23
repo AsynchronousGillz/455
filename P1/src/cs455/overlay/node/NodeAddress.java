@@ -44,14 +44,26 @@ public class NodeAddress {
 		this.port = port;
 	}
 	
+	/**
+	 * Returns the hashCode of the socket.
+	 * @return the socket hashCode in int format
+	 */
 	public int getNodeHash() {
 		return nodeHash;
 	}
 
+	/**
+	 * Returns the IP Address of the node in String format
+	 * @return "{ip}" in string format
+	 */
 	public String getAddress() {
 		return ipAddress;
 	}
 
+	/**
+	 * Returns the port number of the node in int format
+	 * @return the port number in int format
+	 */
 	public int getPort() {
 		return port;
 	}
@@ -65,8 +77,9 @@ public class NodeAddress {
 		result = prime * result + port;
 		return result;
 	}
-
+	
 	public boolean equals(NodeAddress other) {
+		System.out.println(this+" - "+other); //DEBUG
 		if (this == other)
 			return true;
 		if (other == null)
@@ -77,10 +90,23 @@ public class NodeAddress {
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * Get just IP Address
+	 * @return the "{ip}" in String format
+	 */
 	public String toString() {
+		return this.ipAddress;
+	}
+	
+	/**
+	 * Get the IP Address and the port
+	 * @return the "{ip} {port}" in String format
+	 */
+	public String getInfo() {
 		return this.ipAddress+" "+this.port;
 	}
+
 
 	public void clone(NodeAddress node) {
 		this.nodeHash = node.getNodeHash();

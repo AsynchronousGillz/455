@@ -92,9 +92,9 @@ public abstract class AbstractServer implements Runnable {
 		if (isListening() == false) {
 			if (serverSocket == null) {
 				serverSocket = new ServerSocket(getPort(), backlog);
-				if (getPort() == 0)
-					this.setPort(this.serverSocket.getLocalPort());
 			}
+			if (getPort() == 0)
+				this.setPort(this.serverSocket.getLocalPort());
 			setName();
 
 			serverSocket.setSoTimeout(timeout);
@@ -109,8 +109,7 @@ public abstract class AbstractServer implements Runnable {
 	 */
 	final public void setName() throws IOException {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
-		String[] oc = ipAddress.split("\\.");
-		this.serverName = oc[2]+"."+oc[3]+":"+this.port;
+		this.serverName = ipAddress+":"+this.port;
 	}
 	
 	/**

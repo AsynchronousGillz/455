@@ -30,9 +30,7 @@ public class RegistryList {
 		data.add(node);
 	}
 	
-	public synchronized void removeFromList(NodeAddress node) throws Exception {
-		if(data.contains(node) == false)
-			throw new Exception("Node not found in registry.");
+	public synchronized void removeFromList(NodeAddress node) {
 		data.remove(node);
 	}
 

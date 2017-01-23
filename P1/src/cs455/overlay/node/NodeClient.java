@@ -255,7 +255,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		Message m = new Message(node.toString());
+		Message m = new Message(node.getInfo());
 		m.setType("REGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -271,7 +271,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		Message m = new Message(node.toString());
+		Message m = new Message(node.getInfo());
 		m.setType("DEREGISTER_REQUEST");
 		try {
 			sendToServer(m);

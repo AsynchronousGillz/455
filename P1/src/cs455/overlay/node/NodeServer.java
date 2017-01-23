@@ -34,10 +34,10 @@ public class NodeServer extends AbstractServer {
 		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
-	synchronized public void nodeDisconnected(NodeConnection node) {
+	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(node+" disconnected at "+dateFormat.format(date));
+		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
 	}
 
 	public void listeningException(Throwable exception) {

@@ -139,6 +139,11 @@ public class NodeConnection extends Thread {
 		return nodeSocket == null ? null : nodeSocket.getInetAddress();
 	}
 
+	/**
+	 * Returns the socket of the node.
+	 * 
+	 * @return the node's socket.
+	 */
 	public Socket getNodeSocket() {
 		return nodeSocket;
 	}

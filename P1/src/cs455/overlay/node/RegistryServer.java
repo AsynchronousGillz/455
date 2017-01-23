@@ -37,12 +37,12 @@ public class RegistryServer extends AbstractServer {
 		System.out.println(node+" connected at "+dateFormat.format(date));
 	}
 
-	synchronized public void nodeDisconnected(NodeConnection node) {
+	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(node+" disconnected at "+dateFormat.format(date));
+		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
 		try {
-			serverList.removeFromList(node.getAddress());
+			serverList.removeFromList(nodeConnection.getAddress());
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -66,8 +66,7 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
-		String message = "False"; // DEBUG
-		// String message = (status)?"True":"False";
+		String message = (status)?"True":"False";
 		Message m = new Message(message);
 		m.setType("REGISTER_RESPONSE");
 		try {
