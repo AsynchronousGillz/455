@@ -50,21 +50,47 @@ public class RegistryServer extends AbstractServer {
 
 	public void listeningException(Throwable exception) {
 		System.out.println("listeningException :: "+exception.toString());
+		System.out.println("listeningException :: "+exception.getStackTrace());
 		System.exit(1);
 	}
 
+	/**
+	 * 
+	 */
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
 	}
 
+	/**
+	 * 
+	 */
 	protected void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getList() {
 		return serverList.getList();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getOverlay() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	/**
+	 * 
+	 * @param status
+	 * @param client
+	 */
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
 		String message = (status)?"True":"False";
 		Message m = new Message(message);
@@ -119,6 +145,6 @@ public class RegistryServer extends AbstractServer {
 			default:
 		}
 	}
-
+	
 }
 

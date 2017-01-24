@@ -27,12 +27,8 @@ public class Registry {
 			System.out.println(ex.toString());
 		}
 		
-		try {
-			Thread s = new RegistryInterface(server);
-			s.start();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		RegistryInterface i = new RegistryInterface(server);
+		i.runConsole();
 	}
 	
 }

@@ -10,7 +10,7 @@ import java.io.*;
  * @see cs455.overlay.node.Registry;
  */
 
-public class RegistryInterface extends Thread {
+public class RegistryInterface {
 	// Class variables *************************************************
 
 	final public static boolean debug = false;
@@ -22,23 +22,19 @@ public class RegistryInterface extends Thread {
 	// Constructors ****************************************************
 
 	/**
-	 * Constructs an instance of the chat client.
+	 * Constructs an instance of the registry server.
 	 *
-	 * @param host
+	 * @param server
 	 * 		The server to connect to.
-	 * @param portSimple Chat/OCSF Phase: 2
-	 * 		The port number to connect on.
-	 * @param serverUI
-	 * 		The interface type variable.
 	 */
 
-	public RegistryInterface(RegistryServer server) throws IOException {
+	public RegistryInterface(RegistryServer server) {
 		this.server = server;
 	}
 
 	// Instance methods ************************************************
 	
-	public void run() {
+	public void runConsole() {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
@@ -70,6 +66,13 @@ public class RegistryInterface extends Thread {
 			case "listNodes":
 				if (tokens.length == 1) {
 					System.out.println(server.getList());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "showOverlay":
+				if (tokens.length == 1) {
+					System.out.println(server.getOverlay());
 				} else {
 					this.invalid(message);
 				}
