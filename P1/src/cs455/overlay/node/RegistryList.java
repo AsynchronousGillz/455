@@ -126,6 +126,22 @@ public class RegistryList {
 	public synchronized void removeFromList(NodeAddress node) {
 		data.remove(node);
 	}
+	
+	public synchronized NodeAddress findNode(String info) {
+		NodeAddress ret = null;
+		int port = 0;
+		try {
+			port = Integer.parseInt(info);
+		} catch (NumberFormatException e){}
+		
+		for (NodeAddress node: data) {
+			if (node.getAddress().contains(info))
+				return node;
+			if (port != 0 && node.getPort() == port)
+				return node;
+		}
+		return ret;
+	}
 
 	public synchronized NodeAddress getNode(String ipAddress, int port) {
 		for (NodeAddress node: data) {

@@ -22,7 +22,7 @@ public class MessagingNode {
 		try {
 			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "127.0.0.1";
+			registryIP = "venus";
 		}
 		
 		try {

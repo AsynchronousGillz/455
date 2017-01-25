@@ -40,7 +40,7 @@ public class RegistryInterface {
 			String message;
 			while (true) {
 				message = fromConsole.readLine();
-				if (message.equals(""))
+				if (message.trim().equals(""))
 					continue;
 				
 				getAction(message);
@@ -63,28 +63,55 @@ public class RegistryInterface {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "listNodes":
+			case "list-messaging":
 				if (tokens.length == 1) {
 					System.out.println(server.getList());
+				} else if (tokens.length == 2) {
+					System.out.println(server.getNode(tokens[1]));
 				} else {
 					this.invalid(message);
 				}
 				break;
-			case "showOverlay":
+			case "setup-overlay":
+				if (tokens.length == 1) {
+					System.out.println(server.getOverlay());
+				} else if (tokens.length == 2) {
+					System.out.println(server.getOverlay());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "list-weights":
 				if (tokens.length == 1) {
 					System.out.println(server.getOverlay());
 				} else {
 					this.invalid(message);
 				}
 				break;
-			case "getPort":
+			case "send-overlay-link-weights":
+				if (tokens.length == 1) {
+					server.sendOverlay();
+					System.out.println("Overlay sent to nodes.");
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "start":
+				if (tokens.length == 2) {
+					int numberOfRounds = validateInput(tokens[1]);
+					server.sendStart(numberOfRounds);
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "get-port":
 				if (tokens.length == 1) {
 					System.out.println(server.getPort());
 				} else {
 					this.invalid(message);
 				}
 				break;
-			case "getHost":
+			case "get-host":
 				if (tokens.length == 1) {
 					System.out.println(server.getHost());
 				} else {
@@ -97,10 +124,23 @@ public class RegistryInterface {
 	}
 	
 	/**
-	 * It closes the server.
+	 * Validate input is a valid number.
+	 * 
+	 * @param input
+	 *            The string to be validated.
 	 */
-	public void shutdown() throws IOException {
-		server.stopListening();
+	public int validateInput(String input) {
+		try {
+			int num = Integer.parseInt(input);
+			if (num < 0)
+				throw new Exception();
+			return num;
+		} catch (NumberFormatException e) {
+			System.err.println("Error: Invalid input must input a number.");
+		} catch (Exception e) {
+			System.err.println("Error: number must be greater then zero.");
+		}
+		return 0;
 	}
 	
 	/**
@@ -110,8 +150,16 @@ public class RegistryInterface {
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: [ showOverlay | listNodes | getPort | getHost ]";
+		String info = "invalid command \"" + message + "\" try: \t\n[ send-overlay-link-weights | list-messaging | setup-overlay ]\t\n[ list-weights | get-port | get-host ]";
 		System.err.println(info);
 	}
 
+	
+	/**
+	 * It closes the server.
+	 */
+	public void shutdown() throws IOException {
+		server.stopListening();
+	}
+	
 }

@@ -1,11 +1,11 @@
 // File name Message.java
-package cs455.overlay.node;
+package cs455.overlay.msg;
 
 import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class Message {
+public class NodeMessage {
 
 	private int type;
 	private long time;
@@ -24,7 +24,7 @@ public class Message {
             "TRAFFIC_SUMMARY"
 		};
 	
-	public Message(byte[] bytes) {
+	public NodeMessage(byte[] bytes) {
 		try {
 			makeObject(bytes);
 		} catch (Exception e) {
@@ -32,7 +32,7 @@ public class Message {
 		}
 	}
 	
-	public Message(String message) {
+	public NodeMessage(String message) {
 		this.message = message;
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();

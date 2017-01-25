@@ -54,7 +54,7 @@ public class NodeInterface extends Thread {
 			String message;
 			while (stop == false) {
 				message = fromConsole.readLine();
-				if (message.equals(""))
+				if (message.trim().equals(""))
 					continue;
 				
 				getAction(message);
@@ -77,14 +77,29 @@ public class NodeInterface extends Thread {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "getPort":
+			case "de-register":
+				if (tokens.length == 1) {
+					client.unregister();
+					exit();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "print-shortest-path":
+				if (tokens.length == 1) {
+					server.getShortestPath();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "get-port":
 				if (tokens.length == 1) {
 					System.out.println(server.getPort());
 				} else {
 					this.invalid(message);
 				}
 				break;
-			case "getHost":
+			case "get-host":
 				if (tokens.length == 1) {
 					System.out.println(server.getHost());
 				} else {
@@ -97,10 +112,21 @@ public class NodeInterface extends Thread {
 	}
 	
 	/**
-	 * It closes the server.
+	 * Build the shortest path string.
 	 */
-	public void shutdown() throws IOException {
-		server.stopListening();
+	public String getShortestPath() {
+		String ret = "";
+		ret += server.getShortestPath();
+		return ret;
+	}
+	
+	/**
+	 * It closes the program.
+	 */
+	public void exit() {
+		client.close();
+		server.serverClosed();
+		System.exit(0);
 	}
 	
 	/**

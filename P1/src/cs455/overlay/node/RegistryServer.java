@@ -13,6 +13,8 @@ import java.text.*;
 import java.util.*;
 import java.io.*;
 
+import cs455.overlay.msg.*;
+
 public class RegistryServer extends AbstractServer {
 	
 	/**
@@ -69,10 +71,28 @@ public class RegistryServer extends AbstractServer {
 	
 	/**
 	 * 
+	 * @param string
+	 * @return
+	 */
+	public String getNode(String info) {
+		return serverList.findNode(info).toString();
+	}
+	
+	
+	/**
+	 * 
 	 * @return
 	 */
 	public String getList() {
 		return serverList.getList();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getOverlay(int index) {
+		return serverList.getConnections(index);
 	}
 	
 	/**
@@ -86,7 +106,23 @@ public class RegistryServer extends AbstractServer {
 		}
 		return ret.toString();
 	}
-
+	
+	/**
+	 * 
+	 */
+	public void sendOverlay() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * 
+	 * @param numberOfRounds 
+	 */
+	public void sendStart(int numberOfRounds) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	/**
 	 * 
@@ -95,7 +131,7 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
 		String message = (status)?"True":"False";
-		Message m = new Message(message);
+		NodeMessage m = new NodeMessage(message);
 		m.setType("REGISTER_RESPONSE");
 		try {
 			client.sendToNode(m);
@@ -106,7 +142,7 @@ public class RegistryServer extends AbstractServer {
 			client.close();
 	}
 	
-	public void registerNode(Message m, NodeConnection client) {
+	public void registerNode(NodeMessage m, NodeConnection client) {
 		String[] tokens = m.getMessage().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
@@ -116,7 +152,7 @@ public class RegistryServer extends AbstractServer {
 		sendRegistrationResponse(true, client);
 	}
 	
-	public void unregisterNode(Message m, NodeConnection client) {
+	public void unregisterNode(NodeMessage m, NodeConnection client) {
 		String[] tokens = m.getMessage().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false)
@@ -131,22 +167,23 @@ public class RegistryServer extends AbstractServer {
 
 
 	@Override
-	protected void MessageFromNode(Object msg, NodeConnection client) {
-		if (msg instanceof Message == false)
+	protected void MessageFromNode(Object o, NodeConnection client) {
+		if (o instanceof NodeMessage == false)
 			return;
-		Message m = (Message) msg;
+		NodeMessage msg = (NodeMessage) o;
 		if (debug)
-			System.out.println(m);
-		switch(m.getStringType()) {
+			System.out.println(msg);
+		switch(msg.getStringType()) {
 			case "REGISTER_REQUEST":
-				registerNode(m, client);
+				registerNode(msg, client);
 				break;
 			case "DEREGISTER_REQUEST":
-				unregisterNode(m, client);
+				unregisterNode(msg, client);
 				break;
 			default:
 		}
 	}
-	
+
+
 }
 

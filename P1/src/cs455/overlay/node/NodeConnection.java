@@ -4,6 +4,8 @@ package cs455.overlay.node;
 import java.io.*;
 import java.net.*;
 
+import cs455.overlay.msg.*;
+
 /**
  * 
  * @author G van Andel
@@ -87,6 +89,7 @@ public class NodeConnection extends Thread {
 		}
 		String clientIP = nodeSocket.getInetAddress().getHostAddress();
 		this.nodeAddress = new NodeAddress(nodeSocket, clientIP, nodeSocket.getPort());
+		this.setName(nodeAddress.toString());
 		stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
@@ -101,7 +104,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occur when sending the message.
 	 */
-	final public void sendToNode(Message msg) throws IOException {
+	final public void sendToNode(NodeMessage msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
@@ -173,7 +176,7 @@ public class NodeConnection extends Thread {
 				
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				server.receiveMessageFromNode(new Message(bytes), this);
+				server.receiveMessageFromNode(new NodeMessage(bytes), this);
 			}
 		} catch (EOFException ex) {
 			close();

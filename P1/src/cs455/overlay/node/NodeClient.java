@@ -5,6 +5,8 @@ package cs455.overlay.node;
 import java.io.*;
 import java.net.*;
 
+import cs455.overlay.msg.*;
+
 /**
  * 
  * @author G van Andel
@@ -117,7 +119,7 @@ public class NodeClient implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final public void sendToServer(Message msg) throws IOException {
+	final public void sendToServer(NodeMessage msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
@@ -220,7 +222,7 @@ public class NodeClient implements Runnable {
 				byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				messageFromServer(new Message(bytes));
+				messageFromServer(new NodeMessage(bytes));
 			}
 		} catch (Exception exception) {
 			if (stop == false) {
@@ -255,7 +257,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		Message m = new Message(node.getInfo());
+		NodeMessage m = new NodeMessage(node.getInfo());
 		m.setType("REGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -271,7 +273,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		Message m = new Message(node.getInfo());
+		NodeMessage m = new NodeMessage(node.getInfo());
 		m.setType("DEREGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -335,13 +337,19 @@ public class NodeClient implements Runnable {
 
 	// ----------------------------------------------------------
 
+
+	public void unregister() {
+		NodeMessage m = new NodeMessage("Go Kitty Go!");
+		m.setType("REGISTER_RESPONSE");	
+	}
+	
 	/**
 	 * Handles a the response message sent from the server to this node.
 	 * 
 	 * @param m
 	 *            the message sent.
 	 */
-	protected void registerResponse(Message m) {
+	protected void registerResponse(NodeMessage m) {
 		if (m.getMessage().equals("False")) {
 			close();
 		}
@@ -354,9 +362,9 @@ public class NodeClient implements Runnable {
 	 *            the message sent.
 	 */
 	protected void messageFromServer(Object o) {
-		if (o instanceof Message == false)
+		if (o instanceof NodeMessage == false)
 			return;
-		Message m = (Message) o;
+		NodeMessage m = (NodeMessage) o;
 		if (debug)
 			System.out.println(m);
 		switch (m.getStringType()) {
@@ -366,5 +374,6 @@ public class NodeClient implements Runnable {
 		default:
 		}
 	}
+
 }
 // end of Client class

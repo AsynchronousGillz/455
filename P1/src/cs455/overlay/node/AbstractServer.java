@@ -3,9 +3,12 @@ package cs455.overlay.node;
 import java.net.*;
 import java.text.*;
 import java.util.*;
+
+import cs455.overlay.msg.*;
+
 import java.io.*;
 
-public abstract class AbstractServer implements Runnable {
+public abstract class AbstractServer extends Thread {
 	// INSTANCE VARIABLES *********************************************
 
 	/**
@@ -48,12 +51,6 @@ public abstract class AbstractServer implements Runnable {
 	 * default.
 	 */
 	private boolean stop = false;
-	
-	/**
-	 * The last two octets of the server IP address and the port. Set once
-	 * listen is called
-	 */
-	private String serverName;
 	
 	/**
 	 * For debug purposes
@@ -109,14 +106,7 @@ public abstract class AbstractServer implements Runnable {
 	 */
 	final public void setName() throws IOException {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
-		this.serverName = ipAddress+":"+this.port;
-	}
-	
-	/**
-	 * Gets the server name.
-	 */
-	final public String getName(){
-		return this.serverName;
+		this.setName(ipAddress+":"+this.port);
 	}
 	
 	/**
@@ -161,7 +151,7 @@ public abstract class AbstractServer implements Runnable {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllClients(Message msg) {
+	public void sendToAllClients(NodeMessage msg) {
 		Thread[] clientThreadList = getClientConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {
