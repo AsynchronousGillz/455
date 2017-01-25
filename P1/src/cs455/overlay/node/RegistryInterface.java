@@ -110,7 +110,7 @@ public class RegistryInterface {
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: [ listNodes | getPort | getHost ]";
+		String info = "invalid command \"" + message + "\" try: [ showOverlay | listNodes | getPort | getHost ]";
 		System.err.println(info);
 	}
 

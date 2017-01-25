@@ -56,7 +56,9 @@ public class RegistryList {
 	 * Set the number of connections for each node.
 	 * @param numberOfConnections
 	 */
-	public void setNumberOfConnections(int numberOfConnections) {
+	public void setNumberOfConnections(int numberOfConnections) throws Exception {
+		if (numberOfConnections > data.size())
+			throw new Exception("Invalid selction for connection number.");
 		this.numberOfConnections = numberOfConnections;
 	}
 
@@ -82,12 +84,14 @@ public class RegistryList {
 	public String getOverlay() {
 		if (data.size() == 0) 
 			return "Node list is currently empty.";
+		if (validOverlay == false)
+			return "Overlay has not been constructed.";
 		StringBuilder ret = new StringBuilder();
 		int index = 0;
 		for (byte[] bytes: overlay) {
-			ret.append(String.format("%02d -> | ", index++));
+			ret.append(String.format("%02d -> ", index++));
 			for (byte b: bytes) {
-				ret.append(b + " | ");
+				ret.append(b + " ");
 			}
 			ret.append("\n");
 		}
@@ -101,14 +105,14 @@ public class RegistryList {
 	public String getConnections(int index) {
 		if (data.size() == 0) 
 			return "Node list is currently empty.";
-		if (overlay == null)
+		if (validOverlay == false)
 			return "Overlay has not been constructed.";
 		StringBuilder ret = new StringBuilder();
-		ret.append(String.format("%s -> | ", data.get(index)));
+		ret.append(String.format("%s -> ", data.get(index)));
 		int column = 0;
 		for (byte b: overlay[index]) {
 			if (b == 1)
-				ret.append(data.get(column) + " | ");
+				ret.append(data.get(column) + " ");
 			column++;
 		}
 		ret.append("\n");
@@ -132,25 +136,27 @@ public class RegistryList {
 	}
 	
 	public synchronized void buildOverlay() {
-		overlay = new byte[data.size()][data.size()];
-		int size = overlay.length;
-		setOverlayStart(size);
-		for (int row = 0; row < size; row++) {
-			for (int column = 0; column < size; column++) {
-				if (checkConnection(size, row, column) == true) {
-					overlay[row][column] = 1;
-					overlay[column][row] = 1;
+		while (validOverlay == false) {
+			overlay = new byte[data.size()][data.size()];
+			int size = overlay.length;
+			setOverlayStart(size);
+			for (int row = 0; row < size; row++) {
+				for (int column = 0; column < size; column++) {
+					if (checkConnection(size, row, column) == true) {
+						overlay[row][column] = 1;
+						overlay[column][row] = 1;
+					}
 				}
 			}
-		}
-		int sum = 0;
-		for (int row = 0; row < size; row++) {
-			for (int column = 0; column < size; column++) {
-				sum += overlay[row][column];
+			int sum = 0;
+			for (int row = 0; row < size; row++) {
+				for (int column = 0; column < size; column++) {
+					sum += overlay[row][column];
+				}
 			}
+			if (sum == (size * numberOfConnections))
+				validOverlay = true;
 		}
-		if (sum == (size * numberOfConnections))
-			System.out.println("VALID");
 	}
 	
 	private void setOverlayStart(int size) {
@@ -183,8 +189,8 @@ public class RegistryList {
 	}
 	
 	public static void main(String args[]) {
-		RegistryList registerList = new RegistryList(4);
-		for(int i = 0; i < 10; i++) {
+		RegistryList registerList = new RegistryList(6);
+		for(int i = 0; i < 20; i++) {
 			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, 40000+i));
 		}
 		System.out.println(registerList.getList());

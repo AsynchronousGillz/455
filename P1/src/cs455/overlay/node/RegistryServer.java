@@ -31,10 +31,9 @@ public class RegistryServer extends AbstractServer {
 
 
 	public void nodeConnected(NodeConnection nodeConnection) {
-		NodeAddress node = nodeConnection.getAddress();
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(node+" connected at "+dateFormat.format(date));
+		System.out.println(nodeConnection.getAddress()+" connected at "+dateFormat.format(date));
 	}
 
 	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
@@ -81,8 +80,11 @@ public class RegistryServer extends AbstractServer {
 	 * @return
 	 */
 	public String getOverlay() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < serverList.getNumberOfConnections(); i++) {
+			ret.append(serverList.getConnections(i));
+		}
+		return ret.toString();
 	}
 
 	
