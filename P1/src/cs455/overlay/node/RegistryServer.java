@@ -71,9 +71,10 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * Search for the Node with the node name or the 
+	 * Search the serverList for the Node with a host name, ip address
+	 * or port similar to the String parameter.
 	 * @param string
-	 * @return
+	 * @return NodeAddress.toString()
 	 */
 	public String getNode(String info) {
 		return serverList.findNode(info).toString();
@@ -114,21 +115,41 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * From the interface given the command "setup-overlay"
+	 * first check the number of node is more then the number
+	 * of connections and if so print an error else have the
+	 * RegistryList build the overlay and print success.
 	 */
-	public String makeOverlay() {
-		// TODO Auto-generated method stub
-		return null;
+	public void makeOverlay() {
+		if (serverList.checkOverlay() == false) {
+			System.err.println("Invalid connections to node ratio.");
+			return;
+		}
+		serverList.buildOverlay();
+		System.out.println("The overlay has been succesfully setup.");
 	}
 	
 	/**
+	 * From the interface given the command "setup-overlay"
+	 * first check the number of node is more then the number
+	 * of connections and if so print an error else have the
+	 * RegistryList build the overlay and print success.
 	 * 
-	 * @return
+	 * @param number of connections.
 	 */
-	public String makeOverlay(int numberConnections) {
-		// TODO Auto-generated method stub
-		return null;
+	public void makeOverlay(int numberConnections) {
+		try {
+			serverList.setNumberOfConnections(numberConnections);
+		} catch (Exception e) {
+			System.err.println(e.toString());
+			return;
+		}
+		if (serverList.checkOverlay() == false) {
+			System.err.println("Invalid connections to node ratio.");
+			return;
+		}
+		serverList.buildOverlay();
+		System.out.println("The overlay has been succesfully setup.");
 	}
 
 	

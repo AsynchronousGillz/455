@@ -76,10 +76,10 @@ public class Registry {
 				break;
 			case "setup-overlay":
 				if (tokens.length == 1) {
-					System.out.println(server.makeOverlay());
+					server.makeOverlay();
 				} else if (tokens.length == 2) {
 					int numberConnections = validateInput(tokens[1]);
-					System.out.println(server.makeOverlay(numberConnections));
+					server.makeOverlay(numberConnections);
 				} else {
 					this.invalid(message);
 				}
@@ -153,7 +153,9 @@ public class Registry {
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: \t\n[ send-overlay-link-weights | list-messaging | setup-overlay ]\t\n[ list-weights | get-port | get-host ]";
+		String info = "invalid command \"" + message + "\" try: ";
+		info += "\t[ send-overlay-link-weights | list-messaging | setup-overlay ]\n";
+		info += "\t[ list-messaging | list-weights | get-port | get-host ]\n";
 		System.err.println(info);
 	}
 

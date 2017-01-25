@@ -87,25 +87,42 @@ public class NodeAddress {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
 		result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
 		result = prime * result + nodeHash;
 		result = prime * result + port;
 		return result;
 	}
-	
-	public boolean equals(NodeAddress other) {
-		System.out.println(this+" - "+other); //DEBUG
-		if (this == other)
+		
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (other == null)
+		if (obj == null)
 			return false;
+		if (obj instanceof NodeAddress == false)
+			return false;
+		
+		NodeAddress other = (NodeAddress) obj;
+		if (this.hostName == null && other.hostName != null) {
+				return false;
+		} else if (hostName.equals(other.hostName) == false) {
+			return false;
+		}
+		
+		if (this.ipAddress == null && other.ipAddress != null) {
+				return false;
+		} else if (ipAddress.equals(other.ipAddress) == false) {
+			return false;
+		}
+		
 		if (nodeHash != other.nodeHash)
 			return false;
 		if (port != other.port)
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Get just IP Address
 	 * @return the "{ip}" in String format

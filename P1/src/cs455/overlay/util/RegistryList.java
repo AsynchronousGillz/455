@@ -1,6 +1,5 @@
 package cs455.overlay.util;
 
-import java.net.Socket;
 import java.util.*;
 
 import cs455.overlay.node.NodeAddress;
@@ -63,6 +62,15 @@ public class RegistryList {
 			throw new Exception("Invalid selction for connection number.");
 		this.numberOfConnections = numberOfConnections;
 	}
+	
+	/**
+	 * Check that the number of nodes connected and entered into
+	 * the registry is more then the number of connections.
+	 * @return (numberOfConnections < data.size())
+	 */
+	public boolean checkOverlay() {
+		return (numberOfConnections < data.size());
+	}
 
 	/**
 	 * Returns all of the NodeAddress in table getInfo() format
@@ -74,7 +82,7 @@ public class RegistryList {
 			return "Node list is currently empty.";
 		String ret = "";
 		for (NodeAddress node: data) {
-			ret += node.getRegistryInfo() + "\n";
+			ret += node.getInfo() + "\n";
 		}
 		return ret;
 	}
@@ -110,7 +118,7 @@ public class RegistryList {
 		if (validOverlay == false)
 			return "Overlay has not been constructed.";
 		StringBuilder ret = new StringBuilder();
-		ret.append(String.format("%s -> ", data.get(index)));
+		ret.append(String.format("%s ", data.get(index)));
 		int column = 0;
 		for (byte b: overlay[index]) {
 			if (b == 1)
@@ -126,6 +134,8 @@ public class RegistryList {
 	}
 	
 	public synchronized void removeFromList(NodeAddress node) {
+		if (data.contains(node) == true)
+			System.out.println("I SEE YOU."); // DEBUG
 		data.remove(node);
 	}
 	
@@ -204,17 +214,6 @@ public class RegistryList {
 		if (rand.nextInt(size) > row)
 			return false;
 		return true;
-	}
-	
-	public static void main(String args[]) {
-		RegistryList registerList = new RegistryList(6);
-		for(int i = 0; i < 20; i++) {
-			registerList.addToList(new NodeAddress(new Socket(), "test_"+i, "127.0.0."+i, 40000+i));
-		}
-		System.out.println(registerList.getList());
-		registerList.buildOverlay();
-		System.out.println(registerList.getOverlay());
-		System.out.println(registerList.getConnections(0));
 	}
 
 }
