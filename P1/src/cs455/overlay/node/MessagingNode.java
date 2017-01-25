@@ -1,6 +1,8 @@
 package cs455.overlay.node;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * 
@@ -12,7 +14,136 @@ import java.io.IOException;
 
 public class MessagingNode {
 
-	public boolean debug = false;
+	// Class variables *************************************************
+
+	/**
+	 * 
+	 */
+	private boolean stop = false;
+
+	/**
+	 * 
+	 */
+	final public static boolean debug = false;
+
+	// Instance variables **********************************************
+
+	NodeClient client;
+	NodeServer server;
+
+	// Constructors ****************************************************
+
+	/**
+	 * Constructs an instance of the chat client.
+	 *
+	 * @param client
+	 * 		The client that connects to the registry.
+	 * @param server
+	 * 		The server for the messaging nodes to connect to.
+	 */
+
+	public MessagingNode(NodeClient client, NodeServer server) {
+		this.client = client;
+		this.server = server;
+	}
+
+	// Instance methods ************************************************
+	
+	public void runConsole() {
+		try {
+			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
+			String message;
+			while (stop == false) {
+				message = fromConsole.readLine();
+				if (message.trim().equals(""))
+					continue;
+				
+				getAction(message);
+				
+			}
+		} catch(Exception e) {
+			System.out.println("Unexpected error while reading from console!");
+		}
+	}
+	
+	/**
+	 *            
+	 * This method implements the commands for the server. Called when a command 
+	 * is entered into the server while listening for connections.
+	 *
+	 * @param message
+	 *            The message received from the client with a # at index 0.
+	 */
+
+	private void getAction(String message){
+		String[] tokens = message.split(" ");
+		switch(tokens[0]){
+			case "de-register":
+				if (tokens.length == 1) {
+					client.unregister();
+					exit();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "print-shortest-path":
+				if (tokens.length == 1) {
+					server.getShortestPath();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "get-port":
+				if (tokens.length == 1) {
+					System.out.println(server.getPort());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "get-host":
+				if (tokens.length == 1) {
+					System.out.println(server.getHost());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			default:
+				this.invalid(message);
+		}
+	}
+	
+	/**
+	 * Build the shortest path string.
+	 */
+	public String getShortestPath() {
+		String ret = "";
+		ret += server.getShortestPath();
+		return ret;
+	}
+	
+	/**
+	 * It closes the program.
+	 */
+	public void exit() {
+		client.close();
+		server.serverClosed();
+		System.exit(0);
+	}
+	
+	/**
+	 * It displays small help onto the screen.
+	 *
+	 * @param message
+	 *            The string to be displayed with error format.
+	 */
+	public void invalid(String message) {
+		String info = "invalid command \"" + message + "\" try: [ getPort | getHost ]";
+		System.err.println(info);
+	}
+
+	public void close() {
+		// TODO
+	}
 	
 	public static void main(String args[]) {
 		
@@ -22,7 +153,7 @@ public class MessagingNode {
 		try {
 			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "venus";
+			registryIP = "mercury";
 		}
 		
 		try {
@@ -42,8 +173,8 @@ public class MessagingNode {
 		
 		NodeClient nodeClient = new NodeClient(nodeServer, registryIP, registryPort);
 		
-		NodeInterface ni = new NodeInterface(nodeClient, nodeServer);
-		ni.start();
+		MessagingNode node = new MessagingNode(nodeClient, nodeServer);
+		node.runConsole();
 		
 	}
 	

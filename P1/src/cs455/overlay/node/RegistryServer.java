@@ -14,6 +14,7 @@ import java.util.*;
 import java.io.*;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.RegistryList;
 
 public class RegistryServer extends AbstractServer {
 	
@@ -145,7 +146,7 @@ public class RegistryServer extends AbstractServer {
 	public void registerNode(NodeMessage m, NodeConnection client) {
 		String[] tokens = m.getMessage().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
-		if (clientAddress.equals(tokens[0]) ^ getHost().equals(tokens[0]) == false)
+		if (clientAddress.equals(tokens[0]) == false)
 			sendRegistrationResponse(false, client);
 		int clientPort = Integer.parseInt(tokens[1]);
 		serverList.addToList(new NodeAddress(client.getNodeSocket(), tokens[0], clientPort));

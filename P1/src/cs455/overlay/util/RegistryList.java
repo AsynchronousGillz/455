@@ -1,7 +1,9 @@
-package cs455.overlay.node;
+package cs455.overlay.util;
 
 import java.net.Socket;
 import java.util.*;
+
+import cs455.overlay.node.NodeAddress;
 
 /**
  * 
