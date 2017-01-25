@@ -88,7 +88,8 @@ public class NodeConnection extends Thread {
 			throw ex; // Rethrow the exception.
 		}
 		String clientIP = nodeSocket.getInetAddress().getHostAddress();
-		this.nodeAddress = new NodeAddress(nodeSocket, clientIP, nodeSocket.getPort());
+		String clientName = this.getTargetHostName(clientIP);
+		this.nodeAddress = new NodeAddress(nodeSocket, clientName, clientIP, nodeSocket.getPort());
 		this.setName(nodeAddress.toString());
 		stopping = false;
 		start(); // Start the thread waits for data from the socket
@@ -150,6 +151,23 @@ public class NodeConnection extends Thread {
 	public Socket getNodeSocket() {
 		return nodeSocket;
 	}
+	
+	/**
+	 * Returns a string host name.
+	 * @param ip of target machine.
+	 * @return machine host name.
+	 */
+	public String getTargetHostName(String targetIP) {
+		String ret = null;
+		try {
+            InetAddress host = InetAddress.getByName(targetIP);
+            ret = host.getHostName();
+        } catch (UnknownHostException ex) {
+            ex.printStackTrace();
+        }
+		return ret;
+	}
+	
 	/**
 	 * Returns a string representation of the node.
 	 * 

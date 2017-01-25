@@ -55,7 +55,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = false;
+	protected final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -183,20 +183,14 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * Returns an array containing the existing client connections. This can be
-	 * used by concrete subclasses to implement messages that do something with
-	 * each connection (e.g. kill it, send a message to it etc.). Remember that
-	 * after this array is obtained, some clients in this migth disconnect. New
-	 * clients can also connect, these later will not appear in the array.
+	 * Returns an array containing the existing client connections. New
+	 * clients can also connect. This is only for that time.
 	 *
-	 * @return an array of <code>Thread</code> containing
-	 *         <code>NodeConnection</code> instances.
+	 * @return an array of Thread containing NodeConnection instances.
 	 */
 	synchronized final public Thread[] getClientConnections() {
 		Thread[] clientThreadList = new Thread[nodeThreadGroup.activeCount()];
-
 		nodeThreadGroup.enumerate(clientThreadList);
-
 		return clientThreadList;
 	}
 
@@ -219,6 +213,35 @@ public abstract class AbstractServer extends Thread {
 		try {
 			ret = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {}
+		return ret;
+	}
+	
+	/**
+	 * Returns the host name for this IP address.
+	 *
+	 * @return the host name in String format.
+	 */
+	final public String getHostName() {
+		String ret = null;
+		try {
+			ret = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {}
+		return ret;
+	}
+	
+	/**
+	 * Returns a string host name.
+	 * @param ip of target machine.
+	 * @return machine host name.
+	 */
+	final public String getTargetHostName(String targetIP) {
+		String ret = null;
+		try {
+            InetAddress host = InetAddress.getByName(targetIP);
+            ret = host.getHostName();
+        } catch (UnknownHostException ex) {
+            ex.printStackTrace();
+        }
 		return ret;
 	}
 

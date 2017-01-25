@@ -71,7 +71,7 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
+	 * Search for the Node with the node name or the 
 	 * @param string
 	 * @return
 	 */
@@ -93,6 +93,8 @@ public class RegistryServer extends AbstractServer {
 	 * @return
 	 */
 	public String getOverlay(int index) {
+		if (serverList.getValidOverlay() == false)
+			return "Overlay has not been constructed.";
 		return serverList.getConnections(index);
 	}
 	
@@ -101,12 +103,34 @@ public class RegistryServer extends AbstractServer {
 	 * @return
 	 */
 	public String getOverlay() {
+		if (serverList.getValidOverlay() == false)
+			return "Overlay has not been constructed.";
+		
 		StringBuilder ret = new StringBuilder();
 		for (int i = 0; i < serverList.getNumberOfConnections(); i++) {
 			ret.append(serverList.getConnections(i));
 		}
 		return ret.toString();
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String makeOverlay() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String makeOverlay(int numberConnections) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	/**
 	 * 
@@ -149,7 +173,8 @@ public class RegistryServer extends AbstractServer {
 		if (clientAddress.equals(tokens[0]) == false)
 			sendRegistrationResponse(false, client);
 		int clientPort = Integer.parseInt(tokens[1]);
-		serverList.addToList(new NodeAddress(client.getNodeSocket(), tokens[0], clientPort));
+		String clientName = getTargetHostName(tokens[0]);
+		serverList.addToList(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -159,8 +184,9 @@ public class RegistryServer extends AbstractServer {
 		if (tokens[0].equals(clientAddress) == false)
 			sendRegistrationResponse(false, client);
 		int clientPort = Integer.parseInt(tokens[1]);
+		String clientName = getTargetHostName(tokens[0]);
 		try {
-			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), tokens[0], clientPort));
+			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
@@ -184,6 +210,7 @@ public class RegistryServer extends AbstractServer {
 			default:
 		}
 	}
+
 
 
 }

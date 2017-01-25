@@ -76,9 +76,10 @@ public class Registry {
 				break;
 			case "setup-overlay":
 				if (tokens.length == 1) {
-					System.out.println(server.getOverlay());
+					System.out.println(server.makeOverlay());
 				} else if (tokens.length == 2) {
-					System.out.println(server.getOverlay());
+					int numberConnections = validateInput(tokens[1]);
+					System.out.println(server.makeOverlay(numberConnections));
 				} else {
 					this.invalid(message);
 				}

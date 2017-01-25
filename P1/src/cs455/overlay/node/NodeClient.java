@@ -65,7 +65,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = false;
+	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -256,8 +256,8 @@ public class NodeClient implements Runnable {
 	protected void connectionEstablished() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		NodeMessage m = new NodeMessage(node.getInfo());
+		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
+		NodeMessage m = new NodeMessage(node.getRegistryInfo());
 		m.setType("REGISTER_REQUEST");
 		try {
 			sendToServer(m);
@@ -272,8 +272,8 @@ public class NodeClient implements Runnable {
 	protected void connectionClosed() {
 		if (nodeSocket == null)
 			return;
-		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHost(), nodeServer.getPort());
-		NodeMessage m = new NodeMessage(node.getInfo());
+		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
+		NodeMessage m = new NodeMessage(node.getRegistryInfo());
 		m.setType("DEREGISTER_REQUEST");
 		try {
 			sendToServer(m);

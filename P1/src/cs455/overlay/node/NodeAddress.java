@@ -10,7 +10,6 @@ import java.net.*;
  *
  */
 
-
 public class NodeAddress {
 
 	/**
@@ -20,11 +19,18 @@ public class NodeAddress {
 	private int nodeHash;
 	
 	/**
-	 * This class represents an Internet Protocol (IP) address.
+	 * This String represents an Internet Protocol (IP) address.
 	 * 
 	 * @see java.net.InetAddress
 	 */
 	private String ipAddress;
+	
+	/**
+	 * This String represents the host name.
+	 * 
+	 * @see java.net.InetAddress
+	 */
+	private String hostName;
 	
 	/**
 	 * This is to make nodes port information accessible.
@@ -38,8 +44,9 @@ public class NodeAddress {
 	 * @param port
 	 */
 
-	public NodeAddress(Socket socket, String ipAddress, int port) {
+	public NodeAddress(Socket socket, String hostName, String ipAddress, int port) {
 		this.nodeHash = socket.hashCode();
+		this.hostName = hostName;
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
@@ -60,6 +67,14 @@ public class NodeAddress {
 		return ipAddress;
 	}
 
+	/**
+	 * Returns the host name of the node in String format
+	 * @return "{host name}" in string format
+	 */
+	public String getHost() {
+		return hostName;
+	}
+	
 	/**
 	 * Returns the port number of the node in int format
 	 * @return the port number in int format
@@ -100,16 +115,25 @@ public class NodeAddress {
 	}
 	
 	/**
-	 * Get the IP Address and the port
+	 * Get the IP Address, and port in String format
 	 * @return the "{ip} {port}" in String format
 	 */
-	public String getInfo() {
+	public String getRegistryInfo() {
 		return this.ipAddress+" "+this.port;
+	}
+	
+	/**
+	 * Get the Host name, IP Address, and port in String format
+	 * @return the "{host name} {ip} {port}" in String format
+	 */
+	public String getInfo() {
+		return this.hostName+" "+this.ipAddress+" "+this.port;
 	}
 
 
 	public void clone(NodeAddress node) {
 		this.nodeHash = node.getNodeHash();
+		this.hostName = node.getHost();
 		this.ipAddress = node.getAddress();
 		this.port = node.getPort();
 	}

@@ -74,7 +74,7 @@ public class RegistryList {
 			return "Node list is currently empty.";
 		String ret = "";
 		for (NodeAddress node: data) {
-			ret += node.getInfo() + "\n";
+			ret += node.getRegistryInfo() + "\n";
 		}
 		return ret;
 	}
@@ -209,7 +209,7 @@ public class RegistryList {
 	public static void main(String args[]) {
 		RegistryList registerList = new RegistryList(6);
 		for(int i = 0; i < 20; i++) {
-			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, 40000+i));
+			registerList.addToList(new NodeAddress(new Socket(), "test_"+i, "127.0.0."+i, 40000+i));
 		}
 		System.out.println(registerList.getList());
 		registerList.buildOverlay();
