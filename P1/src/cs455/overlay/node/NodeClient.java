@@ -387,8 +387,12 @@ public class NodeClient implements Runnable {
 	/**
 	 * Handles a message sent from the server to this node.
 	 * 
+	 * Then checks if the message is a protocol then if so
+	 * converts it to a Protocol. Then switch based on the 
+	 * message type. 
+	 * 
 	 * @param o
-	 *            the message sent.
+	 *            the incoming message.
 	 */
 	protected void messageFromServer(Object o) {
 		if (o instanceof Protocol == false)
@@ -397,17 +401,15 @@ public class NodeClient implements Runnable {
 		if (debug)
 			System.out.println(m);
 		switch (m.getStringType()) {
-			case "REGISTER_RESPONSE": {
+			case "REGISTER_RESPONSE":
 				registerResponse(m.convertToRegistation());
 				break;
-			}
-			case "MESSAGING_NODES_LIST": {
+			case "MESSAGING_NODES_LIST":
 				registerOverlay(m.convertToOverlay());
 				break;
-			}
-			case "LINK_WEIGHTS": {
+			case "LINK_WEIGHTS":
+				registerWeights(m.convertToOverlay());
 				break;
-			}
 			default:
 		}
 	}

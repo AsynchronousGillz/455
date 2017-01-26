@@ -166,8 +166,12 @@ public class RegistryServer extends AbstractServer {
 		}
 		NodeConnection[] con = getClientConnections();
 		int length = con.length;
-		for (int index = 0; index < length; index++) { // DEBUG
-			 new Overlay(bytes, index, 0);
+		try {
+			for (int index = 0; index < length; index++) { // DEBUG
+				con[index].sendToNode(new Overlay(bytes, index, 0));
+			}
+		} catch (IOException e) {
+			System.err.println(e.toString());
 		}
 	}
 	
