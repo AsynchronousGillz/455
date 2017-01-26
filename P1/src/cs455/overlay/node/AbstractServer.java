@@ -50,12 +50,12 @@ public abstract class AbstractServer extends Thread {
 	 * Indicates if the listening thread is ready to stop. Set to false by
 	 * default.
 	 */
-	private boolean stop = false;
+	private boolean stop = true;
 	
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = false;
+	protected final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -151,7 +151,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllClients(NodeMessage msg) {
+	public void sendToAllClients(Message msg) {
 		Thread[] clientThreadList = getClientConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {

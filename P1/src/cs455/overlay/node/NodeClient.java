@@ -65,7 +65,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = false;
+	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -119,7 +119,7 @@ public class NodeClient implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final public void sendToServer(NodeMessage msg) throws IOException {
+	final public void sendToServer(Protocol msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
@@ -222,7 +222,7 @@ public class NodeClient implements Runnable {
 				byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				messageFromServer(new NodeMessage(bytes));
+				messageFromServer(new Protocol(bytes));
 			}
 		} catch (Exception exception) {
 			if (stop == false) {
@@ -257,8 +257,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
-		NodeMessage m = new NodeMessage(node.getRegistryInfo());
-		m.setType("REGISTER_REQUEST");
+		Protocol m = new Registation(node.getRegistryInfo(), 0);
 		try {
 			sendToServer(m);
 		} catch (IOException e) {
@@ -273,8 +272,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
-		NodeMessage m = new NodeMessage(node.getRegistryInfo());
-		m.setType("DEREGISTER_REQUEST");
+		Protocol m = new Registation(node.getRegistryInfo(), 1);
 		try {
 			sendToServer(m);
 		} catch (IOException e) {
@@ -339,8 +337,15 @@ public class NodeClient implements Runnable {
 
 
 	public void unregister() {
-		NodeMessage m = new NodeMessage("Go Kitty Go!");
-		m.setType("REGISTER_RESPONSE");	
+		if (nodeSocket == null)
+			return;
+		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
+		Protocol m = new Registation(node.getRegistryInfo(), 1);
+		try {
+			sendToServer(m);
+		} catch (IOException e) {
+			System.err.println("Could not send Registration.");
+		}
 	}
 	
 	/**
@@ -349,7 +354,7 @@ public class NodeClient implements Runnable {
 	 * @param m
 	 *            the message sent.
 	 */
-	protected void registerResponse(NodeMessage m) {
+	protected void registerResponse(Protocol m) {
 		if (m.getMessage().equals("False")) {
 			close();
 		}
@@ -362,9 +367,9 @@ public class NodeClient implements Runnable {
 	 *            the message sent.
 	 */
 	protected void messageFromServer(Object o) {
-		if (o instanceof NodeMessage == false)
+		if (o instanceof Protocol == false)
 			return;
-		NodeMessage m = (NodeMessage) o;
+		Protocol m = (Protocol) o;
 		if (debug)
 			System.out.println(m);
 		switch (m.getStringType()) {

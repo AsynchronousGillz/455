@@ -1,17 +1,17 @@
-// File name Message.java
 package cs455.overlay.msg;
 
 import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class NodeMessage {
-
+public class Protocol {
+	
+	
 	private int type;
 	private long time;
-	private String message;
+	private byte indicator;
+	private byte[] message;
 
-	
 	private final String[] Types = { 
             "REGISTER_REQUEST",
             "REGISTER_RESPONSE",
@@ -19,12 +19,20 @@ public class NodeMessage {
             "MESSAGING_NODES_LIST",
             "LINK_WEIGHTS",
             "TASK_INITIATE",
+            "TASK_MESSAGE",
             "TASK_COMPLETE",
             "PULL_TRAFFIC_SUMMARY",
             "TRAFFIC_SUMMARY"
-		};
+	};
 	
-	public NodeMessage(byte[] bytes) {
+	public Protocol() {
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		dateFormat.format(date);// 2016/11/16 12:08:43
+		time = date.getTime();
+	}
+	
+	public Protocol(byte[] bytes) {
 		try {
 			makeObject(bytes);
 		} catch (Exception e) {
@@ -32,16 +40,18 @@ public class NodeMessage {
 		}
 	}
 	
-	public NodeMessage(String message) {
-		this.message = message;
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		dateFormat.format(date);// 2016/11/16 12:08:43
-		time = date.getTime();
-	}
+	//******************************************************************************
 	
 	public int getType() {
 		return type;
+	}
+	
+	public void setIndicator(byte i) {
+		this.indicator = i;
+	}
+	
+	public byte getIndicator() {
+		return indicator;
 	}
 
 	public String getStringType() {
@@ -61,11 +71,11 @@ public class NodeMessage {
 		this.type = index;
 	}
 
-	public String getMessage() {
+	public byte[] getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(byte[] message) {
 		this.message = message;
 	}
 	
@@ -73,24 +83,40 @@ public class NodeMessage {
 		return time;
 	}
 
-	public void setTime(long time) {
-		this.time = time;
+	public String toString() {
+		return "{ \"id\" : \""+type+"\", \"type\" : \"" + Types[type] + "\" }";
 	}
 
-	public String toString() {
-		return "{ \"id\" : \""+type+"\", \"type\" : \"" + Types[type] + "\", \"message\" : \"" + message + "\" }";
+	//******************************************************************************
+	
+	public Registation convertToRegistation() {
+		String msg = message.toString();
+		Registation ret = new Registation(msg, type);
+		return ret;
 	}
 	
+	public Overlay convertToOverlay() {
+		Overlay ret = new Overlay(message, type);
+		return ret;
+	}
+	
+	//******************************************************************************
+
+	/**
+	 * Converts Protocol to byte array to be sent across the socket.
+	 * @return byte array.
+	 * @throws IOException
+	 */
 	public final byte[] makeBytes() throws IOException {
 		byte[] bytes = null;
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
 		output.writeInt(type);
 		output.writeLong(time);
-		byte[] identifierBytes = message.getBytes();
-		int elementLength = identifierBytes.length;
+		byte[] messageBytes = message;
+		int elementLength = messageBytes.length;
 		output.writeInt(elementLength);
-		output.write(identifierBytes);
+		output.write(messageBytes);
 		output.flush();
 		bytes = byteOutputStream.toByteArray();
 		byteOutputStream.close();
@@ -98,15 +124,20 @@ public class NodeMessage {
 		return bytes;
 	}
 
+	/**
+	 * Takes the bytes sent on the socket and assigns values.
+	 * @param bytes byte array from socket.
+	 * @throws IOException
+	 */
 	public final void makeObject(byte[] bytes) throws IOException {
 		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
 		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
-		type = input.readInt();
-		time = input.readLong();
+		this.type = input.readInt();
+		this.time = input.readLong();
 		int identifierLength = input.readInt();
-		byte[] identifierBytes = new byte[identifierLength];
-		input.readFully(identifierBytes);
-		message = new String(identifierBytes);
+		byte[] messageBytes = new byte[identifierLength];
+		input.readFully(messageBytes);
+		this.message = messageBytes;
 		byteInputStream.close();
 		input.close();
 	}

@@ -103,7 +103,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occur when sending the message.
 	 */
-	final public void sendToNode(NodeMessage msg) throws IOException {
+	final public void sendToNode(Protocol msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
@@ -200,7 +200,7 @@ public class NodeConnection extends Thread {
 				
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				server.receiveMessageFromNode(new NodeMessage(bytes), this);
+				server.receiveMessageFromNode(new Protocol(bytes), this);
 			}
 		} catch (EOFException ex) {
 			close();

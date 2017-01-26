@@ -72,9 +72,9 @@ public class NodeServer extends AbstractServer {
 	
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
-		if (msg instanceof NodeMessage == false)
+		if (msg instanceof Protocol == false)
 			return;
-		NodeMessage m = (NodeMessage) msg;
+		Protocol m = (Protocol) msg;
 		if (debug)
 			System.out.println(m);
 		switch(m.getStringType()) {

@@ -173,8 +173,7 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
 		String message = (status)?"True":"False";
-		NodeMessage m = new NodeMessage(message);
-		m.setType("REGISTER_RESPONSE");
+		Registation m = new Registation(message, 2);
 		try {
 			client.sendToNode(m);
 		} catch (IOException e) {
@@ -184,8 +183,8 @@ public class RegistryServer extends AbstractServer {
 			client.close();
 	}
 	
-	public void registerNode(NodeMessage m, NodeConnection client) {
-		String[] tokens = m.getMessage().split(" ");
+	public void registerNode(Registation m, NodeConnection client) {
+		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false) {
 			sendRegistrationResponse(false, client);
@@ -198,8 +197,8 @@ public class RegistryServer extends AbstractServer {
 		sendRegistrationResponse(true, client);
 	}
 	
-	public void unregisterNode(NodeMessage m, NodeConnection client) {
-		String[] tokens = m.getMessage().split(" ");
+	public void unregisterNode(Registation m, NodeConnection client) {
+		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false) {
 			sendRegistrationResponse(false, client);
@@ -216,18 +215,22 @@ public class RegistryServer extends AbstractServer {
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {
-		if (o instanceof NodeMessage == false)
+		if (o instanceof Protocol == false)
 			return;
-		NodeMessage msg = (NodeMessage) o;
+		Protocol msg = (Protocol) o;
 		if (debug)
 			System.out.println(msg);
 		switch(msg.getStringType()) {
-			case "REGISTER_REQUEST":
-				registerNode(msg, client);
+			case "REGISTER_REQUEST": {
+				Registation reg = msg.convertToRegistation();
+				registerNode(reg, client);
 				break;
-			case "DEREGISTER_REQUEST":
-				unregisterNode(msg, client);
+			}
+			case "DEREGISTER_REQUEST": {
+				Registation reg = msg.convertToRegistation();
+				unregisterNode(reg, client);
 				break;
+			}
 			default:
 		}
 	}
