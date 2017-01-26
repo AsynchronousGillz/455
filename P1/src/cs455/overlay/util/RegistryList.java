@@ -124,11 +124,11 @@ public class RegistryList {
 	 * Returns the Nodes connections
 	 * @return
 	 */
-	public String getConnections(int index) {
+	public String getConnections(int index) throws Exception {
 		if (data.size() == 0) 
-			return "Node list is currently empty.";
+			throw new Exception("Node list is currently empty.");
 		if (validOverlay == false)
-			return "Overlay has not been constructed.";
+			throw new Exception("Overlay has not been constructed.");
 		StringBuilder ret = new StringBuilder();
 		ret.append(String.format("%s ", data.get(index)));
 		int column = 0;

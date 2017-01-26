@@ -86,17 +86,7 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 */
-	public String getOverlay(int index) {
-		if (serverList.getValidOverlay() == false)
-			return "Overlay has not been constructed.";
-		return serverList.getConnections(index);
-	}
-	
-	/**
-	 * 
+	 * TODO
 	 * @return
 	 */
 	public String getOverlay() {
@@ -104,8 +94,12 @@ public class RegistryServer extends AbstractServer {
 			return "Overlay has not been constructed.";
 		
 		StringBuilder ret = new StringBuilder();
-		for (int i = 0; i < serverList.getNumberOfConnections(); i++) {
-			ret.append(serverList.getConnections(i));
+		try {
+			for (int i = 0; i < serverList.getNumberOfConnections(); i++) {
+				ret.append(serverList.getConnections(i));
+			}
+		} catch (Exception e) {
+			System.err.println(e.toString());
 		}
 		return ret.toString();
 	}
@@ -173,6 +167,7 @@ public class RegistryServer extends AbstractServer {
 		} catch (IOException e) {
 			System.err.println(e.toString());
 		}
+		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
 	
 	/**

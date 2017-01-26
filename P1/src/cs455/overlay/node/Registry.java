@@ -94,7 +94,6 @@ public class Registry {
 			case "send-overlay-link-weights":
 				if (tokens.length == 1) {
 					server.sendOverlay();
-					System.out.println("Overlay sent to nodes.");
 				} else {
 					this.invalid(message);
 				}

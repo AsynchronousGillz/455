@@ -4,6 +4,9 @@ import java.io.*;
 
 public class Overlay extends Protocol {
 	
+	
+	//******************************************************************************
+	
 	/**
 	 * Used when creating the message from a Protocol.
 	 * @param message
@@ -46,6 +49,50 @@ public class Overlay extends Protocol {
 				break;
 		}
 		convertArray(nodes, number);
+	}
+	
+	/**
+	 * Used when creating a message from the Overlay.
+	 * @param nodes
+	 * 			connection information.
+	 * @param number
+	 * 			number node in array
+	 * @param type
+	 * 			0 for MESSAGING_NODES_LIST
+	 * 			1 for LINK_WEIGHTS
+	 */
+	public Overlay(String[] nodes, int number, int type) {
+		super();
+		switch(type) {
+			case 0: 
+				this.setType("MESSAGING_NODES_LIST");
+				break;
+			case 1:
+				this.setType("LINK_WEIGHTS");
+				break;
+		}
+		convertArray(nodes, number);
+	}
+	
+	/**
+	 * 
+	 * @param nodes
+	 * @param number
+	 */
+	public void convertArray(String[] nodes, int number) {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(output);
+		try {
+			out.writeInt(number);
+			out.writeInt(nodes.length);
+			for (String node : nodes) {
+				out.writeInt(node.length());
+				out.write(node.getBytes());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		message = output.toByteArray();
 	}
 	
 	/**
