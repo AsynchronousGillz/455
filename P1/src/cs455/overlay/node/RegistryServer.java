@@ -222,15 +222,15 @@ public class RegistryServer extends AbstractServer {
 		if (o instanceof Protocol == false)
 			return;
 		Protocol msg = (Protocol) o;
+		if (debug)
+			System.out.println(msg);
 		switch(msg.getStringType()) {
 			case "REGISTER_REQUEST": {
-				Registation reg = msg.convertToRegistation();
-				registerNode(reg, client);
+				registerNode(msg.convertToRegistation(), client);
 				break;
 			}
 			case "DEREGISTER_REQUEST": {
-				Registation reg = msg.convertToRegistation();
-				unregisterNode(reg, client);
+				unregisterNode(msg.convertToRegistation(), client);
 				break;
 			}
 			default:

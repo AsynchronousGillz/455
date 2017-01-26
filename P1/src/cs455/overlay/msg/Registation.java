@@ -31,7 +31,11 @@ public class Registation extends Protocol {
 	}
 	
 	public String getMessageString() {
-		return new String(this.getMessage());
+		return new String(message);
+	}
+	
+	public String toString() {
+		return " id :"+type+", type: " + Types[type] + " , message: " + getMessageString();
 	}
 	
 }

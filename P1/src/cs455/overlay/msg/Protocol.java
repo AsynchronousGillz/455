@@ -7,12 +7,12 @@ import java.util.*;
 public class Protocol {
 	
 	
-	private int type;
-	private long time;
-	private byte indicator;
-	private byte[] message;
+	protected int type;
+	protected long time;
+	protected byte indicator;
+	protected byte[] message;
 
-	private final String[] Types = { 
+	protected final String[] Types = { 
             "REGISTER_REQUEST",
             "REGISTER_RESPONSE",
             "DEREGISTER_REQUEST",
@@ -84,13 +84,13 @@ public class Protocol {
 	}
 
 	public String toString() {
-		return "{ \"id\" : \""+type+"\", \"type\" : \"" + Types[type] + "\" }";
+		return "id: "+type+", type: " + Types[type];
 	}
 
 	//******************************************************************************
 	
 	public Registation convertToRegistation() {
-		String msg = message.toString();
+		String msg = new String(message);
 		Registation ret = new Registation(msg, type);
 		return ret;
 	}

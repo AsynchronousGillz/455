@@ -1,8 +1,6 @@
 package cs455.overlay.msg;
 
-import java.util.ArrayList;
-
-import cs455.overlay.node.NodeAddress;
+import java.io.*;
 
 public class Overlay extends Protocol {
 	
@@ -39,7 +37,7 @@ public class Overlay extends Protocol {
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
 	 */
-	public Overlay(ArrayList<NodeAddress> nodes, int number, int type) {
+	public Overlay(String[] nodes, int number, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -49,14 +47,45 @@ public class Overlay extends Protocol {
 				this.setType("LINK_WEIGHTS");
 				break;
 		}
-		this.setMessage(convertArrayList(nodes, number));
+		convertArray(nodes, number);
 	}
 	
-	public byte[] convertArrayList(ArrayList<NodeAddress> nodes, int number) {
-		return null;
+	/**
+	 * 
+	 * @param nodes
+	 * @param number
+	 */
+	public void convertArray(String[] nodes, int number) {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(output);
+		try {
+			out.writeInt(nodes.length);
+			for (String node : nodes) {
+				out.writeUTF(node);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		message = output.toByteArray();
 	}
 	
-	public ArrayList<NodeAddress> convertArrayList(byte[] nodes) {
-		return null;
+	/**
+	 * 
+	 * @return
+	 */
+	public String[] convertToArray() {
+		String[] ret = null;
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
+		try {
+			int length = in.readInt();
+			ret = new String[length];
+			for (int i = 0; i < length; i++) {
+				ret[i] = in.readUTF();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 }

@@ -354,7 +354,9 @@ public class NodeClient implements Runnable {
 	 * @param m
 	 *            the message sent.
 	 */
-	protected void registerResponse(Protocol m) {
+	protected void registerResponse(Registation m) {
+		if (debug)
+			System.out.println(m.getMessageString());;
 		if (m.getMessage().equals("False")) {
 			close();
 		}
@@ -373,10 +375,11 @@ public class NodeClient implements Runnable {
 		if (debug)
 			System.out.println(m);
 		switch (m.getStringType()) {
-		case "REGISTER_RESPONSE":
-			registerResponse(m);
-			break;
-		default:
+			case "REGISTER_RESPONSE": {
+				registerResponse(m.convertToRegistation());
+				break;
+			}
+			default:
 		}
 	}
 

@@ -153,7 +153,7 @@ public class MessagingNode {
 		try {
 			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "mercury";
+			registryIP = "venus";
 		}
 		
 		try {
