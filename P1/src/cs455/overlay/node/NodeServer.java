@@ -27,20 +27,12 @@ public class NodeServer extends AbstractServer {
 	public NodeServer() throws IOException {
 		super(0);
 	}
-
-	/**
-	 * 
-	 */
 	public void nodeConnected(NodeConnection nodeConnection) {
-		NodeAddress node = nodeConnection.getAddress();
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(node+" connected at "+dateFormat.format(date));
+		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
 	}
 
-	/**
-	 * 
-	 */
 	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();

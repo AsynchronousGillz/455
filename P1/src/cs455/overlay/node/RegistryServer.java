@@ -36,18 +36,14 @@ public class RegistryServer extends AbstractServer {
 	public void nodeConnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(nodeConnection.getAddress()+" connected at "+dateFormat.format(date));
+		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
 	}
 
 	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
-		try {
-			serverList.removeFromList(nodeConnection.getAddress());
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
+		serverList.removeFromList(nodeConnection.getAddress());
 	}
 
 	public void listeningException(Throwable exception) {
@@ -57,14 +53,14 @@ public class RegistryServer extends AbstractServer {
 	}
 
 	/**
-	 * 
+	 * TODO
 	 */
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
 	}
 
 	/**
-	 * 
+	 * TODO
 	 */
 	protected void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
@@ -82,7 +78,7 @@ public class RegistryServer extends AbstractServer {
 	
 	
 	/**
-	 * 
+	 * TODO
 	 * @return
 	 */
 	public String getList() {
@@ -191,26 +187,30 @@ public class RegistryServer extends AbstractServer {
 	public void registerNode(NodeMessage m, NodeConnection client) {
 		String[] tokens = m.getMessage().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
-		if (clientAddress.equals(tokens[0]) == false)
+		if (tokens[0].equals(clientAddress) == false) {
 			sendRegistrationResponse(false, client);
-		int clientPort = Integer.parseInt(tokens[1]);
+			return;
+		}
 		String clientName = getTargetHostName(tokens[0]);
-		serverList.addToList(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
+		int clientPort = Integer.parseInt(tokens[1]);
+		client.makeNodeAddress(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
+		serverList.addToList(client.getAddress());
 		sendRegistrationResponse(true, client);
 	}
 	
 	public void unregisterNode(NodeMessage m, NodeConnection client) {
 		String[] tokens = m.getMessage().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
-		if (tokens[0].equals(clientAddress) == false)
+		if (tokens[0].equals(clientAddress) == false) {
 			sendRegistrationResponse(false, client);
-		int clientPort = Integer.parseInt(tokens[1]);
-		String clientName = getTargetHostName(tokens[0]);
-		try {
-			serverList.removeFromList(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
-		} catch (Exception e) {
-			System.err.println(e.toString());
+			return;
 		}
+		if (validateInput(tokens[1]) == client.getAddress().getPort()) {
+			sendRegistrationResponse(false, client);
+			return;
+		}
+		serverList.removeFromList(client.getAddress());
+		sendRegistrationResponse(true, client);
 	}
 
 

@@ -38,10 +38,12 @@ public class NodeAddress {
 	private int port;
 	
 	/**
+	 * Make the object with a socket, hostName, ipAddress, and port.
 	 * 
-	 * @param socket
-	 * @param inetAddress
-	 * @param port
+	 * @param socket Assign the hashCode of the socket to nodeHash 
+	 * @param hostName Assign the host name to hostName
+	 * @param ipAddress Assign the ip address to ipAddress
+	 * @param port Assign the port number to port
 	 */
 
 	public NodeAddress(Socket socket, String hostName, String ipAddress, int port) {
@@ -96,8 +98,6 @@ public class NodeAddress {
 		
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
 		if (obj instanceof NodeAddress == false)
@@ -109,17 +109,19 @@ public class NodeAddress {
 		} else if (hostName.equals(other.hostName) == false) {
 			return false;
 		}
-		
+
 		if (this.ipAddress == null && other.ipAddress != null) {
 				return false;
 		} else if (ipAddress.equals(other.ipAddress) == false) {
 			return false;
 		}
-		
+
 		if (nodeHash != other.nodeHash)
 			return false;
+		
 		if (port != other.port)
 			return false;
+		
 		return true;
 	}
 
@@ -155,11 +157,4 @@ public class NodeAddress {
 		this.port = node.getPort();
 	}
 	
-	public static void main(String args[]) {
-		Socket s = new Socket();
-		NodeAddress one = new NodeAddress(s, "cat", "127.0.0.1", 31);
-		NodeAddress two = new NodeAddress(s, "cat", "127.0.0.1", 31);
-		System.out.println(one.equals(two));
-		System.out.println(one.hashCode() == two.hashCode());
-	}
 }

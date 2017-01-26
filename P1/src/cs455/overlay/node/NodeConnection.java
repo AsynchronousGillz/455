@@ -81,17 +81,15 @@ public class NodeConnection extends Thread {
 
 		// Initialize the objects streams
 		try {
-			input = new DataInputStream(nodeSocket.getInputStream());
-			output = new DataOutputStream(nodeSocket.getOutputStream());
+			this.input = new DataInputStream(nodeSocket.getInputStream());
+			this.output = new DataOutputStream(nodeSocket.getOutputStream());
 		} catch (IOException ex) {
 			close();
 			throw ex; // Rethrow the exception.
 		}
-		String clientIP = nodeSocket.getInetAddress().getHostAddress();
-		String clientName = this.getTargetHostName(clientIP);
-		this.nodeAddress = new NodeAddress(nodeSocket, clientName, clientIP, nodeSocket.getPort());
-		this.setName(nodeAddress.toString());
-		stopping = false;
+		this.nodeAddress = null;
+		setName(nodeSocket.getInetAddress().getHostAddress());
+		this.stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
 
@@ -130,6 +128,11 @@ public class NodeConnection extends Thread {
 		} finally {
 			server.nodeDisconnected(this);
 		}
+	}
+	
+	final public void makeNodeAddress(NodeAddress nodeAddress) {
+		this.nodeAddress = nodeAddress;
+		this.setName(nodeAddress.toString());
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -174,7 +177,10 @@ public class NodeConnection extends Thread {
 	 * @return the node's description.
 	 */
 	public String toString() {
-		return nodeAddress.toString();
+		if (nodeAddress == null)
+			return getName();
+		else
+			return nodeAddress.toString();
 	}
 
 	// RUN METHOD -------------------------------------------------------

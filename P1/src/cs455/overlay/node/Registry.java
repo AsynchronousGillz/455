@@ -78,7 +78,7 @@ public class Registry {
 				if (tokens.length == 1) {
 					server.makeOverlay();
 				} else if (tokens.length == 2) {
-					int numberConnections = validateInput(tokens[1]);
+					int numberConnections = server.validateInput(tokens[1]);
 					server.makeOverlay(numberConnections);
 				} else {
 					this.invalid(message);
@@ -101,7 +101,7 @@ public class Registry {
 				break;
 			case "start":
 				if (tokens.length == 2) {
-					int numberOfRounds = validateInput(tokens[1]);
+					int numberOfRounds = server.validateInput(tokens[1]);
 					server.sendStart(numberOfRounds);
 				} else {
 					this.invalid(message);
@@ -124,26 +124,6 @@ public class Registry {
 			default:
 				this.invalid(message);
 		}
-	}
-	
-	/**
-	 * Validate input is a valid number.
-	 * 
-	 * @param input
-	 *            The string to be validated.
-	 */
-	public int validateInput(String input) {
-		try {
-			int num = Integer.parseInt(input);
-			if (num < 0)
-				throw new Exception();
-			return num;
-		} catch (NumberFormatException e) {
-			System.err.println("Error: Invalid input must input a number.");
-		} catch (Exception e) {
-			System.err.println("Error: number must be greater then zero.");
-		}
-		return 0;
 	}
 	
 	/**

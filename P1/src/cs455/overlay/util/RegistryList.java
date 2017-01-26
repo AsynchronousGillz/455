@@ -134,8 +134,6 @@ public class RegistryList {
 	}
 	
 	public synchronized void removeFromList(NodeAddress node) {
-		if (data.contains(node) == true)
-			System.out.println("I SEE YOU."); // DEBUG
 		data.remove(node);
 	}
 	

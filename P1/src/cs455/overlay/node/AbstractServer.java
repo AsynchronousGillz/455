@@ -55,7 +55,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = true;
+	protected final boolean debug = false;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -288,6 +288,27 @@ public abstract class AbstractServer extends Thread {
 	 */
 	final public void setBacklog(int backlog) {
 		this.backlog = backlog;
+	}
+	
+	
+	/**
+	 * Validate input is a valid number.
+	 * 
+	 * @param input
+	 *            The string to be validated.
+	 */
+	final public int validateInput(String input) {
+		try {
+			int num = Integer.parseInt(input);
+			if (num < 0)
+				throw new Exception();
+			return num;
+		} catch (NumberFormatException e) {
+			System.err.println("Error: Invalid input must input a number.");
+		} catch (Exception e) {
+			System.err.println("Error: number must be greater then zero.");
+		}
+		return 0;
 	}
 
 	// RUN METHOD -------------------------------------------------------
