@@ -28,11 +28,10 @@ public class Registation extends Protocol {
 				this.setMessage(message.getBytes());
 				break;
 		}
-		
 	}
 	
 	public String getMessageString() {
 		return new String(this.getMessage());
 	}
-
+	
 }

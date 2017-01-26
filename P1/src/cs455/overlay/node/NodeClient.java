@@ -257,7 +257,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
-		Protocol m = new Registation(node.getRegistryInfo(), 0);
+		Registation m = new Registation(node.getRegistryInfo(), 0);
 		try {
 			sendToServer(m);
 		} catch (IOException e) {
@@ -272,7 +272,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
-		Protocol m = new Registation(node.getRegistryInfo(), 1);
+		Registation m = new Registation(node.getRegistryInfo(), 1);
 		try {
 			sendToServer(m);
 		} catch (IOException e) {
@@ -340,7 +340,7 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		NodeAddress node = new NodeAddress(nodeSocket, nodeServer.getHostName(), nodeServer.getHost(), nodeServer.getPort());
-		Protocol m = new Registation(node.getRegistryInfo(), 1);
+		Registation m = new Registation(node.getRegistryInfo(), 1);
 		try {
 			sendToServer(m);
 		} catch (IOException e) {

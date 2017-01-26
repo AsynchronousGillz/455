@@ -184,6 +184,8 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	public void registerNode(Registation m, NodeConnection client) {
+		if (debug)
+			System.out.println(m.getMessageString());
 		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false) {
@@ -198,6 +200,8 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	public void unregisterNode(Registation m, NodeConnection client) {
+		if (debug)
+			System.out.println(m.getMessageString());
 		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false) {
@@ -218,8 +222,6 @@ public class RegistryServer extends AbstractServer {
 		if (o instanceof Protocol == false)
 			return;
 		Protocol msg = (Protocol) o;
-		if (debug)
-			System.out.println(msg);
 		switch(msg.getStringType()) {
 			case "REGISTER_REQUEST": {
 				Registation reg = msg.convertToRegistation();
