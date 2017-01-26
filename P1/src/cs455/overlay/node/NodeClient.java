@@ -354,12 +354,34 @@ public class NodeClient implements Runnable {
 	 * @param m
 	 *            the message sent.
 	 */
-	protected void registerResponse(Registation m) {
+	public void registerResponse(Registation m) {
 		if (debug)
 			System.out.println(m.getMessageString());;
 		if (m.getMessage().equals("False")) {
 			close();
 		}
+	}
+	
+	/**
+	 * Handles a the overlay message sent from the server.
+	 * 
+	 * @param o
+	 *            the overlay message sent.
+	 */
+	public void registerOverlay(Overlay o) {
+		if (debug)
+			o.displayOverlay();
+	}
+	
+	/**
+	 * Handles a the overlay message sent from the server.
+	 * 
+	 * @param o
+	 *            the overlay message sent.
+	 */
+	public void registerWeights(Overlay o) {
+		if (debug)
+			o.displayOverlay();
 	}
 
 	/**
@@ -377,6 +399,13 @@ public class NodeClient implements Runnable {
 		switch (m.getStringType()) {
 			case "REGISTER_RESPONSE": {
 				registerResponse(m.convertToRegistation());
+				break;
+			}
+			case "MESSAGING_NODES_LIST": {
+				registerOverlay(m.convertToOverlay());
+				break;
+			}
+			case "LINK_WEIGHTS": {
 				break;
 			}
 			default:

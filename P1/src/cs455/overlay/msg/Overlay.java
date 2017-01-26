@@ -5,11 +5,9 @@ import java.io.*;
 public class Overlay extends Protocol {
 	
 	/**
-	 * 
+	 * Used when creating the message from a Protocol.
 	 * @param message
 	 * 			connection information in byte form.
-	 * @param number
-	 * 			number of links or number of peers.
 	 * @param type
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
@@ -28,16 +26,16 @@ public class Overlay extends Protocol {
 	}
 	
 	/**
-	 * 
+	 * Used when creating a message from the Overlay.
 	 * @param nodes
 	 * 			connection information.
 	 * @param number
-	 * 			number of links or number of peers.
+	 * 			number node in array
 	 * @param type
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
 	 */
-	public Overlay(String[] nodes, int number, int type) {
+	public Overlay(byte[][] nodes, int number, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -55,13 +53,14 @@ public class Overlay extends Protocol {
 	 * @param nodes
 	 * @param number
 	 */
-	public void convertArray(String[] nodes, int number) {
+	public void convertArray(byte[][] nodes, int number) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(output);
 		try {
+			out.writeInt(number);
 			out.writeInt(nodes.length);
-			for (String node : nodes) {
-				out.writeUTF(node);
+			for (byte[] node : nodes) {
+				out.write(node);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -73,19 +72,33 @@ public class Overlay extends Protocol {
 	 * 
 	 * @return
 	 */
-	public String[] convertToArray() {
-		String[] ret = null;
+	public byte[][] convertToArray() {
+		byte[][] ret = null;
 		ByteArrayInputStream input = new ByteArrayInputStream(message);
 		DataInputStream in = new DataInputStream(input);
 		try {
+			this.num = in.readInt();
 			int length = in.readInt();
-			ret = new String[length];
+			ret = new byte[length][length];
 			for (int i = 0; i < length; i++) {
-				ret[i] = in.readUTF();
+				in.read(ret[i], 0, length);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	public void displayOverlay() {
+		final byte[][] info = convertToArray();
+		int length = info.length;
+		StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				ret.append(info[i][j]+" ");
+			}
+			ret.append("\n");
+		}
+		System.out.println(ret.toString());
 	}
 }

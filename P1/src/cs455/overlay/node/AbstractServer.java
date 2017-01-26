@@ -151,7 +151,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllClients(Message msg) {
+	public void sendToAllClients(Protocol msg) {
 		Thread[] clientThreadList = getClientConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {
@@ -183,13 +183,13 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * Returns an array containing the existing client connections. New
-	 * clients can also connect. This is only for that time.
+	 * Returns an array containing the existing node connections. New
+	 * node can also connect. This is only for that time.
 	 *
-	 * @return an array of Thread containing NodeConnection instances.
+	 * @return an array of NodeConnection containing NodeConnection instances.
 	 */
-	synchronized final public Thread[] getClientConnections() {
-		Thread[] clientThreadList = new Thread[nodeThreadGroup.activeCount()];
+	synchronized final public NodeConnection[] getClientConnections() {
+		NodeConnection[] clientThreadList = new NodeConnection[nodeThreadGroup.activeCount()];
 		nodeThreadGroup.enumerate(clientThreadList);
 		return clientThreadList;
 	}
@@ -431,7 +431,7 @@ public abstract class AbstractServer extends Thread {
 	 */
 	protected abstract void MessageFromNode(Object msg, NodeConnection client);
 
-	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Receives a command sent from the client to the server. Called by the run

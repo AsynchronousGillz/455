@@ -88,10 +88,22 @@ public class RegistryList {
 	}
 	
 	/**
+	 * Returns the overlay in the two dimensional byte array. 
+	 * @return byte[][] overlay
+	 */
+	public byte[][] getOverlay() throws Exception {
+		if (data.size() == 0) 
+			throw new Exception("Node list is currently empty.");
+		if (validOverlay == false)
+			throw new Exception("Overlay has not been constructed.");
+		return overlay;
+	}
+	
+	/**
 	 * Returns the Nodes connections
 	 * @return
 	 */
-	public String getOverlay() {
+	public String displayOverlay() {
 		if (data.size() == 0) 
 			return "Node list is currently empty.";
 		if (validOverlay == false)

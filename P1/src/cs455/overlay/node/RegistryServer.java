@@ -153,8 +153,22 @@ public class RegistryServer extends AbstractServer {
 	 * 
 	 */
 	public void sendOverlay() {
-		// TODO Auto-generated method stub
-		
+		if (serverList.getValidOverlay() == false) {
+			System.err.println("Overlay has not been setup yet.");
+			return;
+		}
+		byte[][] bytes = null;
+		try {
+			bytes = serverList.getOverlay();
+		} catch (Exception e) {
+			System.err.println(e.toString());
+			return;
+		}
+		NodeConnection[] con = getClientConnections();
+		int length = con.length;
+		for (int index = 0; index < length; index++) { // DEBUG
+			 new Overlay(bytes, index, 0);
+		}
 	}
 	
 	/**

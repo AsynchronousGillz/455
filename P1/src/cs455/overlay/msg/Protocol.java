@@ -8,6 +8,7 @@ public class Protocol {
 	
 	
 	protected int type;
+	protected int num;
 	protected long time;
 	protected byte indicator;
 	protected byte[] message;

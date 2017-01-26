@@ -17,8 +17,17 @@ import cs455.overlay.msg.*;
 
 public class NodeServer extends AbstractServer {
 
-
-	// CONSTRUCTOR ******************************************************
+	/**
+	 * 
+	 */
+	byte[][] overlay;
+	
+	/**
+	 * 
+	 */
+	byte[][] links;
+	
+	// CONSTRUCTOR -----------------------------------------------------
 	
 	/**
 	 * Constructs a new server.
@@ -27,11 +36,44 @@ public class NodeServer extends AbstractServer {
 	public NodeServer() throws IOException {
 		super(0);
 	}
+	// ACCESSING METHODS ------------------------------------------------
+	
+	/**
+	 * 
+	 */
+	public byte[][] getOverlay() {
+		return overlay;
+	}
+
+	/**
+	 * 
+	 */
+	public void setOverlay(byte[][] overlay) {
+		this.overlay = overlay;
+	}
+
+	/**
+	 * 
+	 */
+	public byte[][] getLinks() {
+		return links;
+	}
+
+	/**
+	 * 
+	 */
+	public void setLinks(byte[][] links) {
+		this.links = links;
+	}
+	
+	// HOOK METHODS -----------------------------------------------------
+	
 	public void nodeConnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
 	}
+
 
 	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -78,7 +120,7 @@ public class NodeServer extends AbstractServer {
 		if (debug)
 			System.out.println(m);
 		switch(m.getStringType()) {
-			case "DEBUG":
+			case "TASK_MESSAGE":
 				break;
 			default:
 		}
