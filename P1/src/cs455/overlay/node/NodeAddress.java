@@ -154,4 +154,12 @@ public class NodeAddress {
 		this.ipAddress = node.getAddress();
 		this.port = node.getPort();
 	}
+	
+	public static void main(String args[]) {
+		Socket s = new Socket();
+		NodeAddress one = new NodeAddress(s, "cat", "127.0.0.1", 31);
+		NodeAddress two = new NodeAddress(s, "cat", "127.0.0.1", 31);
+		System.out.println(one.equals(two));
+		System.out.println(one.hashCode() == two.hashCode());
+	}
 }
