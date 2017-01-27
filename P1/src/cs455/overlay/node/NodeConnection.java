@@ -197,7 +197,6 @@ public class NodeConnection extends Thread {
 
 			while (stopping == false) {
 				byteSize = input.readInt();
-				
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
 				server.receiveMessageFromNode(new Protocol(bytes), this);

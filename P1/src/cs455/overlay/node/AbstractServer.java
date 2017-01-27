@@ -134,7 +134,7 @@ public abstract class AbstractServer extends Thread {
 			System.err.println(ex.toString());
 		} finally {
 			// Close the client sockets of the already connected clients
-			Thread[] clientThreadList = getClientConnections();
+			Thread[] clientThreadList = getNodeConnections();
 			for (int i = 0; i < clientThreadList.length; i++) {
 				try {
 					((NodeConnection) clientThreadList[i]).close();
@@ -152,7 +152,7 @@ public abstract class AbstractServer extends Thread {
 	 *            Object The message to be sent
 	 */
 	public void sendToAllClients(Protocol msg) {
-		Thread[] clientThreadList = getClientConnections();
+		Thread[] clientThreadList = getNodeConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {
 			try {
@@ -182,16 +182,34 @@ public abstract class AbstractServer extends Thread {
 		return stop;
 	}
 
+	
+	/**
+	 * Returns a String array containing the names of the existing node 
+	 * connections.
+	 *
+	 * @return an array of Strings containing NodeConnection Names.
+	 */
+	synchronized final public String[] getConnectionNames() {
+		int size = nodeThreadGroup.activeCount();
+		NodeConnection[] nodeThreadList = new NodeConnection[size];
+		nodeThreadGroup.enumerate(nodeThreadList);
+		String[] ret = new String[size];
+		for (int i = 0; i < size; i ++) {
+			ret[i] = nodeThreadList[i].getName();
+		}
+		return ret;
+	}
+	
 	/**
 	 * Returns an array containing the existing node connections. New
 	 * node can also connect. This is only for that time.
 	 *
 	 * @return an array of NodeConnection containing NodeConnection instances.
 	 */
-	synchronized final public NodeConnection[] getClientConnections() {
-		NodeConnection[] clientThreadList = new NodeConnection[nodeThreadGroup.activeCount()];
-		nodeThreadGroup.enumerate(clientThreadList);
-		return clientThreadList;
+	synchronized final public NodeConnection[] getNodeConnections() {
+		NodeConnection[] nodeThreadList = new NodeConnection[nodeThreadGroup.activeCount()];
+		nodeThreadGroup.enumerate(nodeThreadList);
+		return nodeThreadList;
 	}
 
 	/**

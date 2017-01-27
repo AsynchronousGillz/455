@@ -167,15 +167,15 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void sendOverlay() {
 		if (serverList.getValidOverlay() == false) {
-			System.err.println("Overlay has not been setup yet.");
+			System.err.println("Overlay has not been constructed.");
 			return;
 		}
-		NodeConnection[] con = getClientConnections();
+		NodeConnection[] con = getNodeConnections();
 		String info[] = null;
 		try {
 			info = serverList.getConnections();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 			return;
 		}
 		int length = con.length;
@@ -186,7 +186,7 @@ public class RegistryServer extends AbstractServer {
 		} catch (IOException e) {
 			System.err.println(e.toString());
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.err.println(e.toString());
 		}
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}

@@ -1,5 +1,6 @@
 package cs455.overlay.util;
 
+import java.net.Socket;
 import java.util.*;
 
 import cs455.overlay.node.NodeAddress;
@@ -136,7 +137,7 @@ public class RegistryList {
 			int column = 0;
 			for (byte b: overlay[index]) {
 				if (b != 0)
-					ret[index] += data.get(column).getConnection()+" ";
+					ret[index] += data.get(column).getConnection()+":"+b+"  ";
 				column++;
 			}
 		}
@@ -154,6 +155,10 @@ public class RegistryList {
 	 * TODO
 	 */
 	public synchronized void removeFromList(NodeAddress node) {
+		if (validOverlay == true) {
+			validOverlay = false;
+			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
+		}
 		data.remove(node);
 	}
 	
@@ -193,12 +198,12 @@ public class RegistryList {
 			
 			overlay = new byte[data.size()][data.size()];
 			int size = overlay.length;
-			int sum = setOverlayStart(size);
+			int sum = setOverlayStart(rand, size);
 
 			for (int row = 0; row < size; row++) {
 				for (int column = 0; column < size; column++) {
 					if (checkConnection(size, row, column) == true) {
-						int weight = rand.nextInt(9) + 1;
+						byte weight = (byte)((byte)rand.nextInt(9) + 1);
 						overlay[row][column] = weight;
 						overlay[column][row] = weight;
 						sum += 2;
@@ -220,11 +225,11 @@ public class RegistryList {
 	 */
 	private int setOverlayStart(Random rand, int size) {
 		int ret = 2;
-		int weight = rand.nextInt(9) + 1;
+		byte weight = (byte)((byte)rand.nextInt(9) + 1);
 		overlay[0][size-1] = weight;
 		overlay[size-1][0] = weight;
 		for (int i = 1; i < size; i++) {
-			weight = rand.nextInt(9) + 1;
+			weight = (byte)((byte)rand.nextInt(9) + 1);
 			overlay[i-1][i] = weight;
 			overlay[i][i-1] = weight;
 			ret += 2;
@@ -244,12 +249,12 @@ public class RegistryList {
 	private boolean checkConnection(int size, int row, int column) {
 		if (row == column)
 			return false;
-		if (overlay[row][column] == 1)
+		if (overlay[row][column] != 0)
 			return false;
 		int row_sum = 0, col_sum = 0;
 		for (int i = 0; i < size; i++) {
-			row_sum += overlay[row][i];
-			col_sum += overlay[column][i];
+			row_sum += (overlay[row][i] != 0) ? 1 : 0;
+			col_sum += (overlay[column][i] != 0) ? 1 : 0;
 		}
 		if (row_sum >= numberOfConnections)
 			return false;
@@ -264,12 +269,22 @@ public class RegistryList {
 	public static void main(String args[]) {
 		RegistryList registerList = new RegistryList(4);
 		for(int i = 0; i < 10; i++) {
-			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, 40000+i));
+			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, "127.0.0."+i, 40000+i));
 		}
 		System.out.println(registerList.getList());
 		registerList.buildOverlay();
-		System.out.println(registerList.displayOverlay());
+		String[] info = null;
+		try {
+			info = registerList.getConnections();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for (String i: info) {
+			System.out.println(i);
+		}
 	}
+	// Host:ServerPort ip:port:wieght 
+	// 127.0.0.0:40000 127.0.0.1:40001:4  127.0.0.2:40002:4  127.0.0.3:40003:9  127.0.0.9:40009:4
 
 }
 
