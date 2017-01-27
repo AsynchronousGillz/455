@@ -74,6 +74,13 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
+			case "display-overlay":
+				if (tokens.length == 1) {
+					System.out.println(server.displayOverlay());
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "setup-overlay":
 				if (tokens.length == 1) {
 					server.makeOverlay();
@@ -86,7 +93,7 @@ public class Registry {
 				break;
 			case "list-weights":
 				if (tokens.length == 1) {
-					System.out.println(server.getOverlay());
+					System.out.println(server.displayOverlay());
 				} else {
 					this.invalid(message);
 				}
@@ -132,8 +139,8 @@ public class Registry {
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: ";
-		info += "\t[ send-overlay-link-weights | list-messaging | setup-overlay ]\n";
+		String info = "invalid command \"" + message + "\" try:\n";
+		info += "\t[ send-overlay-link-weights | display-overlay | setup-overlay ]\n";
 		info += "\t[ list-messaging | list-weights | get-port | get-host ]\n";
 		System.err.println(info);
 	}

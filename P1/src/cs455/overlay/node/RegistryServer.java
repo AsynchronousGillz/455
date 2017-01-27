@@ -19,6 +19,11 @@ import cs455.overlay.util.RegistryList;
 public class RegistryServer extends AbstractServer {
 	
 	/**
+	 * The setup-overlay has begun.
+	 */
+	private boolean registationCheck;
+	
+	/**
 	 * The connection listener thread.
 	 */
 	private RegistryList serverList;
@@ -28,6 +33,7 @@ public class RegistryServer extends AbstractServer {
 	public RegistryServer(int port) throws IOException {
 		super(port);
 		serverList = new RegistryList(4);
+		registationCheck = false;
 	}
 	
 	// INSTANCE METHODS *************************************************
@@ -76,6 +82,19 @@ public class RegistryServer extends AbstractServer {
 		return serverList.findNode(info).toString();
 	}
 	
+	/**
+	 * TODO
+	 */
+	public boolean getRegistration() {
+		return this.registationCheck;
+	}
+	
+	/**
+	 * TODO
+	 */
+	public void setRegistration() {
+		this.registationCheck = true;
+	}
 	
 	/**
 	 * TODO
@@ -83,25 +102,6 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public String getList() {
 		return serverList.getList();
-	}
-	
-	/**
-	 * TODO
-	 * @return
-	 */
-	public String getOverlay() {
-		if (serverList.getValidOverlay() == false)
-			return "Overlay has not been constructed.";
-		
-		StringBuilder ret = new StringBuilder();
-		try {
-			for (int i = 0; i < serverList.getNumberOfConnections(); i++) {
-				ret.append(serverList.getConnections(i));
-			}
-		} catch (Exception e) {
-			System.err.println(e.toString());
-		}
-		return ret.toString();
 	}
 	
 	/**
@@ -115,6 +115,7 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Invalid connections to node ratio.");
 			return;
 		}
+		this.setRegistration();
 		serverList.buildOverlay();
 		System.out.println("The overlay has been succesfully setup.");
 	}
@@ -138,34 +139,54 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Invalid connections to node ratio.");
 			return;
 		}
+		this.setRegistration();
 		serverList.buildOverlay();
 		System.out.println("The overlay has been succesfully setup.");
 	}
 
+	/**
+	 * TODO
+	 * @return
+	 */
+	public String displayOverlay() {
+		String info[] = null;
+		try {
+			info = serverList.getConnections();
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		StringBuilder sb = new StringBuilder();
+		for (String s: info) {
+			sb.append(s+"\n");
+		}
+		return sb.toString();
+	}
 	
 	/**
-	 * 
+	 * TODO
 	 */
 	public void sendOverlay() {
 		if (serverList.getValidOverlay() == false) {
 			System.err.println("Overlay has not been setup yet.");
 			return;
 		}
-		byte[][] bytes = null;
+		NodeConnection[] con = getClientConnections();
+		String info[] = null;
 		try {
-			bytes = serverList.getOverlay();
+			info = serverList.getConnections();
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			System.out.println(e.getMessage());
 			return;
 		}
-		NodeConnection[] con = getClientConnections();
 		int length = con.length;
 		try {
-			for (int index = 0; index < length; index++) { // DEBUG
-				con[index].sendToNode(new Overlay(bytes, index, 0));
+			for (int index = 0; index < length; index++) {
+				con[index].sendToNode(new Overlay(info, 0));
 			}
 		} catch (IOException e) {
 			System.err.println(e.toString());
+		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
@@ -199,6 +220,10 @@ public class RegistryServer extends AbstractServer {
 	public void registerNode(Registation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
+		if (registationCheck == true) {
+			sendRegistrationResponse(false, client);
+			return;
+		}
 		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getInetAddress().getHostAddress();
 		if (tokens[0].equals(clientAddress) == false) {
@@ -249,8 +274,6 @@ public class RegistryServer extends AbstractServer {
 			default:
 		}
 	}
-
-
 
 }
 

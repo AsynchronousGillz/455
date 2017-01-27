@@ -121,24 +121,26 @@ public class RegistryList {
 	}
 	
 	/**
-	 * Returns the Nodes connections
-	 * @return
+	 * Returns the Nodes connections from the overlay.
+	 * @return 
 	 */
-	public String getConnections(int index) throws Exception {
+	public String[] getConnections() throws Exception {
 		if (data.size() == 0) 
 			throw new Exception("Node list is currently empty.");
 		if (validOverlay == false)
 			throw new Exception("Overlay has not been constructed.");
-		StringBuilder ret = new StringBuilder();
-		ret.append(String.format("%s ", data.get(index)));
-		int column = 0;
-		for (byte b: overlay[index]) {
-			if (b == 1)
-				ret.append(data.get(column) + " ");
-			column++;
+		int length = data.size();
+		String[] ret = new String[length];
+		for (int index = 0; index < length; index++) {
+			ret[index] = data.get(index).getConnection()+" ";
+			int column = 0;
+			for (byte b: overlay[index]) {
+				if (b == 1)
+					ret[index] += data.get(column).getConnection()+" ";
+				column++;
+			}
 		}
-		ret.append("\n");
-		return ret.toString();
+		return ret;
 	}
 	
 	public synchronized void addToList(NodeAddress node) {

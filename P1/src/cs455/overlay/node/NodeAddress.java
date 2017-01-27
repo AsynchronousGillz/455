@@ -148,6 +148,15 @@ public class NodeAddress {
 	public String getInfo() {
 		return this.hostName+" "+this.ipAddress+" "+this.port;
 	}
+	
+	/**
+	 * Get the IP Address, and port in String format
+	 * @return the "{ip}:{port}" in String format
+	 */
+	public String getConnection() {
+		return this.ipAddress+":"+this.port;
+	}
+	
 
 
 	public void clone(NodeAddress node) {
@@ -156,5 +165,5 @@ public class NodeAddress {
 		this.ipAddress = node.getAddress();
 		this.port = node.getPort();
 	}
-	
+
 }

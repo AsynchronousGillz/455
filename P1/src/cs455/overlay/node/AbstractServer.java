@@ -55,7 +55,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = true;
+	protected final boolean debug = false;
 
 	// CONSTRUCTOR ******************************************************
 

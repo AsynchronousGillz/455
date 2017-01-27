@@ -32,13 +32,11 @@ public class Overlay extends Protocol {
 	 * Used when creating a message from the Overlay.
 	 * @param nodes
 	 * 			connection information.
-	 * @param number
-	 * 			number node in array
 	 * @param type
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
 	 */
-	public Overlay(byte[][] nodes, int number, int type) {
+	public Overlay(String[] nodes, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -48,46 +46,21 @@ public class Overlay extends Protocol {
 				this.setType("LINK_WEIGHTS");
 				break;
 		}
-		convertArray(nodes, number);
+		convertArray(nodes);
 	}
 	
 	/**
-	 * Used when creating a message from the Overlay.
+	 * TODO
 	 * @param nodes
-	 * 			connection information.
-	 * @param number
-	 * 			number node in array
-	 * @param type
-	 * 			0 for MESSAGING_NODES_LIST
-	 * 			1 for LINK_WEIGHTS
 	 */
-	public Overlay(String[] nodes, int number, int type) {
-		super();
-		switch(type) {
-			case 0: 
-				this.setType("MESSAGING_NODES_LIST");
-				break;
-			case 1:
-				this.setType("LINK_WEIGHTS");
-				break;
-		}
-		convertArray(nodes, number);
-	}
-	
-	/**
-	 * 
-	 * @param nodes
-	 * @param number
-	 */
-	public void convertArray(String[] nodes, int number) {
+	public void convertArray(String[] nodes) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(output);
 		try {
-			out.writeInt(number);
 			out.writeInt(nodes.length);
-			for (String node : nodes) {
-				out.writeInt(node.length());
-				out.write(node.getBytes());
+			for (String n: nodes) {
+				out.writeInt(n.length());
+				out.write(n.getBytes());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -96,56 +69,49 @@ public class Overlay extends Protocol {
 	}
 	
 	/**
-	 * 
-	 * @param nodes
-	 * @param number
+	 * TODO
 	 */
-	public void convertArray(byte[][] nodes, int number) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(output);
-		try {
-			out.writeInt(number);
-			out.writeInt(nodes.length);
-			for (byte[] node : nodes) {
-				out.write(node);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		message = output.toByteArray();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public byte[][] convertToArray() {
-		byte[][] ret = null;
+	public String[] getString() {
+		String[] ret = null;
 		ByteArrayInputStream input = new ByteArrayInputStream(message);
 		DataInputStream in = new DataInputStream(input);
 		try {
-			this.num = in.readInt();
-			int length = in.readInt();
-			ret = new byte[length][length];
-			for (int i = 0; i < length; i++) {
-				in.read(ret[i], 0, length);
+			byte[] bytes = null;
+			int size = in.readInt();
+			ret = new String[size];
+			for (int i = 0; i < size; i ++) {
+				int length = in.readInt();
+				bytes = new byte[length];
+				in.read(bytes, 0, length);
+				ret[i] = new String(bytes);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return ret;
 	}
-
-	public void displayOverlay() {
-		final byte[][] info = convertToArray();
-		int length = info.length;
-		StringBuilder ret = new StringBuilder();
-		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < length; j++) {
-				ret.append(info[i][j]+" ");
+	
+	/**
+	 * TODO
+	 */
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
+		try {
+			byte[] bytes = null;
+			int size = in.readInt();
+			for (int i = 0; i < size; i ++) {
+				int length = in.readInt();
+				bytes = new byte[length];
+				in.read(bytes, 0, length);
+				sb.append(new String(bytes)+"\n");
 			}
-			ret.append("\n");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println(ret.toString());
+		return sb.toString();
 	}
+	
+	
 }

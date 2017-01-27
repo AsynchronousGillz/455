@@ -8,7 +8,6 @@ public class Protocol {
 	
 	
 	protected int type;
-	protected int num;
 	protected long time;
 	protected byte indicator;
 	protected byte[] message;
@@ -54,7 +53,7 @@ public class Protocol {
 	public byte getIndicator() {
 		return indicator;
 	}
-
+	
 	public String getStringType() {
 		return Types[type];
 	}

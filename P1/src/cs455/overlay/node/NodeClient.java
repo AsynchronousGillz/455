@@ -387,7 +387,7 @@ public class NodeClient implements Runnable {
 	 */
 	public void registerOverlay(Overlay o) {
 		if (debug)
-			o.displayOverlay();
+			System.out.println(o);
 	}
 	
 	/**
@@ -398,7 +398,7 @@ public class NodeClient implements Runnable {
 	 */
 	public void registerWeights(Overlay o) {
 		if (debug)
-			o.displayOverlay();
+			System.out.println(o);
 	}
 
 	/**
