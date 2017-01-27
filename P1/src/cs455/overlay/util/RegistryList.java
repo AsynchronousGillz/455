@@ -197,6 +197,16 @@ public class RegistryList {
 			if (sum == (size * numberOfConnections))
 				validOverlay = true;
 		}
+		Random rand = new Random();
+		for (int row = 0; row < size; row++) {
+				for (int column = 0; column < size; column++) {
+					if (overlay[row][column] == 1) {
+						int weight = rand.nextInt(size);
+						overlay[row][column] = weight;
+						overlay[column][row] = weight;
+					}
+				}
+			}
 	}
 	
 	private void setOverlayStart(int size) {
