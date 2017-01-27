@@ -143,14 +143,23 @@ public class RegistryList {
 		return ret;
 	}
 	
+	/**
+	 * TODO
+	 */
 	public synchronized void addToList(NodeAddress node) {
 		data.add(node);
 	}
 	
+	/**
+	 * TODO
+	 */
 	public synchronized void removeFromList(NodeAddress node) {
 		data.remove(node);
 	}
 	
+	/**
+	 * TODO
+	 */
 	public synchronized NodeAddress findNode(String info) {
 		NodeAddress ret = null;
 		int port = 0;
@@ -174,7 +183,10 @@ public class RegistryList {
 		}
 		return null;
 	}
-	
+	/**
+	 * The overlay is a byte[][] that when byte[x][y] != 0
+	 * lists the weight of the connection.
+	 */
 	public synchronized void buildOverlay() {
 		Random rand = new Random();
 		while (validOverlay == false) {
@@ -219,7 +231,16 @@ public class RegistryList {
 		}
 		return ret;
 	}
-	
+
+	/**
+	 * To ensure that a node is not already connected as well as
+	 * that node nor its partner will be connected to more then
+	 * the numberOfConnections 
+	 * @param size
+	 * 			The size of the array.
+	 * @return sum
+	 * 			The sum of the number of connections made.
+	 */
 	private boolean checkConnection(int size, int row, int column) {
 		if (row == column)
 			return false;
