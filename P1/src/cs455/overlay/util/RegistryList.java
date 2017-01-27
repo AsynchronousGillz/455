@@ -240,5 +240,15 @@ public class RegistryList {
 		return true;
 	}
 
+	public static void main(String args[]) {
+		RegistryList registerList = new RegistryList(4);
+		for(int i = 0; i < 10; i++) {
+			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, 40000+i));
+		}
+		System.out.println(registerList.getList());
+		registerList.buildOverlay();
+		System.out.println(registerList.displayOverlay());
+	}
+
 }
 
