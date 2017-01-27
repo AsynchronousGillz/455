@@ -28,7 +28,7 @@ public class RegistryList {
 	private boolean validOverlay;
 	
 	/**
-	 * The list of connections to other nodes
+	 * The list of connections to other nodes.
 	 */
 	private byte[][] overlay;
 	
@@ -135,7 +135,7 @@ public class RegistryList {
 			ret[index] = data.get(index).getConnection()+" ";
 			int column = 0;
 			for (byte b: overlay[index]) {
-				if (b == 1)
+				if (b != 0)
 					ret[index] += data.get(column).getConnection()+" ";
 				column++;
 			}
@@ -176,46 +176,48 @@ public class RegistryList {
 	}
 	
 	public synchronized void buildOverlay() {
+		Random rand = new Random();
 		while (validOverlay == false) {
+			
 			overlay = new byte[data.size()][data.size()];
 			int size = overlay.length;
-			setOverlayStart(size);
+			int sum = setOverlayStart(size);
+
 			for (int row = 0; row < size; row++) {
 				for (int column = 0; column < size; column++) {
 					if (checkConnection(size, row, column) == true) {
-						overlay[row][column] = 1;
-						overlay[column][row] = 1;
+						int weight = rand.nextInt(9) + 1;
+						overlay[row][column] = weight;
+						overlay[column][row] = weight;
+						sum += 2;
 					}
-				}
-			}
-			int sum = 0;
-			for (int row = 0; row < size; row++) {
-				for (int column = 0; column < size; column++) {
-					sum += overlay[row][column];
 				}
 			}
 			if (sum == (size * numberOfConnections))
 				validOverlay = true;
 		}
-		Random rand = new Random();
-		for (int row = 0; row < size; row++) {
-				for (int column = 0; column < size; column++) {
-					if (overlay[row][column] == 1) {
-						int weight = rand.nextInt(size);
-						overlay[row][column] = weight;
-						overlay[column][row] = weight;
-					}
-				}
-			}
 	}
-	
-	private void setOverlayStart(int size) {
+	/**
+	 * To ensure that every node can connect to every other node
+	 * first loop around the array and connect every node to two
+	 * of its N closest nodes.
+	 * @param size
+	 * 			The size of the array.
+	 * @return sum
+	 * 			The sum of the number of connections made.
+	 */
+	private int setOverlayStart(Random rand, int size) {
+		int ret = 2;
+		int weight = rand.nextInt(9) + 1;
+		overlay[0][size-1] = weight;
+		overlay[size-1][0] = weight;
 		for (int i = 1; i < size; i++) {
-			overlay[i-1][i] = 1;
-			overlay[i][i-1] = 1;
+			weight = rand.nextInt(9) + 1;
+			overlay[i-1][i] = weight;
+			overlay[i][i-1] = weight;
+			ret += 2;
 		}
-		overlay[0][size-1] = 1;
-		overlay[size-1][0] = 1;
+		return ret;
 	}
 	
 	private boolean checkConnection(int size, int row, int column) {
