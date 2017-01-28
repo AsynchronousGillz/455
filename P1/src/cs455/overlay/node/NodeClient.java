@@ -363,23 +363,6 @@ public class NodeClient implements Runnable {
 	}
 	
 	/**
-	 * Returns the Nodes connections
-	 * @return
-	 */
-	public String getConnections(byte[][] data, int number) {
-		StringBuilder ret = new StringBuilder();
-		// String info = nodeServer.getHost()+" "+nodeServer.getPort();
-		int column = 0;
-		for (byte b: data[number]) {
-			if (b == 1)
-				ret.append(column + " ");
-			column++;
-		}
-		ret.append("\n");
-		return ret.toString();
-	}
-	
-	/**
 	 * Handles a the overlay message sent from the server.
 	 * 
 	 * @param o
