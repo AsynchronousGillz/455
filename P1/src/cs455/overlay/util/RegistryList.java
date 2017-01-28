@@ -1,6 +1,6 @@
 package cs455.overlay.util;
 
-import java.net.Socket;
+import java.net.*;
 import java.util.*;
 
 import cs455.overlay.node.NodeAddress;
@@ -71,6 +71,20 @@ public class RegistryList {
 	 */
 	public boolean checkOverlay() {
 		return (numberOfConnections < data.size());
+	}
+
+	/**
+	 * Returns all of the NodeAddress in String[] format
+	 * getInfo() format in String format. 
+	 * @return list of all the nodes
+	 */
+	public String[] getRegistration() {
+		String[] ret = new String[data.size()]
+		int index = 0;
+		for (NodeAddress node: data) {
+			ret[index++] = node.getInfo() + "\n";
+		}
+		return ret;
 	}
 
 	/**

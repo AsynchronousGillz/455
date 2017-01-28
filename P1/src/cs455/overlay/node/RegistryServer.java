@@ -91,12 +91,14 @@ public class RegistryServer extends AbstractServer {
 	
 	/**
 	 * Set the flag registationCheck to true, then uses the serverlist to 
-	 * build the overlay. Once the overlay has been set up print an 
-	 * acknowledgment.
+	 * build the overlay. Then a list of all the nodes is sent to each node
+	 * connected in the overlay. Then print an acknowledgment.
 	 */
 	private void setRegistration() {
 		this.registationCheck = true;
 		serverList.buildOverlay();
+		String[] info = serverList.getRegistration();
+		this.sendToAllNodes(new Overlay(info, 0));
 		System.out.println("The overlay has been succesfully setup.");
 	}
 	
@@ -170,7 +172,6 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Overlay has not been constructed.");
 			return;
 		}
-		NodeConnection[] con = getNodeConnections();
 		String info[] = null;
 		try {
 			info = serverList.getConnections();
@@ -178,16 +179,7 @@ public class RegistryServer extends AbstractServer {
 			System.err.println(e.getMessage());
 			return;
 		}
-		int length = con.length;
-		try {
-			for (int index = 0; index < length; index++) {
-				con[index].sendToNode(new Overlay(info, 0));
-			}
-		} catch (IOException e) {
-			System.err.println(e.toString());
-		} catch (Exception e) {
-			System.err.println(e.toString());
-		}
+		this.sendToAllNodes(new Overlay(info, 0));
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
 	
