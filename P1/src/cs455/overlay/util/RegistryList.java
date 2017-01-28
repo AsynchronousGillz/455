@@ -53,6 +53,15 @@ public class RegistryList {
 	public int getNumberOfConnections() {
 		return numberOfConnections;
 	}
+	
+	/**
+	 * Get the {@link ArrayList} of {@link NodeAddress}
+	 * to build the {@link StatisticsCollector}.
+	 * @return
+	 */
+	public ArrayList<NodeAddress> getData() {
+		return data;
+	}
 
 	/**
 	 * Set the number of connections for each node.

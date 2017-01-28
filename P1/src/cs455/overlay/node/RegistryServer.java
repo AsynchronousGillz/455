@@ -120,8 +120,8 @@ public class RegistryServer extends AbstractServer {
 	 * TODO
 	 * @param masterStats
 	 */
-	public void setMasterStats(StatisticsCollector masterStats) {
-		this.masterStats = masterStats;
+	public void setMasterStats() {
+		this.masterStats = new StatisticsCollector(serverList);
 	}
 
 	/**

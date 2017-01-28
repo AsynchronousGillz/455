@@ -1,7 +1,6 @@
 package cs455.overlay.util;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.ArrayList;
 
 import cs455.overlay.node.NodeAddress;
@@ -20,6 +19,11 @@ public class StatisticsCollector {
 	/**
 	 * Indication if the overlay has been built and if it is valid.
 	 */
+	
+	public StatisticsCollector(RegistryList r) {
+		this.numberOfNodes = r.getNumberOfConnections();
+		this.data = r.getData();
+	}
 	
 	public StatisticsCollector(String[] nodes, int serverPort) {
 		this.numberOfNodes = nodes.length;
