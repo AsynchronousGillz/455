@@ -39,6 +39,11 @@ public class NodeAddress {
 	private int port;
 	
 	/**
+	 * This is to make nodes port information accessible.
+	 */
+	private int wieght;
+	
+	/**
 	 * Make the object with a socket, hostName, ipAddress, and port.
 	 * 
 	 * @param socket Assign the hashCode of the socket to nodeHash 
@@ -116,6 +121,22 @@ public class NodeAddress {
 	 */
 	public int getPort() {
 		return port;
+	}
+
+	/**
+	 * TODO
+	 * @return
+	 */
+	public int getWieght() {
+		return wieght;
+	}
+
+	/**
+	 * TODO
+	 * @param wieght
+	 */
+	public void setWieght(int wieght) {
+		this.wieght = wieght;
 	}
 
 	@Override
