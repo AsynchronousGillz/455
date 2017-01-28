@@ -44,7 +44,7 @@ public abstract class AbstractServer extends Thread {
 	 * The thread group associated with client threads. Each member of the
 	 * thread group is a <code> ConnectionToClient </code>.
 	 */
-	private ThreadGroup nodeThreadGroup;
+	protected ThreadGroup nodeThreadGroup;
 
 	/**
 	 * Indicates if the listening thread is ready to stop. Set to false by
@@ -151,7 +151,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllClients(Protocol msg) {
+	public void sendToAllNodes(Protocol msg) {
 		Thread[] clientThreadList = getNodeConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {

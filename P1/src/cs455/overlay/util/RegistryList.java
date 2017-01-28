@@ -79,10 +79,10 @@ public class RegistryList {
 	 * @return list of all the nodes
 	 */
 	public String[] getRegistration() {
-		String[] ret = new String[data.size()]
+		String[] ret = new String[data.size()];
 		int index = 0;
 		for (NodeAddress node: data) {
-			ret[index++] = node.getInfo() + "\n";
+			ret[index++] = node.getInfo();
 		}
 		return ret;
 	}

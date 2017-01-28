@@ -15,6 +15,7 @@ import java.io.*;
 
 import cs455.overlay.msg.*;
 import cs455.overlay.util.RegistryList;
+import cs455.overlay.util.StatisticsCollector;
 
 public class RegistryServer extends AbstractServer {
 	
@@ -24,9 +25,14 @@ public class RegistryServer extends AbstractServer {
 	private boolean registationCheck;
 	
 	/**
-	 * The connection listener thread.
+	 * The connection registration list.
 	 */
 	private RegistryList serverList;
+	
+	/**
+	 * The connection master statistics holder.
+	 */
+	private StatisticsCollector masterStats;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -106,6 +112,22 @@ public class RegistryServer extends AbstractServer {
 	 * TODO
 	 * @return
 	 */
+	public StatisticsCollector getMasterStats() {
+		return masterStats;
+	}
+
+	/**
+	 * TODO
+	 * @param masterStats
+	 */
+	public void setMasterStats(StatisticsCollector masterStats) {
+		this.masterStats = masterStats;
+	}
+
+	/**
+	 * TODO
+	 * @return
+	 */
 	public String getList() {
 		return serverList.getList();
 	}
@@ -179,12 +201,12 @@ public class RegistryServer extends AbstractServer {
 			System.err.println(e.getMessage());
 			return;
 		}
-		this.sendToAllNodes(new Overlay(info, 0));
+		this.sendToAllNodes(new Overlay(info, 1));
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
 	
 	/**
-	 * 
+	 * TODO
 	 * @param numberOfRounds 
 	 */
 	public void sendStart(int numberOfRounds) {
@@ -193,7 +215,10 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
+	 * When the client send a registration request the server will
+	 * check that the request is from the connected socket. IE. that 
+	 * the ip address of the socket matches the registration request
+	 * ip and that the overlay has not yet been constructed.
 	 * @param status
 	 * @param client
 	 */
@@ -209,6 +234,12 @@ public class RegistryServer extends AbstractServer {
 			client.close();
 	}
 	
+	/**
+	 * The node has sent a registration request to the registry server
+	 * now we need to check the request and send a response.
+	 * @param m
+	 * @param client
+	 */
 	public void registerNode(Registation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
@@ -229,6 +260,12 @@ public class RegistryServer extends AbstractServer {
 		sendRegistrationResponse(true, client);
 	}
 	
+	/**
+	 * The node has sent a de-registration request to the registry 
+	 * server now we need to remove the node.
+	 * @param m
+	 * @param client
+	 */
 	public void unregisterNode(Registation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
@@ -245,7 +282,6 @@ public class RegistryServer extends AbstractServer {
 		serverList.removeFromList(client.getAddress());
 		sendRegistrationResponse(true, client);
 	}
-
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {

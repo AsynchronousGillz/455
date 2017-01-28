@@ -371,6 +371,8 @@ public class NodeClient implements Runnable {
 	public void registerOverlay(Overlay o) {
 		if (debug)
 			System.out.println(o);
+		String[] nodes = o.getString();
+		nodeServer.setStats(nodes);
 	}
 	
 	/**

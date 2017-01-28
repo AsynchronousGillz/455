@@ -1,6 +1,7 @@
 package cs455.overlay.node;
 
 import java.net.*;
+import java.security.*;
 
 /**
  * 
@@ -16,7 +17,7 @@ public class NodeAddress {
 	 * This is to make nodes easily identifiable. 
 	 * This is set to null when first created.
 	 */
-	private int nodeHash;
+	private String nodeHash;
 	
 	/**
 	 * This String represents an Internet Protocol (IP) address.
@@ -47,17 +48,49 @@ public class NodeAddress {
 	 */
 
 	public NodeAddress(Socket socket, String hostName, String ipAddress, int port) {
-		this.nodeHash = socket.hashCode();
+		MessageDigest messageDigest = null;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {}
+		messageDigest.update(socket.toString().getBytes());
+		this.nodeHash = new String(messageDigest.digest());
 		this.hostName = hostName;
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
 	
 	/**
+	 * Make the object with a hostName, ipAddress, and port.
+	 * 
+	 * @param hostName Assign the host name to hostName
+	 * @param ipAddress Assign the ip address to ipAddress
+	 * @param port Assign the port number to port
+	 */
+
+	public NodeAddress(String hostName, String ipAddress, int port) {
+		this.hostName = hostName;
+		this.ipAddress = ipAddress;
+		this.port = port;
+	}
+	
+	/**
+	 * Sets the hashCode of the socket. Used on the node for 
+	 * establishing connections.
+	 */
+	public void setNodeHash(Socket socket) {
+		MessageDigest messageDigest = null;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {}
+		messageDigest.update(socket.toString().getBytes());
+		this.nodeHash = new String(messageDigest.digest());
+	}
+	
+	/**
 	 * Returns the hashCode of the socket.
 	 * @return the socket hashCode in int format
 	 */
-	public int getNodeHash() {
+	public String getNodeHash() {
 		return nodeHash;
 	}
 
@@ -91,7 +124,7 @@ public class NodeAddress {
 		int result = 1;
 		result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
 		result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
-		result = prime * result + nodeHash;
+		result = prime * result + ((nodeHash == null) ? 0 : nodeHash.hashCode());
 		result = prime * result + port;
 		return result;
 	}

@@ -4,8 +4,10 @@ package cs455.overlay.node;
 import java.text.*;
 import java.util.*;
 import java.io.*;
+import java.net.Socket;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.StatisticsCollector;
 
 /**
  * 
@@ -16,16 +18,11 @@ import cs455.overlay.msg.*;
  */
 
 public class NodeServer extends AbstractServer {
-
-	/**
-	 * 
-	 */
-	byte[][] overlay;
 	
 	/**
 	 * 
 	 */
-	byte[][] links;
+	private StatisticsCollector stats;
 	
 	// CONSTRUCTOR -----------------------------------------------------
 	
@@ -39,31 +36,46 @@ public class NodeServer extends AbstractServer {
 	// ACCESSING METHODS ------------------------------------------------
 	
 	/**
-	 * 
+	 * Get the {@link StatisticsCollector} to send the results
+	 * to the registry.
+	 * @return this.stats
 	 */
-	public byte[][] getOverlay() {
-		return overlay;
+	public StatisticsCollector getStats() {
+		return this.stats;
 	}
-
+	
 	/**
 	 * 
+	 * @param nodes
 	 */
-	public void setOverlay(byte[][] overlay) {
-		this.overlay = overlay;
+	public void setStats(String[] nodes) {
+		this.stats = new StatisticsCollector(nodes, this.getPort());
 	}
-
+	
 	/**
-	 * 
+	 * Add a connection to the server to another server.
+	 * @param host
+	 * @param sPort
 	 */
-	public byte[][] getLinks() {
-		return links;
-	}
+	public void addConnection(String host, String sPort) {
+		int port = validateInput(sPort);
+		if (port == 0)
+			return;
+		// Wait here for new connection attempts, or a timeout
+		Socket clientSocket = null;
+		try {
+			clientSocket = new Socket(host, port);
+		} catch (IOException e) {
+			System.err.println("Could not connect to: "+host+":"+port);
+		}
 
-	/**
-	 * 
-	 */
-	public void setLinks(byte[][] links) {
-		this.links = links;
+		// When a client is accepted, create a thread to handle
+		// the data exchange, then add it to thread group
+		synchronized (this) {
+			try {
+				new NodeConnection(this.nodeThreadGroup, clientSocket, this);
+			} catch (IOException e) {}
+		}
 	}
 	
 	// HOOK METHODS -----------------------------------------------------
