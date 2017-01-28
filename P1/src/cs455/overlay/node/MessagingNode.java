@@ -78,7 +78,7 @@ public class MessagingNode {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "de-register":
+			case "exit-overlay":
 				if (tokens.length == 1) {
 					client.unregister();
 					exit();
