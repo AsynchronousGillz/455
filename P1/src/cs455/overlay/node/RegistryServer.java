@@ -90,10 +90,14 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * TODO
+	 * Set the flag registationCheck to true, then uses the serverlist to 
+	 * build the overlay. Once the overlay has been set up print an 
+	 * acknowledgment.
 	 */
-	public void setRegistration() {
+	private void setRegistration() {
 		this.registationCheck = true;
+		serverList.buildOverlay();
+		System.out.println("The overlay has been succesfully setup.");
 	}
 	
 	/**
@@ -116,8 +120,6 @@ public class RegistryServer extends AbstractServer {
 			return;
 		}
 		this.setRegistration();
-		serverList.buildOverlay();
-		System.out.println("The overlay has been succesfully setup.");
 	}
 	
 	/**
@@ -140,8 +142,6 @@ public class RegistryServer extends AbstractServer {
 			return;
 		}
 		this.setRegistration();
-		serverList.buildOverlay();
-		System.out.println("The overlay has been succesfully setup.");
 	}
 
 	/**
