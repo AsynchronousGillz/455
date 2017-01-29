@@ -1,60 +1,69 @@
 package cs455.overlay.util;
 
-import java.net.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import cs455.overlay.node.NodeAddress;
+import java.math.BigInteger;
 
 public class StatisticsCollector {
+
 	/**
-	 * The list of node connected to the register.
+	 * 
 	 */
-	HashMap<NodeAddress, NodeInformation> data;
-	
+	private BigInteger sent;
+
 	/**
-	 * The number of connections for each node.
+	 * 
 	 */
-	private int numberOfNodes;
-	
-	public StatisticsCollector(RegistryList r) {
-		this.numberOfNodes = r.getNumberOfConnections();
-		this.data = new HashMap<>();
-		ArrayList<NodeAddress> info = r.getData();
-		for (NodeAddress node: info) {
-			this.data.put(node, new NodeInformation());
-		}
+	private BigInteger received;
+
+	/**
+	 * 
+	 */
+	private BigInteger sumSent;
+
+	/**
+	 * 
+	 */
+	private BigInteger sumReceived;
+
+	/**
+	 * 
+	 */
+	public StatisticsCollector() {
+		this.sent = BigInteger.valueOf(0);
+		this.received = BigInteger.valueOf(0);
+		this.sumSent = BigInteger.valueOf(0);
+		this.sumReceived = BigInteger.valueOf(0);
 	}
-	
-	/**
-	 * TODO
-	 * @param nodes
-	 * @param serverPort
-	 */
-	public StatisticsCollector(String[] nodes, int serverPort) {
-		this.numberOfNodes = nodes.length;
-		String ipAddress = null;
-		try {
-			ipAddress = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {}
-		this.data = new HashMap<>();
-		for (String node: nodes) {
-			String[] temp = node.split(" ");
-			int port = Integer.parseInt(temp[2]);
-			if (temp[1].equals(ipAddress) == false && port != serverPort) {
-				data.put(new NodeAddress(temp[0], temp[1], port), new NodeInformation());
-				break;
-			}
-		}
+
+	public BigInteger getSent() {
+		return sent;
 	}
-	// topeka.cs.colostate.edu 129.82.44.174 34257 
-	
-	/**
-	 * Return the number of connections for each node.
-	 * @return the number of connections in int format
-	 */
-	public int getNumberOfConnections() {
-		return numberOfNodes;
+
+	public synchronized void addSent(BigInteger x) {
+		this.sent.add(BigInteger.valueOf(1));
+		this.sumSent.add(x);
+	}
+
+	public BigInteger getReceived() {
+		return received;
+	}
+
+	public synchronized void addReceived(BigInteger x) {
+		this.received.add(BigInteger.valueOf(1));
+		this.sumReceived.add(x);
+	}
+
+	public BigInteger getSumSent() {
+		return sumSent;
+	}
+
+	public BigInteger getSumReceived() {
+		return sumReceived;
+	}
+
+	@Override
+	public String toString() {
+		return "NodeInformation [sent=" + sent + ", received=" + received + ", sumSent=" + sumSent + ", sumReceived="
+				+ sumReceived + "]";
 	}
 
 }

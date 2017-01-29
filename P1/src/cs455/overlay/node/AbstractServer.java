@@ -158,13 +158,12 @@ public abstract class AbstractServer extends Thread {
 	 *            Object The message to be sent
 	 */
 	public void sendToAllNodes(Protocol msg) {
-		Thread[] clientThreadList = getNodeConnections();
+		NodeConnection[] clientThreadList = getNodeConnections();
 
 		for (int i = 0; i < clientThreadList.length; i++) {
 			try {
-				((NodeConnection) clientThreadList[i]).sendToNode(msg);
-			} catch (Exception ex) {
-			}
+				clientThreadList[i].sendToNode(msg);
+			} catch (Exception ex) {}
 		}
 	}
 
@@ -301,8 +300,8 @@ public abstract class AbstractServer extends Thread {
 	 * TODO
 	 * @param list
 	 */
-	final public void setMasterStats(RegistryList list) {
-		this.stats = new StatisticsCollector(list);
+	final public void setStats() {
+		this.stats = new StatisticsCollector();
 	}
 
 	/**

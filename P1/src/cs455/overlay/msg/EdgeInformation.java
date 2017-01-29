@@ -12,13 +12,24 @@ public class EdgeInformation extends Protocol {
 	
 		/**
 		 * Used when creating the message from a Protocol. SINGLE_WEIGHT.
-		 * @param message
-		 * 			connection information in byte form.
+		 * @param weight
+		 * 			connection information int form
 		 */
 		public EdgeInformation(int weight) {
 			super();
 			this.setType("SINGLE_WEIGHT");
 			convertMessage(weight);
+		}
+		
+		/**
+		 * Used when converting the message from a Protocol. SINGLE_WEIGHT.
+		 * @param message
+		 * 			connection information in byte form.
+		 */
+		public EdgeInformation(byte[] message) {
+			super();
+			this.setType("TASK_MESSAGE");
+			this.setMessage(message);
 		}
 		
 		/**

@@ -182,6 +182,31 @@ public class NodeConnection extends Thread {
 		else
 			return nodeAddress.toString();
 	}
+	
+	/**
+	 * Returns the NodeAddress contained within the NodeConnection
+	 * 
+	 * @return the NodeAddress
+	 */
+	public NodeAddress getAddress() {
+		return nodeAddress;
+	}
+	
+	/**
+	 * Set the weight of the NodeAddress contained within the NodeConnection
+	 */
+	public void setWeight(int wieght) {
+		nodeAddress.setWieght(wieght);;
+	}
+	
+	/**
+	 * Returns the NodeAddress contained within the NodeConnection
+	 * 
+	 * @return the weight of the connection.
+	 */
+	public int getWeight() {
+		return nodeAddress.getWieght();
+	}
 
 	// RUN METHOD -------------------------------------------------------
 
@@ -246,10 +271,6 @@ public class NodeConnection extends Thread {
 			closeAll();
 		} catch (IOException e) {
 		}
-	}
-
-	public NodeAddress getAddress() {
-		return nodeAddress;
 	}
 
 }

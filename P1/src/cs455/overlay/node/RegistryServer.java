@@ -91,14 +91,22 @@ public class RegistryServer extends AbstractServer {
 	
 	/**
 	 * Set the flag registationCheck to true, then uses the serverlist to 
-	 * build the overlay. Then a list of all the nodes is sent to each node
+	 * build the overlay. Then a list of connections is sent to each node
 	 * connected in the overlay. Then print an acknowledgment.
 	 */
 	private void setRegistration() {
 		this.registationCheck = true;
 		serverList.buildOverlay();
-		String[] info = serverList.getRegistration();
-		this.sendToAllNodes(new Overlay(info, 0));
+		NodeConnection[] nodes = this.getNodeConnections();
+		for (NodeConnection node : nodes) {
+			int i = serverList.getNodeIndex(node.getAddress().getAddress(), node.getAddress().getPort());
+			String[] info = serverList.getRegistration(i);
+			try {
+				node.sendToNode(new Overlay(info, 0));
+			} catch (IOException e) {
+				System.out.println("Error: Could not send overlay to node: "+node);
+			}
+		}
 		System.out.println("The overlay has been succesfully setup.");
 	}
 
@@ -260,6 +268,17 @@ public class RegistryServer extends AbstractServer {
 		serverList.removeFromList(client.getAddress());
 		sendRegistrationResponse(true, client);
 	}
+	
+	/**
+	 * The node has sent a task-complete request to the registry.
+	 * @param m
+	 * @param client
+	 */
+	public void taskComplete(Registation m, NodeConnection client) {
+		if (debug)
+			System.out.println(m.getMessageString());
+		// TODO
+	}
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {
@@ -275,6 +294,10 @@ public class RegistryServer extends AbstractServer {
 			}
 			case "DEREGISTER_REQUEST": {
 				unregisterNode(msg.convertToRegistation(), client);
+				break;
+			}
+			case "TASK_COMPLETE": {
+				taskComplete(msg.convertToRegistation(), client);
 				break;
 			}
 			default:

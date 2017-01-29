@@ -9,6 +9,7 @@ public class Registation extends Protocol {
 	 * 			0 for REGISTER_REQUEST
 	 * 			1 for DEREGISTER_REQUEST
 	 * 			2 for REGISTER_RESPONSE
+	 * 			3 for TASK_COMPLETE
 	 */
 	public Registation(String message, int type) {
 		super();
@@ -25,6 +26,10 @@ public class Registation extends Protocol {
 				this.setType("REGISTER_RESPONSE");
 				byte i = (message.equals("True")) ? (byte)1 : (byte)0 ;
 				this.setIndicator(i);
+				this.setMessage(message.getBytes());
+				break;
+			case 3:
+				this.setType("TASK_COMPLETE");
 				this.setMessage(message.getBytes());
 				break;
 		}

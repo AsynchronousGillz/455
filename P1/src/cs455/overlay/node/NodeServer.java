@@ -49,9 +49,14 @@ public class NodeServer extends AbstractServer {
 	 * TODO
 	 * @param nodes
 	 */
-	public void setStats(String[] nodes) {
-		this.stats = new StatisticsCollector(nodes, this.getPort());
+	public void setWeights(String[] nodes) {
+		connections = new ArrayList<>();
+		for (String info : nodes) {
+			String[] node = info.split(":");
+			addConnection(node[0], node[1], node[2]);
+		}
 	}
+	//
 	
 	/**
 	 * TODO
@@ -69,12 +74,8 @@ public class NodeServer extends AbstractServer {
 				break;
 			}
 		}
-		int numberOfConnections = info.length;
+		System.out.println(Arrays.toString(info));
 		
-		for (int i = 1; i < numberOfConnections; i++) {
-			String[] node = info[i].split(":");
-			addConnection(node[0], node[1], node[2]);
-		}
 		// info = A
 	}
 	// A = [ 127.0.0.0:40000, 127.0.0.1:40001:4, 127.0.0.2:40002:4, 127.0.0.3:40003:9, 127.0.0.9:40009:4 ]
@@ -149,6 +150,16 @@ public class NodeServer extends AbstractServer {
 		System.out.println("serverStopped :: Exitting.");
 	}
 	
+	
+	/**
+	 *  TODO
+	 */
+	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
+		if (debug)
+			System.out.println(m);
+		client.setWeight(m.getWeight());
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -166,6 +177,9 @@ public class NodeServer extends AbstractServer {
 		if (debug)
 			System.out.println(m);
 		switch(m.getStringType()) {
+			case "SINGLE_WEIGHT":
+				updateConnectionWeight(m.convertToEdgeInformation(), client);
+				break;
 			case "TASK_MESSAGE":
 				break;
 			default:

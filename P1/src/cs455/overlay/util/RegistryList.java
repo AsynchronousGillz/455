@@ -86,15 +86,17 @@ public class RegistryList {
 	 * getInfo() format in String format. 
 	 * @return list of all the nodes
 	 */
-	public String[] getRegistration() {
-		String[] ret = new String[data.size()];
-		int index = 0;
-		for (NodeAddress node: data) {
-			ret[index++] = node.getInfo();
+	public String[] getRegistration(int index) {
+		int length = numberOfConnections;
+		String[] ret = new String[length];
+		ret[0] = data.get(index).getConnection() + " ";
+		for (int i = 0; i < length; i++) {
+			if (overlay[index][i] != 0)
+				ret[i+1] = data.get(i).getConnection() + " ";
 		}
 		return ret;
 	}
-
+	
 	/**
 	 * Returns all of the NodeAddress in table getInfo() format
 	 * in String format. 
@@ -204,6 +206,12 @@ public class RegistryList {
 		return ret;
 	}
 
+	/**
+	 * 
+	 * @param ipAddress
+	 * @param port
+	 * @return
+	 */
 	public synchronized NodeAddress getNode(String ipAddress, int port) {
 		for (NodeAddress node: data) {
 			if (node.getAddress().equals(ipAddress) && node.getPort() == port)
@@ -211,6 +219,22 @@ public class RegistryList {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @param address
+	 * @param port
+	 * @return
+	 */
+	public synchronized int getNodeIndex(String address, int port) {
+		int lenght = data.size();
+		for (int i = 0; i < lenght; i++) {
+			if (data.get(i).getAddress().equals(address) && data.get(i).getPort() == port)
+				return i;
+		}
+		return -1;
+	}
+	
 	/**
 	 * The overlay is a byte[][] that when byte[x][y] != 0
 	 * lists the weight of the connection.

@@ -101,6 +101,11 @@ public class Protocol {
 		return ret;
 	}
 	
+	public EdgeInformation convertToEdgeInformation() {
+		EdgeInformation ret = new EdgeInformation(message);
+		return ret;
+	}
+	
 	//******************************************************************************
 
 	/**

@@ -379,7 +379,8 @@ public class NodeClient implements Runnable {
 		if (debug)
 			System.out.print(o);
 		String[] nodes = o.getString();
-		nodeServer.setStats(nodes);
+		nodeServer.setInfo(nodes);
+		nodeServer.setStats();
 	}
 	
 	/**
@@ -392,7 +393,7 @@ public class NodeClient implements Runnable {
 		if (debug)
 			System.out.print(o);
 		String[] nodes = o.getString();
-		nodeServer.setInfo(nodes);
+		nodeServer.setWeights(nodes);
 	}
 
 	/**
