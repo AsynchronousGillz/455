@@ -18,6 +18,7 @@ public class Protocol {
             "DEREGISTER_REQUEST",
             "MESSAGING_NODES_LIST",
             "LINK_WEIGHTS",
+            "SINGLE_WEIGHT",
             "TASK_INITIATE",
             "TASK_MESSAGE",
             "TASK_COMPLETE",

@@ -38,21 +38,16 @@ public class StatisticsCollector {
 			ipAddress = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {}
 		this.data = new HashMap<>();
-		for (int i = 1; i < this.numberOfNodes; i++) {
-			String[] temp = nodes[i].split(":");
+		for (String node: nodes) {
+			String[] temp = node.split(" ");
 			int port = Integer.parseInt(temp[2]);
 			if (temp[1].equals(ipAddress) == false && port != serverPort) {
-				String[] connections = nodes[i].split(" ");
-				for (String node: connections) {
-					temp = node.split(":");
-					data.put(new NodeAddress(temp[0], temp[1], port), new NodeInformation());
-				}
+				data.put(new NodeAddress(temp[0], temp[1], port), new NodeInformation());
 				break;
 			}
 		}
 	}
-	// Host:ServerPort ip:port:wieght 
-	// 127.0.0.0:40000 127.0.0.1:40001:4  127.0.0.2:40002:4  127.0.0.3:40003:9  127.0.0.9:40009:4
+	// topeka.cs.colostate.edu 129.82.44.174 34257 
 	
 	/**
 	 * Return the number of connections for each node.

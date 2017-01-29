@@ -14,8 +14,7 @@ import java.util.*;
 import java.io.*;
 
 import cs455.overlay.msg.*;
-import cs455.overlay.util.RegistryList;
-import cs455.overlay.util.StatisticsCollector;
+import cs455.overlay.util.*;
 
 public class RegistryServer extends AbstractServer {
 	
@@ -28,11 +27,6 @@ public class RegistryServer extends AbstractServer {
 	 * The connection registration list.
 	 */
 	private RegistryList serverList;
-	
-	/**
-	 * The connection master statistics holder.
-	 */
-	private StatisticsCollector masterStats;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -106,22 +100,6 @@ public class RegistryServer extends AbstractServer {
 		String[] info = serverList.getRegistration();
 		this.sendToAllNodes(new Overlay(info, 0));
 		System.out.println("The overlay has been succesfully setup.");
-	}
-	
-	/**
-	 * TODO
-	 * @return
-	 */
-	public StatisticsCollector getMasterStats() {
-		return masterStats;
-	}
-
-	/**
-	 * TODO
-	 * @param masterStats
-	 */
-	public void setMasterStats() {
-		this.masterStats = new StatisticsCollector(serverList);
 	}
 
 	/**

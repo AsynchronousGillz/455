@@ -226,7 +226,7 @@ public class NodeClient implements Runnable {
 			}
 		} catch (Exception exception) {
 			if (stop == false) {
-				close();
+				close(1);
 				connectionException(exception);
 			}
 		} finally {
@@ -245,7 +245,7 @@ public class NodeClient implements Runnable {
 	 */
 	protected void connectionException(Exception exception) {
 		if (exception instanceof EOFException)
-			close();
+			close(1);
 		else
 			System.out.println("connectionException :: " + exception.toString());
 	}
@@ -285,11 +285,13 @@ public class NodeClient implements Runnable {
 	/**
 	 * Closes the node. If the connection is already closed, this call has no
 	 * effect.
-	 * 
+	 * @param node
+	 * 			0 for exit
+	 * 			1 for error 
 	 * @exception IOException
-	 *                if an error occurs when closing the socket.
+	 * 			if an error occurs when closing the socket.
 	 */
-	final public void close() {
+	final public void close(int mode) {
 		stop = true; // Set the flag that tells the thread to stop
 
 		try {
@@ -298,8 +300,12 @@ public class NodeClient implements Runnable {
 			if (debug)
 				System.err.println(ex.toString());
 		} finally {
-			System.err.println("An error occured connecting to the server. Exitting.");
-			System.exit(1);
+			if (mode == 0) {
+				System.out.println("Disconnecting from the server. Exitting.");
+			} else {
+				System.err.println("An error occured connecting to the server. Exitting.");
+				System.exit(1);
+			}
 		}
 	}
 
@@ -346,6 +352,7 @@ public class NodeClient implements Runnable {
 		} catch (IOException e) {
 			System.err.println("Could not send Registration.");
 		}
+		close(0);
 	}
 	
 	/**
@@ -358,19 +365,19 @@ public class NodeClient implements Runnable {
 		if (debug)
 			System.out.println(m.getMessageString());;
 		if (m.getMessage().equals("False")) {
-			close();
+			close(0);
 		}
 	}
 	
 	/**
 	 * Handles a the overlay message sent from the server.
-	 * 
+	 * With the connections within the overlay.
 	 * @param o
 	 *            the overlay message sent.
 	 */
 	public void registerOverlay(Overlay o) {
 		if (debug)
-			System.out.println(o);
+			System.out.print(o);
 		String[] nodes = o.getString();
 		nodeServer.setStats(nodes);
 	}
@@ -383,7 +390,9 @@ public class NodeClient implements Runnable {
 	 */
 	public void registerWeights(Overlay o) {
 		if (debug)
-			System.out.println(o);
+			System.out.print(o);
+		String[] nodes = o.getString();
+		nodeServer.setInfo(nodes);
 	}
 
 	/**

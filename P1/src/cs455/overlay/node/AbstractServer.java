@@ -5,6 +5,7 @@ import java.text.*;
 import java.util.*;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.*;
 
 import java.io.*;
 
@@ -51,6 +52,11 @@ public abstract class AbstractServer extends Thread {
 	 * default.
 	 */
 	private boolean stop = true;
+	
+	/**
+	 * The connection master statistics holder.
+	 */
+	protected StatisticsCollector stats;
 	
 	/**
 	 * For debug purposes
@@ -281,6 +287,22 @@ public abstract class AbstractServer extends Thread {
 	 */
 	final public void setPort(int port) {
 		this.port = port;
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	final public StatisticsCollector getMasterStats() {
+		return stats;
+	}
+
+	/**
+	 * TODO
+	 * @param list
+	 */
+	final public void setMasterStats(RegistryList list) {
+		this.stats = new StatisticsCollector(list);
 	}
 
 	/**

@@ -212,7 +212,6 @@ public class NodeAddress {
 	}
 	
 
-
 	public void clone(NodeAddress node) {
 		this.nodeHash = node.getNodeHash();
 		this.hostName = node.getHost();

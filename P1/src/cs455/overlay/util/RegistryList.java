@@ -1,6 +1,5 @@
 package cs455.overlay.util;
 
-import java.net.*;
 import java.util.*;
 
 import cs455.overlay.node.NodeAddress;
@@ -157,25 +156,26 @@ public class RegistryList {
 		String[] ret = new String[length];
 		for (int index = 0; index < length; index++) {
 			ret[index] = data.get(index).getConnection()+" ";
-			int column = 0;
-			for (byte b: overlay[index]) {
-				if (b != 0)
-					ret[index] += data.get(column).getConnection()+":"+b+"  ";
-				column++;
+			for (int outdex = index; outdex < length; outdex++) {
+				if (overlay[index][outdex] != 0)
+					ret[index] += data.get(outdex).getConnection()+":"+overlay[index][outdex]+" ";
 			}
 		}
 		return ret;
 	}
 	
 	/**
-	 * TODO
+	 * When a node connects to the Server and sends 
+	 * the registry request and is added to the list. 
 	 */
 	public synchronized void addToList(NodeAddress node) {
 		data.add(node);
 	}
 	
 	/**
-	 * TODO
+	 * If  node disconnects between 'setup-overlay' and 
+	 * 'send-overlay-link-weights' then it will notify the
+	 * server about the change, and make the overlay void.
 	 */
 	public synchronized void removeFromList(NodeAddress node) {
 		if (validOverlay == true) {
@@ -289,6 +289,7 @@ public class RegistryList {
 		return true;
 	}
 
+	/*
 	public static void main(String args[]) {
 		RegistryList registerList = new RegistryList(4);
 		for(int i = 0; i < 10; i++) {
@@ -306,6 +307,7 @@ public class RegistryList {
 			System.out.println(i);
 		}
 	}
+	*/
 	// Host:ServerPort ip:port:wieght 
 	// 127.0.0.0:40000 127.0.0.1:40001:4  127.0.0.2:40002:4  127.0.0.3:40003:9  127.0.0.9:40009:4
 

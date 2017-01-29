@@ -125,7 +125,7 @@ public class MessagingNode {
 	 * It closes the program.
 	 */
 	public void exit() {
-		client.close();
+		client.close(0);
 		server.serverClosed();
 		System.exit(0);
 	}

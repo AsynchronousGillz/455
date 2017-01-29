@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.Socket;
 
 import cs455.overlay.msg.*;
-import cs455.overlay.util.StatisticsCollector;
+import cs455.overlay.util.*;
 
 /**
  * 
@@ -22,7 +22,7 @@ public class NodeServer extends AbstractServer {
 	/**
 	 * 
 	 */
-	private StatisticsCollector stats;
+	ArrayList<NodeAddress> connections;
 	
 	// CONSTRUCTOR -----------------------------------------------------
 	
@@ -32,6 +32,7 @@ public class NodeServer extends AbstractServer {
 	 */
 	public NodeServer() throws IOException {
 		super(0);
+		connections = null;
 	}
 	// ACCESSING METHODS ------------------------------------------------
 	
@@ -45,7 +46,7 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
+	 * TODO
 	 * @param nodes
 	 */
 	public void setStats(String[] nodes) {
@@ -53,11 +54,37 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
+	 * TODO
+	 * @param nodes
+	 */
+	public void setInfo(String[] nodes) {
+		connections = new ArrayList<>();
+		int length = nodes.length;
+		String[] info = null;
+		for (int i = 0; i < length; i++) {
+			String[] total = nodes[i].split(" ");
+			String[] host = total[0].split(":");
+			if (host[0].equals(this.getHost()) && validateInput(host[1]) == getPort()) {
+				info = total;
+				break;
+			}
+		}
+		int numberOfConnections = info.length;
+		
+		for (int i = 1; i < numberOfConnections; i++) {
+			String[] node = info[i].split(":");
+			addConnection(node[0], node[1], node[2]);
+		}
+		// info = A
+	}
+	// A = [ 127.0.0.0:40000, 127.0.0.1:40001:4, 127.0.0.2:40002:4, 127.0.0.3:40003:9, 127.0.0.9:40009:4 ]
+	
+	/**
 	 * Add a connection to the server to another server.
 	 * @param host
 	 * @param sPort
 	 */
-	public void addConnection(String host, String sPort) {
+	public void addConnection(String host, String sPort, String sWeight) {
 		int port = validateInput(sPort);
 		if (port == 0)
 			return;
@@ -68,13 +95,20 @@ public class NodeServer extends AbstractServer {
 		} catch (IOException e) {
 			System.err.println("Could not connect to: "+host+":"+port);
 		}
-
-		// When a client is accepted, create a thread to handle
-		// the data exchange, then add it to thread group
+		NodeConnection newConnection = null;
 		synchronized (this) {
 			try {
-				new NodeConnection(this.nodeThreadGroup, clientSocket, this);
+				newConnection = new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 			} catch (IOException e) {}
+		}
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		System.out.println("Established connection to "+host+" at "+dateFormat.format(date));
+		int weight = validateInput(sWeight);
+		try {
+			newConnection.sendToNode(new EdgeInformation(weight));
+		} catch (IOException e) {
+			System.err.println("Error when sending wieght information.");
 		}
 	}
 	
