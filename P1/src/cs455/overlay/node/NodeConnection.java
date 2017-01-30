@@ -88,7 +88,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error oclcur when creating the connection.
 	 */
-	NodeConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
+	public NodeConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
 		super(group, (Runnable) null);
 		// Initialize variables
 		this.nodeSocket = nodeSocket;

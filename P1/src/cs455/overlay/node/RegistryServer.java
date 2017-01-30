@@ -73,16 +73,6 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * Search the serverList for the Node with a host name, ip address
-	 * or port similar to the String parameter.
-	 * @param string
-	 * @return NodeAddress.toString()
-	 */
-	public String getNode(String info) {
-		return serverList.findNode(info).toString();
-	}
-	
-	/**
 	 * TODO
 	 */
 	public boolean getRegistration() {
@@ -97,10 +87,8 @@ public class RegistryServer extends AbstractServer {
 	private void setRegistration() {
 		this.registationCheck = true;
 		serverList.buildOverlay();
-		NodeConnection[] nodes = this.getNodeConnections();
-		for (NodeConnection node : nodes) {
-			int i = serverList.getNodeIndex(node.getAddress(), node.getPort());
-			String[] info = serverList.getRegistration(i);
+		for (NodeConnection node : serverList.getData()) {
+			String[] info = serverList.getRegistration(node);
 			try {
 				node.sendToNode(new Overlay(info, 0));
 			} catch (IOException e) {
@@ -117,6 +105,16 @@ public class RegistryServer extends AbstractServer {
 	public String getList() {
 		return serverList.getList();
 	}
+	
+	/**
+	 * TODO
+	 * @param string
+	 * @return
+	 */
+	public String getNode(String info) {
+		return serverList.getNodeInfo(info);
+	}
+
 	
 	/**
 	 * From the interface given the command "setup-overlay"
@@ -303,6 +301,6 @@ public class RegistryServer extends AbstractServer {
 			default:
 		}
 	}
-
+	
 }
 

@@ -69,7 +69,7 @@ public class Registry {
 				if (tokens.length == 1) {
 					System.out.print(server.getList());
 				} else if (tokens.length == 2) {
-					System.out.println(server.getNode(tokens[1]));
+					System.out.print(server.getNode(tokens[1]));
 				} else {
 					this.invalid(message);
 				}

@@ -25,15 +25,15 @@ public class Dijkstra {
 
 			// The shortest path to next is dist[next] and via pred[next].
 
-			final int [] n = G.neighbors (next);
-			for (int j = 0; j < n.length; j++) {
-				final int v = n[j];
-				final int d = dist[next] + G.getWeight(next,v);
-				if (dist[v] > d) {
-					dist[v] = d;
-					pred[v] = next;
-				}
-			}
+//			final int [] n = G.neighbors (next);
+//			for (int j = 0; j < n.length; j++) {
+//				final int v = n[j];
+//				final int d = dist[next] + G.getWeight(next,v);
+//				if (dist[v] > d) {
+//					dist[v] = d;
+//					pred[v] = next;
+//				}
+//			}
 		}
 		return pred;  // (ignore pred[s]==0!)
 	}
@@ -53,11 +53,11 @@ public class Dijkstra {
 	public void printPath (String[] connections, int [] pred, int s, int e) {
 		final ArrayList<String> path = new ArrayList<String>();
 		int x = e;
-		while (x != s) {
-			path.add (0, G.getLabel(x));
-			x = pred[x];
-		}
-		path.add (0, G.getLabel(s));
+//		while (x != s) {
+//			path.add (0, G.getLabel(x));
+//			x = pred[x];
+//		}
+//		path.add (0, G.getLabel(s));
 		System.out.println (path);
 	}
 

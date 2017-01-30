@@ -1,5 +1,7 @@
 package cs455.overlay.util;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 
 import cs455.overlay.node.*;
@@ -86,7 +88,8 @@ public class RegistryList {
 	 * getInfo() format in String format. 
 	 * @return list of all the nodes
 	 */
-	public String[] getRegistration(int index) {
+	public String[] getRegistration(NodeConnection node) {
+		int index = data.indexOf(node);
 		int length = numberOfConnections;
 		String[] ret = new String[length];
 		ret[0] = data.get(index) + " ";
@@ -98,8 +101,7 @@ public class RegistryList {
 	}
 	
 	/**
-	 * Returns all of the NodeAddress in table getInfo() format
-	 * in String format. 
+	 * Returns all of the NodeConnections in getInfo() format
 	 * @return list of all the nodes
 	 */
 	public String getList() {
@@ -108,6 +110,27 @@ public class RegistryList {
 		String ret = "";
 		for (NodeConnection node: data) {
 			ret += node.getInfo() + "\n";
+		}
+		return ret;
+	}
+	
+	/**
+	 * Returns all NodeConnections getInfo() format.
+	 * @return list 
+	 */
+	public String getNodeInfo(String search) {
+		if (data.size() == 0) 
+			return "Node list is currently empty.";
+		String ret = "";
+		int port = 0;
+		try {
+			port = Integer.parseInt(search);
+		} catch (NumberFormatException e) {}
+		for (NodeConnection node: data) {
+			if (node.getAddress().equals(search))
+				ret += node.getInfo() + "\n";
+			else if (node.getPort() == port)
+				ret += node.getInfo() + "\n";
 		}
 		return ret;
 	}
@@ -188,54 +211,6 @@ public class RegistryList {
 	}
 	
 	/**
-	 * TODO
-	 */
-	public synchronized NodeConnection findNode(String info) {
-		NodeConnection ret = null;
-		int port = 0;
-		try {
-			port = Integer.parseInt(info);
-		} catch (NumberFormatException e){}
-		
-		for (NodeConnection node: data) {
-			if (node.getAddress().contains(info))
-				return node;
-			if (port != 0 && node.getPort() == port)
-				return node;
-		}
-		return ret;
-	}
-
-	/**
-	 * 
-	 * @param ipAddress
-	 * @param port
-	 * @return
-	 */
-	public synchronized NodeConnection getNode(String ipAddress, int port) {
-		for (NodeConnection node: data) {
-			if (node.getAddress().equals(ipAddress) && node.getPort() == port)
-				return node;
-		}
-		return null;
-	}
-	
-	/**
-	 * 
-	 * @param address
-	 * @param port
-	 * @return
-	 */
-	public synchronized int getNodeIndex(String address, int port) {
-		int lenght = data.size();
-		for (int i = 0; i < lenght; i++) {
-			if (data.get(i).getAddress().equals(address) && data.get(i).getPort() == port)
-				return i;
-		}
-		return -1;
-	}
-	
-	/**
 	 * The overlay is a byte[][] that when byte[x][y] != 0
 	 * lists the weight of the connection.
 	 */
@@ -313,11 +288,16 @@ public class RegistryList {
 		return true;
 	}
 
-	/*
+	
 	public static void main(String args[]) {
 		RegistryList registerList = new RegistryList(4);
-		for(int i = 0; i < 10; i++) {
-			registerList.addToList(new NodeAddress(new Socket(), "127.0.0."+i, "127.0.0."+i, 40000+i));
+		try {
+			for(int i = 0; i < 10; i++) {
+				registerList.addToList(new NodeConnection(null, new Socket(), null));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		System.out.println(registerList.getList());
 		registerList.buildOverlay();
@@ -331,7 +311,7 @@ public class RegistryList {
 			System.out.println(i);
 		}
 	}
-	*/
+
 	// Host:ServerPort ip:port:wieght 
 	// 127.0.0.0:40000 127.0.0.1:40001:4  127.0.0.2:40002:4  127.0.0.3:40003:9  127.0.0.9:40009:4
 
