@@ -22,7 +22,7 @@ public class NodeServer extends AbstractServer {
 	/**
 	 * 
 	 */
-	ArrayList<NodeAddress> connections;
+	ArrayList<NodeConnection> connections;
 	
 	// CONSTRUCTOR -----------------------------------------------------
 	

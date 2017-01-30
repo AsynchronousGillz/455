@@ -19,7 +19,7 @@ public class Registry {
 
 	// Instance variables **********************************************
 
-	RegistryServer server;
+	private RegistryServer server;
 
 	// Constructors ****************************************************
 
@@ -67,7 +67,7 @@ public class Registry {
 		switch(tokens[0]){
 			case "list-messaging":
 				if (tokens.length == 1) {
-					System.out.println(server.getList());
+					System.out.print(server.getList());
 				} else if (tokens.length == 2) {
 					System.out.println(server.getNode(tokens[1]));
 				} else {

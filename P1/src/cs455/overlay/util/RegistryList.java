@@ -2,7 +2,7 @@ package cs455.overlay.util;
 
 import java.util.*;
 
-import cs455.overlay.node.NodeAddress;
+import cs455.overlay.node.*;
 
 /**
  * 
@@ -15,7 +15,7 @@ public class RegistryList {
 	/**
 	 * The list of node connected to the register.
 	 */
-	ArrayList<NodeAddress> data;
+	ArrayList<NodeConnection> data;
 	
 	/**
 	 * The number of connections for each node.
@@ -58,7 +58,7 @@ public class RegistryList {
 	 * to build the {@link StatisticsCollector}.
 	 * @return
 	 */
-	public ArrayList<NodeAddress> getData() {
+	public ArrayList<NodeConnection> getData() {
 		return data;
 	}
 
@@ -89,10 +89,10 @@ public class RegistryList {
 	public String[] getRegistration(int index) {
 		int length = numberOfConnections;
 		String[] ret = new String[length];
-		ret[0] = data.get(index).getConnection() + " ";
+		ret[0] = data.get(index) + " ";
 		for (int i = 0; i < length; i++) {
 			if (overlay[index][i] != 0)
-				ret[i+1] = data.get(i).getConnection() + " ";
+				ret[i+1] = data.get(i) + " ";
 		}
 		return ret;
 	}
@@ -106,7 +106,7 @@ public class RegistryList {
 		if (data.size() == 0) 
 			return "Node list is currently empty.";
 		String ret = "";
-		for (NodeAddress node: data) {
+		for (NodeConnection node: data) {
 			ret += node.getInfo() + "\n";
 		}
 		return ret;
@@ -170,7 +170,7 @@ public class RegistryList {
 	 * When a node connects to the Server and sends 
 	 * the registry request and is added to the list. 
 	 */
-	public synchronized void addToList(NodeAddress node) {
+	public synchronized void addToList(NodeConnection node) {
 		data.add(node);
 	}
 	
@@ -179,7 +179,7 @@ public class RegistryList {
 	 * 'send-overlay-link-weights' then it will notify the
 	 * server about the change, and make the overlay void.
 	 */
-	public synchronized void removeFromList(NodeAddress node) {
+	public synchronized void removeFromList(NodeConnection node) {
 		if (validOverlay == true) {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
@@ -190,14 +190,14 @@ public class RegistryList {
 	/**
 	 * TODO
 	 */
-	public synchronized NodeAddress findNode(String info) {
-		NodeAddress ret = null;
+	public synchronized NodeConnection findNode(String info) {
+		NodeConnection ret = null;
 		int port = 0;
 		try {
 			port = Integer.parseInt(info);
 		} catch (NumberFormatException e){}
 		
-		for (NodeAddress node: data) {
+		for (NodeConnection node: data) {
 			if (node.getAddress().contains(info))
 				return node;
 			if (port != 0 && node.getPort() == port)
@@ -212,8 +212,8 @@ public class RegistryList {
 	 * @param port
 	 * @return
 	 */
-	public synchronized NodeAddress getNode(String ipAddress, int port) {
-		for (NodeAddress node: data) {
+	public synchronized NodeConnection getNode(String ipAddress, int port) {
+		for (NodeConnection node: data) {
 			if (node.getAddress().equals(ipAddress) && node.getPort() == port)
 				return node;
 		}

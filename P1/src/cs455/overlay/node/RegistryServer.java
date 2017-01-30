@@ -49,7 +49,7 @@ public class RegistryServer extends AbstractServer {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
-		serverList.removeFromList(nodeConnection.getAddress());
+		serverList.removeFromList(nodeConnection);
 	}
 
 	public void listeningException(Throwable exception) {
@@ -99,7 +99,7 @@ public class RegistryServer extends AbstractServer {
 		serverList.buildOverlay();
 		NodeConnection[] nodes = this.getNodeConnections();
 		for (NodeConnection node : nodes) {
-			int i = serverList.getNodeIndex(node.getAddress().getAddress(), node.getAddress().getPort());
+			int i = serverList.getNodeIndex(node.getAddress(), node.getPort());
 			String[] info = serverList.getRegistration(i);
 			try {
 				node.sendToNode(new Overlay(info, 0));
@@ -239,10 +239,10 @@ public class RegistryServer extends AbstractServer {
 			sendRegistrationResponse(false, client);
 			return;
 		}
-		String clientName = getTargetHostName(tokens[0]);
+		String hostName = getTargetHostName(tokens[0]);
 		int clientPort = Integer.parseInt(tokens[1]);
-		client.makeNodeAddress(new NodeAddress(client.getNodeSocket(), clientName, tokens[0], clientPort));
-		serverList.addToList(client.getAddress());
+		client.setClientInfo(hostName, tokens[0], clientPort);
+		serverList.addToList(client);
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -256,16 +256,16 @@ public class RegistryServer extends AbstractServer {
 		if (debug)
 			System.out.println(m.getMessageString());
 		String[] tokens = m.getMessageString().split(" ");
-		String clientAddress = client.getInetAddress().getHostAddress();
+		String clientAddress = client.getAddress();
 		if (tokens[0].equals(clientAddress) == false) {
 			sendRegistrationResponse(false, client);
 			return;
 		}
-		if (validateInput(tokens[1]) == client.getAddress().getPort()) {
+		if (validateInput(tokens[1]) == client.getPort()) {
 			sendRegistrationResponse(false, client);
 			return;
 		}
-		serverList.removeFromList(client.getAddress());
+		serverList.removeFromList(client);
 		sendRegistrationResponse(true, client);
 	}
 	

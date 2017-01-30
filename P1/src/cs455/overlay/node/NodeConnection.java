@@ -17,6 +17,30 @@ public class NodeConnection extends Thread {
 	// INSTANCE VARIABLES ***********************************************
 
 	/**
+	 * This String represents an Internet Protocol (IP) address.
+	 * 
+	 * @see java.net.InetAddress
+	 */
+	private String ipAddress;
+	
+	/**
+	 * This String represents the host name.
+	 * 
+	 * @see java.net.InetAddress
+	 */
+	private String hostName;
+	
+	/**
+	 * This is to make nodes port information accessible.
+	 */
+	private int port;
+	
+	/**
+	 * This is to make nodes port information accessible.
+	 */
+	private int wieght;
+	
+	/**
 	 * A reference to the Server that created this instance.
 	 */
 	private AbstractServer server;
@@ -49,13 +73,6 @@ public class NodeConnection extends Thread {
 	 */
 	private boolean stopping;
 
-	/**
-	 * Set in constructor. Used when sending messages.
-	 * 
-	 * @see node.NodeAddress
-	 */
-	private NodeAddress nodeAddress;
-
 	// CONSTRUCTORS *****************************************************
 
 	/**
@@ -87,7 +104,6 @@ public class NodeConnection extends Thread {
 			close();
 			throw ex; // Rethrow the exception.
 		}
-		this.nodeAddress = null;
 		setName(nodeSocket.getInetAddress().getHostAddress());
 		this.stopping = false;
 		start(); // Start the thread waits for data from the socket
@@ -128,11 +144,6 @@ public class NodeConnection extends Thread {
 		} finally {
 			server.nodeDisconnected(this);
 		}
-	}
-	
-	final public void makeNodeAddress(NodeAddress nodeAddress) {
-		this.nodeAddress = nodeAddress;
-		this.setName(nodeAddress.toString());
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -177,26 +188,28 @@ public class NodeConnection extends Thread {
 	 * @return the node's description.
 	 */
 	public String toString() {
-		if (nodeAddress == null)
-			return getName();
-		else
-			return nodeAddress.toString();
+		return getName();
 	}
 	
 	/**
-	 * Returns the NodeAddress contained within the NodeConnection
+	 * Add info with a hostName, ipAddress, and port.
 	 * 
-	 * @return the NodeAddress
+	 * @param hostName Assign the host name to hostName
+	 * @param ipAddress Assign the ip address to ipAddress
+	 * @param port Assign the port number to port
 	 */
-	public NodeAddress getAddress() {
-		return nodeAddress;
+
+	public void setClientInfo(String hostName, String ipAddress, int port) {
+		this.hostName = hostName;
+		this.ipAddress = ipAddress;
+		this.port = port;
 	}
 	
 	/**
 	 * Set the weight of the NodeAddress contained within the NodeConnection
 	 */
 	public void setWeight(int wieght) {
-		nodeAddress.setWieght(wieght);;
+		this.wieght = wieght;
 	}
 	
 	/**
@@ -205,7 +218,55 @@ public class NodeConnection extends Thread {
 	 * @return the weight of the connection.
 	 */
 	public int getWeight() {
-		return nodeAddress.getWieght();
+		return this.wieght;
+	}
+	
+	/**
+	 * Returns the IP Address of the node in String format
+	 * @return "{ip}" in string format
+	 */
+	public String getAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * Returns the host name of the node in String format
+	 * @return "{host name}" in string format
+	 */
+	public String getHost() {
+		return hostName;
+	}
+	
+	/**
+	 * Returns the port number of the node in int format
+	 * @return the port number in int format
+	 */
+	public int getPort() {
+		return port;
+	}
+	
+	/**
+	 * Get the IP Address, and port in String format
+	 * @return the "{ip} {port}" in String format
+	 */
+	public String getRegistryInfo() {
+		return this.ipAddress+" "+this.port;
+	}
+	
+	/**
+	 * Get the Host name, IP Address, and port in String format
+	 * @return the "{host name} {ip} {port}" in String format
+	 */
+	public String getInfo() {
+		return this.hostName+" "+this.ipAddress+" "+this.port;
+	}
+	
+	/**
+	 * Get the IP Address, and port in String format
+	 * @return the "{ip}:{port}" in String format
+	 */
+	public String getConnection() {
+		return this.ipAddress+":"+this.port;
 	}
 
 	// RUN METHOD -------------------------------------------------------
