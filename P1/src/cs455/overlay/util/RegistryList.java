@@ -33,6 +33,11 @@ public class RegistryList {
 	 * The list of connections to other nodes.
 	 */
 	private byte[][] overlay;
+
+	/**
+	 * The test boolean.
+	 */
+	final private boolean debug = true;
 	
 	public RegistryList(int numberOfConnections) {
 		this.numberOfConnections = numberOfConnections;
@@ -188,6 +193,7 @@ public class RegistryList {
 				if (overlay[index][outdex] != 0)
 					ret[index] += data.get(outdex).getConnection()+":"+overlay[index][outdex]+" ";
 			}
+			ret[index] = ret[index].trim();
 		}
 		return ret;
 	}
@@ -210,6 +216,8 @@ public class RegistryList {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
 		}
+		if (debug && data.contains(node) == true)
+			System.out.println("DEBUG: removeFromList data contains node.");
 		data.remove(node);
 	}
 	

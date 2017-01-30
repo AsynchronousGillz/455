@@ -296,11 +296,11 @@ public class NodeConnection extends Thread {
 			return false;
 		NodeConnection other = (NodeConnection) obj;
 		if (hostName == null && other.hostName != null)
-				return false;
+			return false;
 		else if (hostName.equals(other.hostName) == false)
 			return false;
 		if (ipAddress == null && other.ipAddress != null)
-				return false;
+			return false;
 		else if (ipAddress.equals(other.ipAddress) == false)
 			return false;
 		if (port != other.port)
