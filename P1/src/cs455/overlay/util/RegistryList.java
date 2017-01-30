@@ -41,6 +41,7 @@ public class RegistryList {
 	
 	/**
 	 * Return the number of connections for each node.
+	 * 
 	 * @return the number of connections in int format
 	 */
 	public boolean getValidOverlay() {
@@ -49,6 +50,7 @@ public class RegistryList {
 	
 	/**
 	 * Return the number of connections for each node.
+	 * 
 	 * @return the number of connections in int format
 	 */
 	public int getNumberOfConnections() {
@@ -58,6 +60,7 @@ public class RegistryList {
 	/**
 	 * Get the {@link ArrayList} of {@link NodeAddress}
 	 * to build the {@link StatisticsCollector}.
+	 * 
 	 * @return
 	 */
 	public ArrayList<NodeConnection> getData() {
@@ -77,6 +80,7 @@ public class RegistryList {
 	/**
 	 * Check that the number of nodes connected and entered into
 	 * the registry is more then the number of connections.
+	 * 
 	 * @return (numberOfConnections < data.size())
 	 */
 	public boolean checkOverlay() {
@@ -89,13 +93,12 @@ public class RegistryList {
 	 * @return list of all the nodes
 	 */
 	public String[] getRegistration(NodeConnection node) {
+		int length = data.size();
 		int index = data.indexOf(node);
-		int length = numberOfConnections;
-		String[] ret = new String[length];
-		ret[0] = data.get(index) + " ";
-		for (int i = 0; i < length; i++) {
+		String[] ret = new String[numberOfConnections];
+		for (int i = 0, r = 0; i < length; i++) {
 			if (overlay[index][i] != 0)
-				ret[i+1] = data.get(i) + " ";
+				ret[r++] = data.get(i).toString();
 		}
 		return ret;
 	}

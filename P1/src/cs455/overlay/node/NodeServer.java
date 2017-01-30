@@ -51,12 +51,19 @@ public class NodeServer extends AbstractServer {
 	 */
 	public void setWeights(String[] nodes) {
 		connections = new ArrayList<>();
-		for (String info : nodes) {
-			String[] node = info.split(":");
-			addConnection(node[0], node[1], node[2]);
-		}
+//		for (String info : nodes) {
+//			String[] node = info.split(":");
+//			addConnection(node[0], node[1], node[2]);
+//			int weight = validateInput(sWeight);
+// get connection
+//			try {
+//				newConnection.sendToNode(new EdgeInformation(weight));
+//			} catch (IOException e) {
+//				System.err.println("Error when sending wieght information.");
+//			}
+//		}
 	}
-	//
+	// A = [ 127.0.0.0:40000, 127.0.0.1:40001:4, 127.0.0.2:40002:4, 127.0.0.3:40003:9, 127.0.0.9:40009:4 ]
 	
 	/**
 	 * TODO
@@ -64,28 +71,19 @@ public class NodeServer extends AbstractServer {
 	 */
 	public void setInfo(String[] nodes) {
 		connections = new ArrayList<>();
-		int length = nodes.length;
-		String[] info = null;
-		for (int i = 0; i < length; i++) {
-			String[] total = nodes[i].split(" ");
-			String[] host = total[0].split(":");
-			if (host[0].equals(this.getHost()) && validateInput(host[1]) == getPort()) {
-				info = total;
-				break;
-			}
+		for (String node : nodes) {
+			String[] host = node.split(":");
+			addConnection(host[0], host[1]);
 		}
-		System.out.println(Arrays.toString(info));
-		
-		// info = A
-	}
-	// A = [ 127.0.0.0:40000, 127.0.0.1:40001:4, 127.0.0.2:40002:4, 127.0.0.3:40003:9, 127.0.0.9:40009:4 ]
+	} 
+	// 129.82.44.175:38271
 	
 	/**
 	 * Add a connection to the server to another server.
 	 * @param host
 	 * @param sPort
 	 */
-	public void addConnection(String host, String sPort, String sWeight) {
+	public void addConnection(String host, String sPort) {
 		int port = validateInput(sPort);
 		if (port == 0)
 			return;
@@ -96,21 +94,14 @@ public class NodeServer extends AbstractServer {
 		} catch (IOException e) {
 			System.err.println("Could not connect to: "+host+":"+port);
 		}
-		NodeConnection newConnection = null;
 		synchronized (this) {
 			try {
-				newConnection = new NodeConnection(this.nodeThreadGroup, clientSocket, this);
+				new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 			} catch (IOException e) {}
 		}
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println("Established connection to "+host+" at "+dateFormat.format(date));
-		int weight = validateInput(sWeight);
-		try {
-			newConnection.sendToNode(new EdgeInformation(weight));
-		} catch (IOException e) {
-			System.err.println("Error when sending wieght information.");
-		}
 	}
 	
 	// HOOK METHODS -----------------------------------------------------

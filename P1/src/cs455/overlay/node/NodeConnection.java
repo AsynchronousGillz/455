@@ -38,7 +38,7 @@ public class NodeConnection extends Thread {
 	/**
 	 * This is to make nodes port information accessible.
 	 */
-	private int wieght;
+	private int weight;
 	
 	/**
 	 * A reference to the Server that created this instance.
@@ -105,6 +105,8 @@ public class NodeConnection extends Thread {
 			throw ex; // Rethrow the exception.
 		}
 		setName(nodeSocket.getInetAddress().getHostAddress());
+		this.hostName = this.ipAddress = null;
+		this.weight = this.port = 0;
 		this.stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
@@ -168,6 +170,7 @@ public class NodeConnection extends Thread {
 	
 	/**
 	 * Returns a string host name.
+	 * 
 	 * @param ip of target machine.
 	 * @return machine host name.
 	 */
@@ -183,12 +186,16 @@ public class NodeConnection extends Thread {
 	}
 	
 	/**
-	 * Returns a string representation of the node.
+	 * Returns a string representation of the node. If serverPort 
+	 * has been sent it will be "ip:port" else it will just be the "ip"
 	 * 
 	 * @return the node's description.
 	 */
 	public String toString() {
-		return getName();
+		if (this.ipAddress != null && port != 0)
+			return this.ipAddress+":"+this.port;
+		else
+			return getName();
 	}
 	
 	/**
@@ -209,7 +216,7 @@ public class NodeConnection extends Thread {
 	 * Set the weight of the NodeAddress contained within the NodeConnection
 	 */
 	public void setWeight(int wieght) {
-		this.wieght = wieght;
+		this.weight = wieght;
 	}
 	
 	/**
@@ -218,7 +225,7 @@ public class NodeConnection extends Thread {
 	 * @return the weight of the connection.
 	 */
 	public int getWeight() {
-		return this.wieght;
+		return this.weight;
 	}
 	
 	/**
@@ -269,8 +276,40 @@ public class NodeConnection extends Thread {
 		return this.ipAddress+":"+this.port;
 	}
 
-	// RUN METHOD -------------------------------------------------------
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
+		result = prime * result + ((ipAddress == null) ? 0 : ipAddress.hashCode());
+		result = prime * result + port;
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeConnection other = (NodeConnection) obj;
+		if (hostName == null && other.hostName != null)
+				return false;
+		else if (hostName.equals(other.hostName) == false)
+			return false;
+		if (ipAddress == null && other.ipAddress != null)
+				return false;
+		else if (ipAddress.equals(other.ipAddress) == false)
+			return false;
+		if (port != other.port)
+			return false;
+		return true;
+	}
+
+	// RUN METHOD -------------------------------------------------------
+	
 	/**
 	 * Constantly reads the node's input stream. Sends all objects that are
 	 * read to the server. Not to be called.
@@ -296,6 +335,9 @@ public class NodeConnection extends Thread {
 			}
 		}
 	}
+	
+	// CLOSE METHOD -------------------------------------------------------
+
 
 	/**
 	 * Closes all connection to the server.

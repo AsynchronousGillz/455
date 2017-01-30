@@ -97,6 +97,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		System.out.println("The overlay has been succesfully setup.");
 	}
+	// 
 
 	/**
 	 * TODO
@@ -131,9 +132,9 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * From the interface given the command "setup-overlay"
-	 * first check the number of node is more then the number
-	 * of connections and if so print an error else have the
+	 * From the interface given the command "setup-overlay" first 
+	 * check the number of node is more then the number of 
+	 * connections and if so print an error else have the
 	 * RegistryList build the overlay and print success.
 	 * 
 	 * @param number of connections.

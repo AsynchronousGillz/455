@@ -375,7 +375,7 @@ public class NodeClient implements Runnable {
 	 * @param o
 	 *            the overlay message sent.
 	 */
-	public void registerOverlay(Overlay o) {
+	public void registerConnections(Overlay o) {
 		if (debug)
 			System.out.print(o);
 		String[] nodes = o.getString();
@@ -417,7 +417,7 @@ public class NodeClient implements Runnable {
 				registerResponse(m.convertToRegistation());
 				break;
 			case "MESSAGING_NODES_LIST":
-				registerOverlay(m.convertToOverlay());
+				registerConnections(m.convertToOverlay());
 				break;
 			case "LINK_WEIGHTS":
 				registerWeights(m.convertToOverlay());
