@@ -1,49 +1,36 @@
 package cs455.overlay.node;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * 
  * @author G van Andel
  *
- * @see cs455.overlay.node
- * 
  */
 
-public class MessagingNode {
+import java.io.IOException;
+import java.io.InputStreamReader;
 
+public class Registry {
+	
 	// Class variables *************************************************
 
-	/**
-	 * 
-	 */
-	private boolean stop = false;
-
-	/**
-	 * 
-	 */
 	final public static boolean debug = false;
 
 	// Instance variables **********************************************
 
-	NodeClient client;
-	NodeServer server;
+	private RegistryServer server;
 
 	// Constructors ****************************************************
 
 	/**
-	 * Constructs an instance of the chat client.
+	 * Constructs an instance of the registry server.
 	 *
-	 * @param client
-	 * 		The client that connects to the registry.
 	 * @param server
-	 * 		The server for the messaging nodes to connect to.
+	 * 		The server for the nodes to connect to.
 	 */
 
-	public MessagingNode(NodeClient client, NodeServer server) {
-		this.client = client;
+	public Registry(RegistryServer server) {
 		this.server = server;
 	}
 
@@ -53,7 +40,7 @@ public class MessagingNode {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
-			while (stop == false) {
+			while (true) {
 				message = fromConsole.readLine();
 				if (message.trim().equals(""))
 					continue;
@@ -78,17 +65,43 @@ public class MessagingNode {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "exit-overlay":
+			case "list-messaging":
 				if (tokens.length == 1) {
-					client.unregister();
-					exit();
+					System.out.print(server.getList());
+				} else if (tokens.length == 2) {
+					System.out.print(server.getNode(tokens[1]));
 				} else {
 					this.invalid(message);
 				}
 				break;
-			case "print-shortest-path":
+			case "setup-overlay":
 				if (tokens.length == 1) {
-					server.getShortestPath();
+					server.makeOverlay();
+				} else if (tokens.length == 2) {
+					int numberConnections = server.validateInput(tokens[1]);
+					server.makeOverlay(numberConnections);
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "list-weights":
+				if (tokens.length == 1) {
+					System.out.println(server.displayOverlay());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "send-overlay-link-weights":
+				if (tokens.length == 1) {
+					server.sendOverlay();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "start":
+				if (tokens.length == 2) {
+					int numberOfRounds = server.validateInput(tokens[1]);
+					server.sendStart(numberOfRounds);
 				} else {
 					this.invalid(message);
 				}
@@ -113,69 +126,45 @@ public class MessagingNode {
 	}
 	
 	/**
-	 * Build the shortest path string.
-	 */
-	public String getShortestPath() {
-		String ret = "";
-		ret += server.getShortestPath();
-		return ret;
-	}
-	
-	/**
-	 * It closes the program.
-	 */
-	public void exit() {
-		client.close(0);
-		server.serverClosed();
-		System.exit(0);
-	}
-	
-	/**
 	 * It displays small help onto the screen.
 	 *
 	 * @param message
 	 *            The string to be displayed with error format.
 	 */
 	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try: [ getPort | getHost ]";
+		String info = "invalid command \"" + message + "\" try:\n";
+		info += "\t[ setup-overlay | send-overlay-link-weights | start ]\n";
+		info += "\t[ list-messaging | list-weights | get-port | get-host ]";
 		System.err.println(info);
 	}
 
-	public void close() {
-		// TODO
-	}
 	
-	public static void main(String args[]) {
-		
-		int registryPort = 0;
-		String registryIP = null;
-		
-		try {
-			registryIP = args[0];
-		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "venus";
-		}
-		
-		try {
-			registryPort = Integer.parseInt(args[1]);
-		} catch (IndexOutOfBoundsException ex) {
-			registryPort = 60100;
-		}
-		
-		NodeServer nodeServer = null;
+	/**
+	 * It closes the server.
+	 */
+	public void shutdown() throws IOException {
+		server.stopListening();
+	}
 
+	public static void main(String [] args) {
+		int port = 0;
 		try {
-			nodeServer = new NodeServer();
-			nodeServer.listen();
+			port = Integer.parseInt(args[0]);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			port = 60100;
+		}
+		
+		RegistryServer server = null;
+		
+		try {
+			server = new RegistryServer(port);
+			server.listen();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		}
 		
-		NodeClient nodeClient = new NodeClient(nodeServer, registryIP, registryPort);
-		
-		MessagingNode node = new MessagingNode(nodeClient, nodeServer);
-		node.runConsole();
-		
+		Registry r = new Registry(server);
+		r.runConsole();
 	}
 	
 }

@@ -406,7 +406,7 @@ public class NodeClient implements Runnable {
 	 *            the EdgeInformation message sent.
 	 */
 	public void registerWeights(EdgeInformation e) {
-		if (debug)
+//		if (debug) // DEBUG
 			System.out.print(e);
 		String address = e.getAddress();
 		int weight = e.getWeight();

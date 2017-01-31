@@ -68,7 +68,8 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 * Array should be formated as a list of "host:port"
+	 * Additional information containing all the nodes and the
+	 * This is an array that should be formated as "host:port"
 	 *
 	 * @param nodes
 	 */
@@ -101,9 +102,11 @@ public class NodeServer extends AbstractServer {
 				new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 			} catch (IOException e) {}
 		}
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		System.out.println("Established connection to "+host+" at "+dateFormat.format(date));
+		if (debug) {
+			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			Date date = new Date();
+			System.out.println("Established connection to "+host+" at "+dateFormat.format(date));
+		}
 	}
 	
 	/**

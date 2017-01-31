@@ -37,6 +37,11 @@ public class RegistryList {
 	 */
 	final private boolean debug = true;
 	
+	/**
+	 * When the server is given the command to set up the overlay.
+	 * 
+	 * @param numberOfConnections
+	 */
 	public RegistryList(int numberOfConnections) {
 		this.numberOfConnections = numberOfConnections;
 		data = new ArrayList<>();
@@ -156,7 +161,8 @@ public class RegistryList {
 	}
 	
 	/**
-	 * Returns the overlay in the two dimensional byte array. 
+	 * Returns the overlay in the two dimensional byte array.
+	 * 
 	 * @return byte[][] overlay
 	 */
 	public byte[][] getOverlay() throws Exception {
@@ -165,6 +171,22 @@ public class RegistryList {
 		if (validOverlay == false)
 			throw new Exception("Overlay has not been constructed.");
 		return overlay;
+	}
+
+	/**
+	 * Returns the overlay in a one dimensional byte array.
+	 * 
+	 * @return byte[] overlay
+	 */
+	public byte[] getBytes() {
+		int length = overlay.length;
+		byte[] o = new byte[length * 2];
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				o[(i + 1) * j] = overlay[i][j];
+			}
+		}
+		return o;
 	}
 	
 	/**
