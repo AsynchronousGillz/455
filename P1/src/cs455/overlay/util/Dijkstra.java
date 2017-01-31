@@ -8,16 +8,72 @@ import java.util.ArrayList;
  * @author G van Andel
  */
 public class Dijkstra {
+	
+	/**
+	 * 
+	 */
+	private int sourceIndex;
+	
+	/**
+	 * shortest known distance from "sourceIndex"
+	 */
+	private int[] dist;
+	
+	/**
+	 * Preceeding node in path
+	 */
+	private int[] pred;
+	
+	/**
+	 * The node information.
+	 */
+	private String[] hostInformation;
 
-	public int [] dijkstra (String[] connections, int s) {
-		final int [] dist = new int [connections.length];  // shortest known distance from "s"
-		final int [] pred = new int [connections.length];  // preceeding node in path
-		final boolean [] visited = new boolean [connections.length]; // all false initially
+	/**
+	 * Lets get the shortest path.
+	 * 
+	 * @param connections
+	 * @param hostName
+	 * @param port
+	 */
+	public Dijkstra (String[] connections, String address, int port) {
+		dist = new int [connections.length];  
+		pred = new int [connections.length];
+		hostInformation = connections;
+		this.getSource(address, port);
 
 		for (int i=0; i<dist.length; i++) {
 			dist[i] = Integer.MAX_VALUE;
 		}
-		dist[s] = 0;
+	}
+	
+	/**
+	 * Set the sourceIndex of the hostNode
+	 * @param hostName
+	 */
+	private void getSource(String address, int port) {
+		int index = 0;
+		for (String node : hostInformation) {
+			String[] info = node.split(" ");
+			int tPort = Integer.parseInt(info[2]);
+			if (info[1].equals(address) == true && port == tPort)
+				this.sourceIndex = index;
+			index++;
+		}
+	}
+	
+	public void addConnections(String host) {
+		
+	}
+	
+	public void addWeights() {
+		
+	}
+	
+	public int[] getPathInformation(String hostName) {
+		
+		boolean [] visited = new boolean [pred.length]; // all false initially
+		dist[sourceIndex] = 0;
 
 		for (int i = 0; i < dist.length; i++) {
 			final int next = minVertex (dist, visited);
@@ -52,13 +108,13 @@ public class Dijkstra {
 
 	public void printPath (String[] connections, int [] pred, int s, int e) {
 		final ArrayList<String> path = new ArrayList<String>();
-		int x = e;
+//		int x = e;
 //		while (x != s) {
 //			path.add (0, G.getLabel(x));
 //			x = pred[x];
 //		}
 //		path.add (0, G.getLabel(s));
-		System.out.println (path);
+		System.out.println(path);
 	}
 
 }

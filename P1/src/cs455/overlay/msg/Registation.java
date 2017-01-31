@@ -35,6 +35,13 @@ public class Registation extends Protocol {
 		}
 	}
 	
+	public boolean checkResponse() {
+		if (getIndicator() == 0)
+			return false;
+		else
+			return true;
+	}
+	
 	public String getMessageString() {
 		return new String(message);
 	}

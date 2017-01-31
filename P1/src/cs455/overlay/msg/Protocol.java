@@ -16,6 +16,7 @@ public class Protocol {
             "REGISTER_REQUEST",
             "REGISTER_RESPONSE",
             "DEREGISTER_REQUEST",
+            "MESSAGING_NODES",
             "MESSAGING_NODES_LIST",
             "LINK_WEIGHTS",
             "SINGLE_WEIGHT",
@@ -110,6 +111,7 @@ public class Protocol {
 
 	/**
 	 * Converts Protocol to byte array to be sent across the socket.
+	 * 
 	 * @return byte array.
 	 * @throws IOException
 	 */
@@ -132,6 +134,7 @@ public class Protocol {
 
 	/**
 	 * Takes the bytes sent on the socket and assigns values.
+	 * 
 	 * @param bytes byte array from socket.
 	 * @throws IOException
 	 */

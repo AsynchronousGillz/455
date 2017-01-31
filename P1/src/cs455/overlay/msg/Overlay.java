@@ -14,6 +14,7 @@ public class Overlay extends Protocol {
 	 * @param type
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
+	 * 			2 for MESSAGING_NODES
 	 */
 	public Overlay(byte[] message, int type) {
 		super();
@@ -23,6 +24,9 @@ public class Overlay extends Protocol {
 				break;
 			case 1:
 				this.setType("LINK_WEIGHTS");
+				break;
+			case 2:
+				this.setType("MESSAGING_NODES");
 				break;
 		}
 		this.setMessage(message);
@@ -35,6 +39,7 @@ public class Overlay extends Protocol {
 	 * @param type
 	 * 			0 for MESSAGING_NODES_LIST
 	 * 			1 for LINK_WEIGHTS
+	 * 			2 for MESSAGING_NODES
 	 */
 	public Overlay(String[] nodes, int type) {
 		super();
@@ -44,6 +49,9 @@ public class Overlay extends Protocol {
 				break;
 			case 1:
 				this.setType("LINK_WEIGHTS");
+				break;
+			case 2:
+				this.setType("MESSAGING_NODES");
 				break;
 		}
 		convertArray(nodes);

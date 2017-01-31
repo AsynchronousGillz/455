@@ -12,13 +12,15 @@ public class EdgeInformation extends Protocol {
 	
 		/**
 		 * Used when creating the message from a Protocol. SINGLE_WEIGHT.
+		 * @param address
+		 * 			the ip address of the sending node
 		 * @param weight
 		 * 			connection information int form
 		 */
-		public EdgeInformation(int weight) {
+		public EdgeInformation(String address, int weight) {
 			super();
 			this.setType("SINGLE_WEIGHT");
-			convertMessage(weight);
+			convertMessage(address, weight);
 		}
 		
 		/**
@@ -36,15 +38,33 @@ public class EdgeInformation extends Protocol {
 		 * TODO
 		 * @param nodes
 		 */
-		public void convertMessage(int weight) {
+		public void convertMessage(String address, int weight) {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			DataOutputStream out = new DataOutputStream(output);
+			byte[] bytes = address.getBytes();
 			try {
 				out.writeInt(weight);
+				out.writeInt(bytes.length);
+				out.write(bytes, 0, bytes.length);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			message = output.toByteArray();
+		}
+		
+		public String getAddress() {
+			byte bytes[] = null;
+			ByteArrayInputStream input = new ByteArrayInputStream(message);
+			DataInputStream in = new DataInputStream(input);
+			try {
+				in.readInt();
+				int len = in.readInt();
+				bytes = new byte[len];
+				in.read(bytes, 0, len);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return bytes.toString();
 		}
 		
 		/**
@@ -66,14 +86,18 @@ public class EdgeInformation extends Protocol {
 		 * TODO
 		 */
 		public String toString() {
-			int ret = 0;
+			String ret = "";
 			ByteArrayInputStream input = new ByteArrayInputStream(message);
 			DataInputStream in = new DataInputStream(input);
+			byte bytes[] = null;
 			try {
-				ret = in.readInt();
+				ret = in.readInt()+" ";
+				int len = in.readInt();
+				bytes = new byte[len];
+				in.read(bytes, 0, len);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return new String(ret+"");
+			return ret + bytes.toString();
 		}
 }

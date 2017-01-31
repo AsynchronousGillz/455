@@ -65,7 +65,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = true;
+	final private boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -371,7 +371,21 @@ public class NodeClient implements Runnable {
 	
 	/**
 	 * Handles a the overlay message sent from the server.
-	 * With the connections within the overlay.
+	 * This Message contains all of the nodes in the Overlay.
+	 * 
+	 * @param o
+	 * 			the overlay message sent.
+	 */
+	private void registerNodes(Overlay o) {
+		if (debug)
+			System.out.print(o);
+		String[] nodes = o.getString();
+		nodeServer.makeDijkstra(nodes);
+	}
+	
+	/**
+	 * Handles a the overlay message sent from the server. With 
+	 * information about the connections within the overlay.
 	 * @param o
 	 *            the overlay message sent.
 	 */
@@ -384,16 +398,19 @@ public class NodeClient implements Runnable {
 	}
 	
 	/**
-	 * Handles a the overlay message sent from the server.
+	 * Handles a the Weight message sent from the server. With 
+	 * information about the weights of the connections within 
+	 * the overlay.
 	 * 
-	 * @param o
-	 *            the overlay message sent.
+	 * @param e
+	 *            the EdgeInformation message sent.
 	 */
-	public void registerWeights(Overlay o) {
+	public void registerWeights(EdgeInformation e) {
 		if (debug)
-			System.out.print(o);
-		String[] nodes = o.getString();
-		nodeServer.setWeights(nodes);
+			System.out.print(e);
+		String address = e.getAddress();
+		int weight = e.getWeight();
+		nodeServer.setWeight(address, weight);
 	}
 
 	/**
@@ -416,11 +433,14 @@ public class NodeClient implements Runnable {
 			case "REGISTER_RESPONSE":
 				registerResponse(m.convertToRegistation());
 				break;
+			case "MESSAGING_NODES":
+				registerNodes(m.convertToOverlay());
+				break;
 			case "MESSAGING_NODES_LIST":
 				registerConnections(m.convertToOverlay());
 				break;
 			case "LINK_WEIGHTS":
-				registerWeights(m.convertToOverlay());
+				registerWeights(m.convertToEdgeInformation());
 				break;
 			default:
 		}

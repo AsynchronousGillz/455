@@ -1,7 +1,5 @@
 package cs455.overlay.util;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.*;
 
 import cs455.overlay.node.*;
@@ -94,14 +92,21 @@ public class RegistryList {
 
 	/**
 	 * Returns all of the NodeAddress in String[] format
-	 * getInfo() format in String format. 
+	 * toString() format in String format. 
+	 *
 	 * @return list of all the nodes
 	 */
 	public String[] getRegistration(NodeConnection node) {
 		int length = data.size();
 		int index = data.indexOf(node);
-		String[] ret = new String[numberOfConnections];
-		for (int i = 0, r = 0; i < length; i++) {
+		int connection = 0;
+
+		for (int i = index; i < length; i++)
+			if (overlay[index][i] != 0)
+				connection++;
+
+		String[] ret = new String[connection];
+		for (int i = index, r = 0; i < length; i++) {
 			if (overlay[index][i] != 0)
 				ret[r++] = data.get(i).toString();
 		}
@@ -110,20 +115,23 @@ public class RegistryList {
 	
 	/**
 	 * Returns all of the NodeConnections in getInfo() format
+	 *
 	 * @return list of all the nodes
 	 */
-	public String getList() {
+	public String[] getList() throws Exception {
 		if (data.size() == 0) 
-			return "Node list is currently empty.";
-		String ret = "";
+			new Exception("Node list is currently empty.");
+		String[] ret = new String[data.size()];
+		int index = 0;
 		for (NodeConnection node: data) {
-			ret += node.getInfo() + "\n";
+			ret[index++] = node.getInfo();
 		}
 		return ret;
 	}
 	
 	/**
 	 * Returns all NodeConnections getInfo() format.
+	 *
 	 * @return list 
 	 */
 	public String getNodeInfo(String search) {
@@ -135,11 +143,15 @@ public class RegistryList {
 			port = Integer.parseInt(search);
 		} catch (NumberFormatException e) {}
 		for (NodeConnection node: data) {
-			if (node.getAddress().equals(search))
+			if (node.getAddress().contains(search))
+				ret += node.getInfo() + "\n";
+			else if (node.getHost().contains(search))
 				ret += node.getInfo() + "\n";
 			else if (node.getPort() == port)
 				ret += node.getInfo() + "\n";
 		}
+		if (ret.equals("") == true)
+			return "No results found. Try again.";
 		return ret;
 	}
 	
@@ -178,7 +190,7 @@ public class RegistryList {
 	
 	/**
 	 * Returns the Nodes connections from the overlay.
-	 * @return 
+	 * @return String array format host:port host:port:weight 
 	 */
 	public String[] getConnections() throws Exception {
 		if (data.size() == 0) 
@@ -186,14 +198,14 @@ public class RegistryList {
 		if (validOverlay == false)
 			throw new Exception("Overlay has not been constructed.");
 		int length = data.size();
-		String[] ret = new String[length];
-		for (int index = 0; index < length; index++) {
-			ret[index] = data.get(index).getConnection()+" ";
+		int size = (length * numberOfConnections) / 2;
+		String[] ret = new String[size];
+		for (int index = 0, rdex = 0; index < length; index++) {
+			String established = data.get(index).getConnection()+" ";
 			for (int outdex = index; outdex < length; outdex++) {
 				if (overlay[index][outdex] != 0)
-					ret[index] += data.get(outdex).getConnection()+":"+overlay[index][outdex]+" ";
+					ret[rdex++] = established + data.get(outdex).getConnection()+":"+overlay[index][outdex];
 			}
-			ret[index] = ret[index].trim();
 		}
 		return ret;
 	}
@@ -298,33 +310,6 @@ public class RegistryList {
 			return false;
 		return true;
 	}
-
-	
-	public static void main(String args[]) {
-		RegistryList registerList = new RegistryList(4);
-		try {
-			for(int i = 0; i < 10; i++) {
-				registerList.addToList(new NodeConnection(null, new Socket(), null));
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(registerList.getList());
-		registerList.buildOverlay();
-		String[] info = null;
-		try {
-			info = registerList.getConnections();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		for (String i: info) {
-			System.out.println(i);
-		}
-	}
-
-	// Host:ServerPort ip:port:wieght 
-	// 127.0.0.0:40000 127.0.0.1:40001:4  127.0.0.2:40002:4  127.0.0.3:40003:9  127.0.0.9:40009:4
 
 }
 

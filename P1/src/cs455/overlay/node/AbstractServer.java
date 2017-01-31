@@ -54,10 +54,20 @@ public abstract class AbstractServer extends Thread {
 	private boolean stop = true;
 	
 	/**
+	 * The setup-overlay has begun.
+	 */
+	protected boolean registationCheck;
+	
+	/**
+	 * The connection registration list.
+	 */
+	protected RegistryList connectionList;
+
+	/**
 	 * The connection master statistics holder.
 	 */
 	protected StatisticsCollector stats;
-	
+
 	/**
 	 * For debug purposes
 	 */
@@ -106,7 +116,7 @@ public abstract class AbstractServer extends Thread {
 			connectionListener.start();
 		}
 	}
-	
+
 	/**
 	 * Sets the server name.
 	 */
@@ -114,7 +124,7 @@ public abstract class AbstractServer extends Thread {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
 		this.setName(ipAddress+":"+this.port);
 	}
-	
+
 	/**
 	 * Causes the server to stop accepting new connections.
 	 */
@@ -177,7 +187,7 @@ public abstract class AbstractServer extends Thread {
 	final public boolean isListening() {
 		return (connectionListener != null);
 	}
-	
+
 	/**
 	 * Returns true if the server has stopped.
 	 *
@@ -187,7 +197,7 @@ public abstract class AbstractServer extends Thread {
 		return stop;
 	}
 
-	
+
 	/**
 	 * Returns a String array containing the names of the existing node 
 	 * connections.
@@ -204,7 +214,29 @@ public abstract class AbstractServer extends Thread {
 		}
 		return ret;
 	}
-	
+
+	/**
+	 * Returns the NodeConnection Object that has both port and ip 
+	 * matching.
+	 *
+	 * @return an array of Strings containing NodeConnection Names.
+	 */
+	synchronized final public NodeConnection getConnection(String address, int port) {
+		NodeConnection ret = null;
+		int size = nodeThreadGroup.activeCount();
+		NodeConnection[] nodeThreadList = new NodeConnection[size];
+		nodeThreadGroup.enumerate(nodeThreadList);
+		String match = address+":"+port;
+		System.out.println("AbstractServer.NodeConnection: :)"); // DEBUG
+		for (NodeConnection node : nodeThreadList) {
+			if (match.equals(node.getConnection()) == true) {
+				ret = node;
+				break;
+			}
+		}
+		return ret;
+	}
+
 	/**
 	 * Returns an array containing the existing node connections. New
 	 * node can also connect. This is only for that time.
@@ -225,7 +257,7 @@ public abstract class AbstractServer extends Thread {
 	final public int getNumberOfClients() {
 		return nodeThreadGroup.activeCount();
 	}
-	
+
 	/**
 	 * Returns the raw IP address.
 	 *
@@ -238,7 +270,7 @@ public abstract class AbstractServer extends Thread {
 		} catch (UnknownHostException e) {}
 		return ret;
 	}
-	
+
 	/**
 	 * Returns the host name for this IP address.
 	 *
@@ -251,20 +283,21 @@ public abstract class AbstractServer extends Thread {
 		} catch (UnknownHostException e) {}
 		return ret;
 	}
-	
+
 	/**
 	 * Returns a string host name.
+	 *
 	 * @param ip of target machine.
 	 * @return machine host name.
 	 */
 	final public String getTargetHostName(String targetIP) {
 		String ret = null;
 		try {
-            InetAddress host = InetAddress.getByName(targetIP);
-            ret = host.getHostName();
-        } catch (UnknownHostException ex) {
-            ex.printStackTrace();
-        }
+			InetAddress host = InetAddress.getByName(targetIP);
+			ret = host.getHostName();
+		} catch (UnknownHostException ex) {
+			ex.printStackTrace();
+		}
 		return ret;
 	}
 
@@ -287,12 +320,12 @@ public abstract class AbstractServer extends Thread {
 	final public void setPort(int port) {
 		this.port = port;
 	}
-	
+
 	/**
 	 * TODO
 	 * @return
 	 */
-	final public StatisticsCollector getMasterStats() {
+	final public StatisticsCollector getStats() {
 		return stats;
 	}
 
@@ -328,10 +361,12 @@ public abstract class AbstractServer extends Thread {
 	final public void setBacklog(int backlog) {
 		this.backlog = backlog;
 	}
-	
-	
+
+
 	/**
-	 * Validate input is a valid number.
+	 * Validate input is a valid number. If number is zero
+	 * then parse int failed and an error will be printed
+	 * and return zero.
 	 * 
 	 * @param input
 	 *            The string to be validated.
