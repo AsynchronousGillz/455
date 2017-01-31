@@ -76,12 +76,14 @@ public class Dijkstra {
 	 * 
 	 * @param bytes
 	 */
-	public void addOverlay(int size, byte[] bytes) {
-		int length = bytes.length / size;
+	public void addOverlay(String[] info) {
+		int length = info.length;
 		byte[][] o = new byte[length][length];
 		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < length; j++) {
-				o[i][j] = bytes[(i + 1) * j];
+			System.out.print(info[i]+" ");
+			String[] connections = info[i].split(" ");
+			for (int j = 0; j < connections.length; j++) {
+				System.out.print(connections[j]+" ");
 			}
 		}
 		this.overlay = o;

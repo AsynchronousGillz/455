@@ -13,14 +13,14 @@ public class EdgeInformation extends Protocol {
 		/**
 		 * Used when creating the message from a Protocol. SINGLE_WEIGHT.
 		 * @param address
-		 * 			the ip address of the sending node
+		 * 			the ip address and port separated by a ':'
 		 * @param weight
 		 * 			connection information int form
 		 */
-		public EdgeInformation(String address, int weight) {
+		public EdgeInformation(String address, int cost) {
 			super();
 			this.setType("SINGLE_WEIGHT");
-			convertMessage(address, weight);
+			convertMessage(address, cost);
 		}
 		
 		/**
@@ -38,12 +38,12 @@ public class EdgeInformation extends Protocol {
 		 * TODO
 		 * @param nodes
 		 */
-		public void convertMessage(String address, int weight) {
+		public void convertMessage(String address, int cost) {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			DataOutputStream out = new DataOutputStream(output);
 			byte[] bytes = address.getBytes();
 			try {
-				out.writeInt(weight);
+				out.writeInt(cost);
 				out.writeInt(bytes.length);
 				out.write(bytes, 0, bytes.length);
 			} catch (IOException e) {
@@ -70,7 +70,7 @@ public class EdgeInformation extends Protocol {
 		/**
 		 * TODO
 		 */
-		public int getWeight() {
+		public int getCost() {
 			int ret = 0;
 			ByteArrayInputStream input = new ByteArrayInputStream(message);
 			DataInputStream in = new DataInputStream(input);

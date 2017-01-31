@@ -405,12 +405,11 @@ public class NodeClient implements Runnable {
 	 * @param e
 	 *            the EdgeInformation message sent.
 	 */
-	public void registerWeights(EdgeInformation e) {
-//		if (debug) // DEBUG
-			System.out.print(e);
-		String address = e.getAddress();
-		int weight = e.getWeight();
-		nodeServer.setWeight(address, weight);
+	public void registerWeights(Overlay o) {
+		if (debug)
+			System.out.print(o);
+		String[] info = o.getString();
+		nodeServer.setWeights(info);
 	}
 
 	/**
@@ -440,7 +439,7 @@ public class NodeClient implements Runnable {
 				registerConnections(m.convertToOverlay());
 				break;
 			case "LINK_WEIGHTS":
-				registerWeights(m.convertToEdgeInformation());
+				registerWeights(m.convertToOverlay());
 				break;
 			default:
 		}

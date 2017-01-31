@@ -38,7 +38,7 @@ public class NodeConnection extends Thread {
 	/**
 	 * This is to make nodes port information accessible.
 	 */
-	private int weight;
+	private int cost;
 	
 	/**
 	 * A reference to the Server that created this instance.
@@ -106,7 +106,7 @@ public class NodeConnection extends Thread {
 		}
 		setName(nodeSocket.getInetAddress().getHostAddress());
 		this.hostName = this.ipAddress = null;
-		this.weight = this.port = 0;
+		this.cost = this.port = 0;
 		this.stopping = false;
 		start(); // Start the thread waits for data from the socket
 	}
@@ -169,30 +169,15 @@ public class NodeConnection extends Thread {
 	}
 	
 	/**
-	 * Returns a string host name.
-	 * 
-	 * @param ip of target machine.
-	 * @return machine host name.
-	 */
-	public String getTargetHostName(String targetIP) {
-		String ret = null;
-		try {
-            InetAddress host = InetAddress.getByName(targetIP);
-            ret = host.getHostName();
-        } catch (UnknownHostException ex) {
-            ex.printStackTrace();
-        }
-		return ret;
-	}
-	
-	/**
 	 * Returns a string representation of the node. If serverPort 
 	 * has been sent it will be "ip:port" else it will just be the "ip"
 	 * 
 	 * @return the node's description.
 	 */
 	public String toString() {
-		if (this.ipAddress != null && port != 0)
+		if (this.ipAddress != null && port != 0 && cost != 0)
+			return this.ipAddress+":"+this.port+":"+this.cost;
+		else if (this.ipAddress != null && port != 0)
 			return this.ipAddress+":"+this.port;
 		else
 			return getName();
@@ -215,8 +200,8 @@ public class NodeConnection extends Thread {
 	/**
 	 * Set the weight of the NodeAddress contained within the NodeConnection
 	 */
-	public void setWeight(int wieght) {
-		this.weight = wieght;
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 	
 	/**
@@ -224,8 +209,8 @@ public class NodeConnection extends Thread {
 	 * 
 	 * @return the weight of the connection.
 	 */
-	public int getWeight() {
-		return this.weight;
+	public int getCost() {
+		return this.cost;
 	}
 	
 	/**

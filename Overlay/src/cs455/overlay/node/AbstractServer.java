@@ -71,7 +71,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = false;
+	protected final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -210,7 +210,7 @@ public abstract class AbstractServer extends Thread {
 		nodeThreadGroup.enumerate(nodeThreadList);
 		String[] ret = new String[size];
 		for (int i = 0; i < size; i ++) {
-			ret[i] = nodeThreadList[i].getName();
+			ret[i] = nodeThreadList[i].toString();
 		}
 		return ret;
 	}
@@ -227,13 +227,14 @@ public abstract class AbstractServer extends Thread {
 		NodeConnection[] nodeThreadList = new NodeConnection[size];
 		nodeThreadGroup.enumerate(nodeThreadList);
 		String match = address+":"+port;
-		System.out.println("AbstractServer.NodeConnection: :)"); // DEBUG
 		for (NodeConnection node : nodeThreadList) {
+			System.out.println(address+":"+port+" - "+node.getConnection()+" :D"); // DEBUG
 			if (match.equals(node.getConnection()) == true) {
 				ret = node;
 				break;
 			}
 		}
+		System.out.println(address+":"+port+" "+ret+" :D"); // DEBUG
 		return ret;
 	}
 

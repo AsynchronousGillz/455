@@ -35,7 +35,7 @@ public class RegistryList {
 	/**
 	 * The test boolean.
 	 */
-	final private boolean debug = true;
+	private boolean debug = false;
 	
 	/**
 	 * When the server is given the command to set up the overlay.
@@ -161,35 +161,6 @@ public class RegistryList {
 	}
 	
 	/**
-	 * Returns the overlay in the two dimensional byte array.
-	 * 
-	 * @return byte[][] overlay
-	 */
-	public byte[][] getOverlay() throws Exception {
-		if (data.size() == 0) 
-			throw new Exception("Node list is currently empty.");
-		if (validOverlay == false)
-			throw new Exception("Overlay has not been constructed.");
-		return overlay;
-	}
-
-	/**
-	 * Returns the overlay in a one dimensional byte array.
-	 * 
-	 * @return byte[] overlay
-	 */
-	public byte[] getBytes() {
-		int length = overlay.length;
-		byte[] o = new byte[length * 2];
-		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < length; j++) {
-				o[(i + 1) * j] = overlay[i][j];
-			}
-		}
-		return o;
-	}
-	
-	/**
 	 * Returns the Nodes connections
 	 * @return
 	 */
@@ -250,7 +221,7 @@ public class RegistryList {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
 		}
-		if (debug && data.contains(node) == true)
+		if (data.contains(node) == true && debug)
 			System.out.println("DEBUG: removeFromList data contains node.");
 		data.remove(node);
 	}

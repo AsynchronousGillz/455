@@ -46,26 +46,17 @@ public class NodeServer extends AbstractServer {
 				continue;
 			String[] node = host[1].split(":");
 			int port = super.validateInput(node[1]);
-			int weight = super.validateInput(node[2]);
+			int cost = super.validateInput(node[2]);
 			NodeConnection nodeConnection = super.getConnection(node[0], port);
+			nodeConnection.setCost(cost);
 			try {
-				nodeConnection.sendToNode(new EdgeInformation(host[0], weight));
+				nodeConnection.sendToNode(new EdgeInformation(host[0], cost));
 			} catch (IOException e) {
 				System.err.println("Error when sending wieght information.");
 			}
 		}
 	}
-	// A = [ 127.0.0.0:40000 , 127.0.0.1:40001:4, 127.0.0.2:40002:4, 127.0.0.3:40003:9, 127.0.0.9:40009:4 ]
-	
-	/**
-	 * TODO
-	 * @param address
-	 * @param weight
-	 */
-	public void setWeight(String address, int weight) {
-		// TODO Auto-generated method stub
-		
-	}
+	// A = [ 127.0.0.0:40000 127.0.0.1:40001:4]
 	
 	/**
 	 * Additional information containing all the nodes and the
@@ -97,16 +88,14 @@ public class NodeServer extends AbstractServer {
 		} catch (IOException e) {
 			System.err.println("Could not connect to: "+host+":"+port);
 		}
+		NodeConnection node = null;
 		synchronized (this) {
 			try {
-				new NodeConnection(this.nodeThreadGroup, clientSocket, this);
+				node = new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 			} catch (IOException e) {}
 		}
-		if (debug) {
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			Date date = new Date();
-			System.out.println("Established connection to "+host+" at "+dateFormat.format(date));
-		}
+		String hostName = super.getTargetHostName(host);
+		node.setClientInfo(hostName, host, port);
 	}
 	
 	/**
@@ -161,7 +150,7 @@ public class NodeServer extends AbstractServer {
 	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
-		client.setWeight(m.getWeight());
+		client.setCost(m.getCost());
 	}
 	
 	/**
