@@ -50,7 +50,7 @@ public class NodeServer extends AbstractServer {
 			NodeConnection nodeConnection = super.getConnection(node[0], port);
 			nodeConnection.setCost(cost);
 			try {
-				nodeConnection.sendToNode(new EdgeInformation(host[0], cost));
+				nodeConnection.sendToNode(new EdgeInformation(port, cost));
 			} catch (IOException e) {
 				System.err.println("Error when sending wieght information.");
 			}
@@ -150,6 +150,9 @@ public class NodeServer extends AbstractServer {
 	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
+		String ipAddress = client.getAddress();
+		String hostName = super.getTargetHostName(ipAddress);
+		client.setClientInfo(hostName, ipAddress, m.getPort());
 		client.setCost(m.getCost());
 	}
 	
@@ -167,8 +170,6 @@ public class NodeServer extends AbstractServer {
 		if (msg instanceof Protocol == false)
 			return;
 		Protocol m = (Protocol) msg;
-		if (debug)
-			System.out.println(m);
 		switch(m.getStringType()) {
 			case "SINGLE_WEIGHT":
 				updateConnectionWeight(m.convertToEdgeInformation(), client);

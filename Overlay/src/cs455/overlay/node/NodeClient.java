@@ -379,8 +379,7 @@ public class NodeClient implements Runnable {
 	private void registerNodes(Overlay o) {
 		if (debug)
 			System.out.print(o);
-		String[] nodes = o.getString();
-		nodeServer.makeDijkstra(nodes);
+		nodeServer.makeDijkstra(o.getString());
 	}
 	
 	/**
@@ -392,8 +391,7 @@ public class NodeClient implements Runnable {
 	public void registerConnections(Overlay o) {
 		if (debug)
 			System.out.print(o);
-		String[] nodes = o.getString();
-		nodeServer.setInfo(nodes);
+		nodeServer.setInfo(o.getString());
 		nodeServer.setStats();
 	}
 	
@@ -408,8 +406,7 @@ public class NodeClient implements Runnable {
 	public void registerWeights(Overlay o) {
 		if (debug)
 			System.out.print(o);
-		String[] info = o.getString();
-		nodeServer.setWeights(info);
+		nodeServer.setWeights(o.getString());
 	}
 
 	/**

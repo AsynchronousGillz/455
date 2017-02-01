@@ -33,11 +33,6 @@ public class RegistryList {
 	private byte[][] overlay;
 
 	/**
-	 * The test boolean.
-	 */
-	private boolean debug = false;
-	
-	/**
 	 * When the server is given the command to set up the overlay.
 	 * 
 	 * @param numberOfConnections
@@ -221,8 +216,6 @@ public class RegistryList {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
 		}
-		if (data.contains(node) == true && debug)
-			System.out.println("DEBUG: removeFromList data contains node.");
 		data.remove(node);
 	}
 	

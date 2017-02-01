@@ -71,7 +71,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = true;
+	protected final boolean debug = false;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -228,13 +228,11 @@ public abstract class AbstractServer extends Thread {
 		nodeThreadGroup.enumerate(nodeThreadList);
 		String match = address+":"+port;
 		for (NodeConnection node : nodeThreadList) {
-			System.out.println(address+":"+port+" - "+node.getConnection()+" :D"); // DEBUG
 			if (match.equals(node.getConnection()) == true) {
 				ret = node;
 				break;
 			}
 		}
-		System.out.println(address+":"+port+" "+ret+" :D"); // DEBUG
 		return ret;
 	}
 

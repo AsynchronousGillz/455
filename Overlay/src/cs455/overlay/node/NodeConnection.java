@@ -105,7 +105,8 @@ public class NodeConnection extends Thread {
 			throw ex; // Rethrow the exception.
 		}
 		setName(nodeSocket.getInetAddress().getHostAddress());
-		this.hostName = this.ipAddress = null;
+		this.ipAddress = getName();
+		this.hostName = null;
 		this.cost = this.port = 0;
 		this.stopping = false;
 		start(); // Start the thread waits for data from the socket
