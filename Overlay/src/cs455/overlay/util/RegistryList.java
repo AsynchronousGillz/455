@@ -192,7 +192,7 @@ public class RegistryList {
 			String established = data.get(index).getConnection()+" ";
 			for (int outdex = index; outdex < length; outdex++) {
 				if (overlay[index][outdex] != 0)
-					ret[rdex++] = established + data.get(outdex).getConnection()+":"+overlay[index][outdex];
+					ret[rdex++] = established + data.get(outdex).getConnection()+" "+overlay[index][outdex];
 			}
 		}
 		return ret;

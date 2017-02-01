@@ -46,7 +46,7 @@ public class NodeServer extends AbstractServer {
 				continue;
 			String[] node = host[1].split(":");
 			int port = super.validateInput(node[1]);
-			int cost = super.validateInput(node[2]);
+			int cost = super.validateInput(host[2]);
 			NodeConnection nodeConnection = super.getConnection(node[0], port);
 			nodeConnection.setCost(cost);
 			try {
@@ -55,8 +55,9 @@ public class NodeServer extends AbstractServer {
 				System.err.println("Error when sending wieght information.");
 			}
 		}
+		dijkstra.addOverlay(nodes);
 	}
-	// A = [ 127.0.0.0:40000 127.0.0.1:40001:4]
+	// A = [ 127.0.0.0:40000 127.0.0.1:40001 4]
 	
 	/**
 	 * Additional information containing all the nodes and the
@@ -99,12 +100,21 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 *  TODO
+	 *  Receive all the connections from the server.
 	 */
 	public void makeDijkstra(String[] info) {
 		String address = super.getHost();
 		int port = super.getPort();
 		dijkstra = new Dijkstra(info, address, port);
+	} 
+	// [ hostName ip port ]
+	
+	/**
+	 * Display the overlay.
+	 * @return String overlay
+	 */
+	public String getOverlay() {
+		return dijkstra.displayOverlay();
 	}
 	
 	// HOOK METHODS -----------------------------------------------------
@@ -141,7 +151,8 @@ public class NodeServer extends AbstractServer {
 	 * 
 	 */
 	protected void serverClosed() {
-		System.out.println("serverStopped :: Exitting.");
+		if (debug)
+			System.out.println("serverClosed :: Exitting.");
 	}
 	
 	/**

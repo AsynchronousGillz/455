@@ -74,7 +74,7 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
-			case "setup-overlay":
+			case "setup-overlay": case "setup":
 				if (tokens.length == 1) {
 					server.makeOverlay();
 				} else if (tokens.length == 2) {
@@ -91,7 +91,7 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
-			case "send-overlay-link-weights":
+			case "send-overlay-link-weights": case "send":
 				if (tokens.length == 1) {
 					server.sendOverlay();
 				} else {

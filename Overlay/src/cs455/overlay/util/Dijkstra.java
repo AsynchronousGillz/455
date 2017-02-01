@@ -17,7 +17,7 @@ public class Dijkstra {
 	/**
 	 * the overlay as constructed on the server.
 	 */
-	private byte[][] overlay;
+	private int[][] overlay;
 	
 	/**
 	 * shortest known distance from "sourceIndex"
@@ -78,16 +78,38 @@ public class Dijkstra {
 	 */
 	public void addOverlay(String[] info) {
 		int length = info.length;
-		byte[][] o = new byte[length][length];
+		int len = hostInformation.length;
+		int[][] o = new int[len][len];
 		for (int i = 0; i < length; i++) {
-			System.out.print(info[i]+" ");
 			String[] connections = info[i].split(" ");
-			for (int j = 0; j < connections.length; j++) {
-				System.out.print(connections[j]+" ");
-			}
+			int row = getIndex(connections[0]);
+			int col = getIndex(connections[1]);
+			byte temp = Byte.parseByte(connections[2]);
+			o[row][col] = o[col][row] = temp;
 		}
 		this.overlay = o;
 	}
+	// [ ip:port ip:port cost]
+	
+	/**
+	 * Get the index of the connection
+	 * 
+	 * @param address:port
+	 */
+	private int getIndex(String address) {
+		int index = 0;
+		String[] host = address.split(":");
+		int sPort = Integer.parseInt(host[1]);
+		for (String node : hostInformation) {
+			String[] info = node.split(" ");
+			int tPort = Integer.parseInt(info[2]);
+			if (info[1].equals(host[0]) == true && sPort == tPort)
+				return index;
+			index++;
+		}
+		return -1;
+	}
+	// [ ip:port ]
 	
 	/**
 	 * Returns the Nodes connections
@@ -96,9 +118,9 @@ public class Dijkstra {
 	public String displayOverlay() {
 		StringBuilder ret = new StringBuilder();
 		int index = 0;
-		for (byte[] bytes: overlay) {
+		for (int[] bytes: overlay) {
 			ret.append(String.format("%02d -> ", index++));
-			for (byte b: bytes) {
+			for (int b: bytes) {
 				ret.append(b + " ");
 			}
 			ret.append("\n");
@@ -115,17 +137,15 @@ public class Dijkstra {
 			final int next = minVertex (dist, visited);
 			visited[next] = true;
 
-			// The shortest path to next is dist[next] and via pred[next].
-
-//			final int [] n = G.neighbors (next);
-//			for (int j = 0; j < n.length; j++) {
-//				final int v = n[j];
-//				final int d = dist[next] + G.getWeight(next,v);
-//				if (dist[v] > d) {
-//					dist[v] = d;
-//					pred[v] = next;
-//				}
-//			}
+			final int [] n = overlay[next];
+			for (int j = 0; j < n.length; j++) {
+				final int v = n[j];
+				final int d = dist[next] + overlay[next][v];
+				if (dist[v] > d) {
+					dist[v] = d;
+					pred[v] = next;
+				}
+			}
 		}
 		return pred;  // (ignore pred[s]==0!)
 	}

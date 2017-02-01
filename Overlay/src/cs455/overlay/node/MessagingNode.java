@@ -14,18 +14,6 @@ import java.io.InputStreamReader;
 
 public class MessagingNode {
 
-	// Class variables *************************************************
-
-	/**
-	 * 
-	 */
-	private boolean stop = false;
-
-	/**
-	 * 
-	 */
-	final public static boolean debug = false;
-
 	// Instance variables **********************************************
 
 	NodeClient client;
@@ -52,14 +40,12 @@ public class MessagingNode {
 	public void runConsole() {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
-			String message;
-			while (stop == false) {
+			String message = null;
+			while (true) {
 				message = fromConsole.readLine();
 				if (message.trim().equals(""))
 					continue;
-				
 				getAction(message);
-				
 			}
 		} catch(Exception e) {
 			System.out.println("Unexpected error while reading from console!");
@@ -78,10 +64,17 @@ public class MessagingNode {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "exit-overlay":
+			case "exit-overlay": case "exit":
 				if (tokens.length == 1) {
 					client.unregister();
 					exit();
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "view-overlay": case "view":
+				if (tokens.length == 1) {
+					System.out.println(server.getOverlay());
 				} else {
 					this.invalid(message);
 				}
@@ -134,8 +127,6 @@ public class MessagingNode {
 	 * It closes the program.
 	 */
 	public void exit() {
-		client.close(0);
-		server.serverClosed();
 		System.exit(0);
 	}
 	
@@ -150,10 +141,6 @@ public class MessagingNode {
 		info += "\t[ print-shortest-path | get-port | get-host ]\n";
 		info += "\t[ get-paths | exit-overlay ]";
 		System.err.println(info);
-	}
-
-	public void close() {
-		// TODO
 	}
 	
 	public static void main(String args[]) {
