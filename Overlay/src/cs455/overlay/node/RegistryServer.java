@@ -186,6 +186,10 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Overlay has not been constructed.");
 			return;
 		}
+		if (connectionList.getOverlaySent() == true) {
+			System.err.println("Overlay has already been sent.");
+			return;
+		}
 		String info[] = null;
 		try {
 			info = connectionList.getConnections();
@@ -194,6 +198,7 @@ public class RegistryServer extends AbstractServer {
 			return;
 		}
 		this.sendToAllNodes(new Overlay(info, 1));
+		connectionList.setOverlaySent();
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
 	

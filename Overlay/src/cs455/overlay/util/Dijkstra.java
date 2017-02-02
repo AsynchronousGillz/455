@@ -20,6 +20,11 @@ public class Dijkstra {
 	private final String[] connections;
 	
 	/**
+	 * 
+	 */
+	private PriorityQueue<Node> queue;
+	
+	/**
 	 * Graph for Dijkstra
 	 */
 	private Graph graph;
@@ -53,14 +58,15 @@ public class Dijkstra {
 	 *            [ip:port ip:port cost]
 	 */
 	public void addOverlay(String[] info) {
-		int length = info.length;
-		for (int i = 0; i < length; i++) {
-			String[] connections = info[i].split(" ");
+		for (String i : info) {
+			String[] connections = i.split(" ");
 			int row = getIndex(connections[0]);
 			int col = getIndex(connections[1]);
 			int tem = Integer.parseInt(connections[2]);
 			graph.addEdge(row, col, tem);
+			graph.addEdge(col, row, tem);
 		}
+		this.calculate();
 	}
 
 	/**
@@ -71,12 +77,8 @@ public class Dijkstra {
 	 */
 	private int getIndex(String address) {
 		int index = 0;
-		String[] host = address.split(":");
-		int sPort = Integer.parseInt(host[1]);
 		for (String node : connections) {
-			String[] info = node.split(" ");
-			int tPort = Integer.parseInt(info[2]);
-			if (info[1].equals(host[0]) == true && sPort == tPort)
+			if (node.equals(address) == true)
 				return index;
 			index++;
 		}
@@ -89,92 +91,115 @@ public class Dijkstra {
 	* update the distances for all the neighbors (In the Priority Queue), you
 	* repeat the process till all the connected nodes are visited.
 	*/
-	public void calculate(){
-		Vertex source = graph.getVertex(connections[sourceIndex]);
+	public void calculate() {
+		Node source = graph.getNode(connections[sourceIndex]);
 		source.minDistance = 0;
-		PriorityQueue<Vertex> queue = new PriorityQueue<Vertex>();
+		queue = new PriorityQueue<Node>();
 		queue.add(source);
 		
-		while(queue.isEmpty() == false){
+		while (queue.isEmpty() == false) {
 			
-			Vertex u = queue.poll();
+			Node u = queue.poll();
 		
-			for(Edge neighbour : u.neighbours){
-				int newDist = u.minDistance + neighbour.cost;
+			for (Edge neighbors : u.neighbors) {
+				int newDist = u.minDistance + neighbors.cost;
 				
-				if(neighbour.target.minDistance>newDist){
+				if (neighbors.target.minDistance > newDist) {
 					// Remove the node from the queue to update the distance value.
-					queue.remove(neighbour.target);
-					neighbour.target.minDistance = newDist;
+					queue.remove(neighbors.target);
+					neighbors.target.minDistance = newDist;
 					
 					// Take the path visited till now and add the new node.s
-					neighbour.target.path = new LinkedList<Vertex>(u.path);
-					neighbour.target.path.add(u);
+					neighbors.target.path = new LinkedList<Node>(u.path);
+					neighbors.target.path.add(u);
 					
 					//Reenter the node with new distance.
-					queue.add(neighbour.target);
+					queue.add(neighbors.target);
 				}
 			}
 		}
 	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public String[] getPaths() {
+		int len = connections.length;
+		String[] ret = new String[len];
+		Node source = graph.getNode(connections[sourceIndex]);
+		int index = 0;
+		for (Edge neighbors : source.neighbors) {
+			ret[index++] = neighbors.target + " " + neighbors.cost;
+		}
+		return ret;
+	}
 
 	public class Graph {
 
-		private ArrayList<Vertex> vertices;
+		private ArrayList<Node> nodes;
 
 		public Graph(String[] connections){
 			int len = connections.length;
-			vertices = new ArrayList<Vertex>(len);
+			nodes = new ArrayList<Node>(len);
 			for(String i : connections){
-				vertices.add(new Vertex(i));
+				nodes.add(new Node(i));
 			}
 		}
 		
 		public void addEdge(int src, int dest, int cost){
-			vertices.get(src).neighbours.add(new Edge(vertices.get(dest), cost));
+			nodes.get(src).neighbors.add(new Edge(nodes.get(dest), cost));
 		}
 		
-		public ArrayList<Vertex> getVertices() {
-			return vertices;
+		public ArrayList<Node> getNodes() {
+			return nodes;
 		}
 		
-		public Vertex getVertex(String address){
-			return vertices.get(vertices.indexOf(address));
+		public Node getNode(String address){
+			return nodes.get(nodes.indexOf(new Node(address)));
+		}
+		
+		public String toString() {
+			return nodes.toString();
 		}
 	}
 
 	class Edge{
-		public final Vertex target;
+		public final Node target;
 		public final int cost;
 
-		public Edge(Vertex target, int cost){
+		public Edge(Node target, int cost){
 			this.target = target;
 			this.cost = cost;
 		}
+		
+		public String toString() {
+			return target + " " + cost;
+		}
 	}
 
-	class Vertex implements Comparable<Vertex> {
+	class Node implements Comparable<Node> {
 
 		public final String name;
-		public ArrayList<Edge> neighbours;
-		public LinkedList<Vertex> path;
+		public ArrayList<Edge> neighbors;
+		public LinkedList<Node> path;
 		public int minDistance = Integer.MAX_VALUE;
-		public Vertex previous;
+		public Node previous;
 
-		public Vertex(String name){
+		public Node(String name){
 			this.name = name;
-			neighbours = new ArrayList<Edge>();
-			path = new LinkedList<Vertex>();
+			neighbors = new ArrayList<Edge>();
+			path = new LinkedList<Node>();
 		}
 
-		public int compareTo(Vertex other){
+		public int compareTo(Node other){
 			return Integer.compare(minDistance, other.minDistance);
 		}
 		
 		public boolean equals(Object obj) {
-			if (obj instanceof Vertex == false)
+			if (obj instanceof Node == false)
 				return false;
-			Vertex v = (Vertex) obj;
+			Node v = (Node) obj;
 			if (name == null && v.name != null)
 				return false;
 			else if (name.equals(v.name) == false)
@@ -183,7 +208,7 @@ public class Dijkstra {
 		}
 
 		public String toString(){
-			return name;
+			return name + " " + minDistance;
 		}
 	}
 

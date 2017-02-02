@@ -81,9 +81,9 @@ public class MessagingNode {
 					this.invalid(message);
 				}
 				break;
-			case "print-shortest-path":
+			case "print-shortest-path": case "print":
 				if (tokens.length == 1) {
-					server.getShortestPath();
+					System.out.println(server.getShortestPath());
 				} else {
 					this.invalid(message);
 				}

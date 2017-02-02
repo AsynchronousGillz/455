@@ -28,6 +28,11 @@ public class RegistryList {
 	private boolean validOverlay;
 	
 	/**
+	 * Indication if the overlay has been built and if it is valid.
+	 */
+	private boolean overlaySent;
+	
+	/**
 	 * The list of connections to other nodes.
 	 */
 	private byte[][] overlay;
@@ -43,12 +48,31 @@ public class RegistryList {
 	}
 	
 	/**
-	 * Return the number of connections for each node.
+	 * Returns if the overlay has been built yet.
 	 * 
-	 * @return the number of connections in int format
+	 * @return true if the overlay has been built.
 	 */
 	public boolean getValidOverlay() {
 		return validOverlay;
+	}
+	
+	
+	/**
+	 * Return the number of connections for each node.
+	 * 
+	 * @return true if sent.
+	 */
+	public boolean getOverlaySent() {
+		return overlaySent;
+	}
+	
+	/**
+	 * Return the number of connections for each node.
+	 * 
+	 * @return true if sent.
+	 */
+	public void setOverlaySent() {
+		this.overlaySent = true;
 	}
 	
 	/**
@@ -78,6 +102,8 @@ public class RegistryList {
 		if (numberOfConnections > data.size())
 			throw new Exception("Invalid selction for connection number.");
 		this.numberOfConnections = numberOfConnections;
+		this.validOverlay = false;
+		this.overlaySent = false;
 	}
 	
 	/**

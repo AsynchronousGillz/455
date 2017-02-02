@@ -165,8 +165,11 @@ public class NodeServer extends AbstractServer {
 	 * @return
 	 */
 	public String getShortestPath() {
-		// TODO Auto-generated method stub
-		return null;
+		String ret = "";
+		String[] info = dijkstra.getPaths();
+		for (String i : info)
+			ret += i + "\n";
+		return ret;
 	}
 	
 	@Override
