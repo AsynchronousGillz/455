@@ -72,13 +72,6 @@ public class MessagingNode {
 					this.invalid(message);
 				}
 				break;
-			case "view-overlay": case "view":
-				if (tokens.length == 1) {
-					System.out.println(server.getOverlay());
-				} else {
-					this.invalid(message);
-				}
-				break;
 			case "get-paths":
 				if (tokens.length == 1) {
 					String[] info = server.getConnectionNames();

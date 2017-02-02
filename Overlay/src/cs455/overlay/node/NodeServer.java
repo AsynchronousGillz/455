@@ -101,21 +101,14 @@ public class NodeServer extends AbstractServer {
 	
 	/**
 	 *  Receive all the connections from the server.
+	 *  
+	 *  @param host [ ip:port ]
 	 */
 	public void makeDijkstra(String[] info) {
 		String address = super.getHost();
 		int port = super.getPort();
 		dijkstra = new Dijkstra(info, address, port);
 	} 
-	// [ hostName ip port ]
-	
-	/**
-	 * Display the overlay.
-	 * @return String overlay
-	 */
-	public String getOverlay() {
-		return dijkstra.displayOverlay();
-	}
 	
 	// HOOK METHODS -----------------------------------------------------
 	

@@ -117,6 +117,7 @@ public class RegistryList {
 	 * Returns all of the NodeConnections in getInfo() format
 	 *
 	 * @return list of all the nodes
+	 * 		[ ip:port ]
 	 */
 	public String[] getList() throws Exception {
 		if (data.size() == 0) 
@@ -124,7 +125,7 @@ public class RegistryList {
 		String[] ret = new String[data.size()];
 		int index = 0;
 		for (NodeConnection node: data) {
-			ret[index++] = node.getInfo();
+			ret[index++] = node.getConnection();
 		}
 		return ret;
 	}

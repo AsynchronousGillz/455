@@ -12,46 +12,38 @@ public class Dijkstra {
 	/**
 	 * The index of the current Node in the overlay, dist, pred, hostInfomation
 	 */
-	private int sourceIndex;
-
-	/**
-	 * the overlay as constructed on the server.
-	 */
-	private int[][] overlay;
+	private final int sourceIndex;
 
 	/**
 	 * The node information.
 	 */
-	private String[] hostInformation;
+	private final String[] connections;
+	
+	/**
+	 * Graph for Dijkstra
+	 */
+	private Graph graph;
 
 	/**
 	 * Lets get the shortest path.
 	 * 
 	 * @param connections
-	 *            [boise.cs.colostate.edu 129.82.44.133 46283]
+	 *            [129.82.44.133:46283]
 	 * @param address
 	 * @param port
 	 */
 	public Dijkstra(String[] connections, String address, int port) {
-		hostInformation = connections;
-		this.getSource(address, port);
-	}
-
-	/**
-	 * Set the sourceIndex of the hostNode
-	 * 
-	 * @param address
-	 * @param port
-	 */
-	private void getSource(String address, int port) {
 		int index = 0;
-		for (String node : hostInformation) {
-			String[] info = node.split(" ");
-			int tPort = Integer.parseInt(info[2]);
-			if (info[1].equals(address) == true && port == tPort)
-				this.sourceIndex = index;
+		for (String node : connections) {
+			String[] info = node.split(":");
+			int tPort = Integer.parseInt(info[1]);
+			if (info[0].equals(address) == true && port == tPort)
+				break;
 			index++;
 		}
+		this.sourceIndex = index;
+		this.graph = new Graph(connections);
+		this.connections = connections;
 	}
 
 	/**
@@ -62,16 +54,13 @@ public class Dijkstra {
 	 */
 	public void addOverlay(String[] info) {
 		int length = info.length;
-		int len = hostInformation.length;
-		int[][] o = new int[len][len];
 		for (int i = 0; i < length; i++) {
 			String[] connections = info[i].split(" ");
 			int row = getIndex(connections[0]);
 			int col = getIndex(connections[1]);
-			byte temp = Byte.parseByte(connections[2]);
-			o[row][col] = o[col][row] = temp;
+			int tem = Integer.parseInt(connections[2]);
+			graph.addEdge(row, col, tem);
 		}
-		this.overlay = o;
 	}
 
 	/**
@@ -84,7 +73,7 @@ public class Dijkstra {
 		int index = 0;
 		String[] host = address.split(":");
 		int sPort = Integer.parseInt(host[1]);
-		for (String node : hostInformation) {
+		for (String node : connections) {
 			String[] info = node.split(" ");
 			int tPort = Integer.parseInt(info[2]);
 			if (info[1].equals(host[0]) == true && sPort == tPort)
@@ -94,72 +83,108 @@ public class Dijkstra {
 		return -1;
 	}
 
-	/**
-	 * Returns the Nodes connections
-	 * 
-	 * @return
-	 */
-	public String displayOverlay() {
-		StringBuilder ret = new StringBuilder();
-		int index = 0;
-		for (int[] bytes : overlay) {
-			ret.append(String.format("%02d -> ", index++));
-			for (int b : bytes) {
-				ret.append(b + " ");
-			}
-			ret.append("\n");
-		}
-		return ret.toString();
-	}
 
-	public int[] getPathInformation() {
-		int len = overlay.length;
-		int[] dist = new int[len];
-		int[] prev = new int[len];
-		boolean[] Q = new boolean[len];
-		for (int i = 0; i < len; i++) {
-			if (overlay[sourceIndex][i] == 0 && i != sourceIndex)
-				dist[i] = Integer.MAX_VALUE;
-			else
-				dist[i] = overlay[sourceIndex][i];
-			prev[i] = -1;
-		}
-		boolean flag = true;
-		while (flag == true) {
-		}
-		System.out.println(Arrays.toString(dist)); // DEBUG
+	/** 
+	* Take the unvisited node with minimum weight, then Visit all its neighbors
+	* update the distances for all the neighbors (In the Priority Queue), you
+	* repeat the process till all the connected nodes are visited.
+	*/
+	public void calculate(){
+		Vertex source = graph.getVertex(connections[sourceIndex]);
+		source.minDistance = 0;
+		PriorityQueue<Vertex> queue = new PriorityQueue<Vertex>();
+		queue.add(source);
 		
-		return dist;
-	}
-
-	private int minVertex(int dist) {
-		int x = Integer.MAX_VALUE;
-		int y = -1; // graph not connected, or no unvisited vertices
-		for (int i = 0; i < overlay.length; i++) {
-			if (v[i] == false && overlay[index][i] < x) {
-				y = i;
-//				x = dist[i];
+		while(queue.isEmpty() == false){
+			
+			Vertex u = queue.poll();
+		
+			for(Edge neighbour : u.neighbours){
+				int newDist = u.minDistance + neighbour.cost;
+				
+				if(neighbour.target.minDistance>newDist){
+					// Remove the node from the queue to update the distance value.
+					queue.remove(neighbour.target);
+					neighbour.target.minDistance = newDist;
+					
+					// Take the path visited till now and add the new node.s
+					neighbour.target.path = new LinkedList<Vertex>(u.path);
+					neighbour.target.path.add(u);
+					
+					//Reenter the node with new distance.
+					queue.add(neighbour.target);
+				}
 			}
 		}
-		return y;
 	}
-	
-	public static void main(String args[]) {
-		String[] connections =  {
-				"a 1 1", "b 1 2",
-				"c 1 3", "d 1 4"
-				};
-		String one = "1"; int port = 1;
-		Dijkstra d = new Dijkstra(connections, one, port);
-		String[] info =  {
-				"1:1 1:2 1", "1:1 1:3 3",
-				"1:3 1:4 1", "1:1 1:4 1"
-				};
-		d.addOverlay(info);
+
+	public class Graph {
+
+		private ArrayList<Vertex> vertices;
+
+		public Graph(String[] connections){
+			int len = connections.length;
+			vertices = new ArrayList<Vertex>(len);
+			for(String i : connections){
+				vertices.add(new Vertex(i));
+			}
+		}
 		
-		System.out.println(d.displayOverlay());
+		public void addEdge(int src, int dest, int cost){
+			vertices.get(src).neighbours.add(new Edge(vertices.get(dest), cost));
+		}
 		
-		d.getPathInformation();
+		public ArrayList<Vertex> getVertices() {
+			return vertices;
+		}
+		
+		public Vertex getVertex(String address){
+			return vertices.get(vertices.indexOf(address));
+		}
+	}
+
+	class Edge{
+		public final Vertex target;
+		public final int cost;
+
+		public Edge(Vertex target, int cost){
+			this.target = target;
+			this.cost = cost;
+		}
+	}
+
+	class Vertex implements Comparable<Vertex> {
+
+		public final String name;
+		public ArrayList<Edge> neighbours;
+		public LinkedList<Vertex> path;
+		public int minDistance = Integer.MAX_VALUE;
+		public Vertex previous;
+
+		public Vertex(String name){
+			this.name = name;
+			neighbours = new ArrayList<Edge>();
+			path = new LinkedList<Vertex>();
+		}
+
+		public int compareTo(Vertex other){
+			return Integer.compare(minDistance, other.minDistance);
+		}
+		
+		public boolean equals(Object obj) {
+			if (obj instanceof Vertex == false)
+				return false;
+			Vertex v = (Vertex) obj;
+			if (name == null && v.name != null)
+				return false;
+			else if (name.equals(v.name) == false)
+				return false;
+			return true;
+		}
+
+		public String toString(){
+			return name;
+		}
 	}
 
 }
