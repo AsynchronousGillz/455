@@ -321,7 +321,8 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * TODO
+	 * Each Server will have a {@link StatisticsCollector} even the registry
+	 * to add up the total of the Statistics.
 	 * @return
 	 */
 	final public StatisticsCollector getStats() {
@@ -329,7 +330,8 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * TODO
+	 * Each Server will have a {@link StatisticsCollector} even the registry
+	 * this will create the StatisticsCollector for the server.
 	 * @param list
 	 */
 	final public void setStats() {

@@ -36,8 +36,10 @@ public class NodeServer extends AbstractServer {
 	// ACCESSING METHODS ------------------------------------------------
 	
 	/**
-	 * TODO
-	 * @param nodes
+	 * When the registry sends the costs we also add the costs of the
+	 * connections to the NodeConnections.
+	 * @see NodeConnection
+	 * @param nodes [ 127.0.0.0:40000 127.0.0.1:40001 4]
 	 */
 	public void setWeights(String[] nodes) {
 		for (String info : nodes) {
@@ -57,13 +59,12 @@ public class NodeServer extends AbstractServer {
 		}
 		dijkstra.addOverlay(nodes);
 	}
-	// A = [ 127.0.0.0:40000 127.0.0.1:40001 4]
 	
 	/**
 	 * Additional information containing all the nodes and the
 	 * This is an array that should be formated as "host:port"
 	 *
-	 * @param nodes
+	 * @param nodes [ 129.82.44.175:38271 ]
 	 */
 	public void setInfo(String[] nodes) {
 		for (String node : nodes) {
@@ -71,7 +72,6 @@ public class NodeServer extends AbstractServer {
 			addConnection(host[0], host[1]);
 		}
 	} 
-	// 129.82.44.175:38271
 	
 	/**
 	 * Add a connection to the server to another server.
@@ -168,7 +168,7 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 * 
+	 * TODO
 	 * @return
 	 */
 	public String getShortestPath() {

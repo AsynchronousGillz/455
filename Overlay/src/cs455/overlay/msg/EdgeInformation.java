@@ -35,8 +35,10 @@ public class EdgeInformation extends Protocol {
 		}
 		
 		/**
-		 * TODO
-		 * @param nodes
+		 * {@link EdgeInformation} contains the information when a link between nodes 
+		 * is setup and the cost and port of the server is sent over.
+		 * @param port
+		 * @param cost
 		 */
 		public void convertMessage(int port, int cost) {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -50,6 +52,10 @@ public class EdgeInformation extends Protocol {
 			message = output.toByteArray();
 		}
 		
+		/**
+		 * Gets the port from the message in int form.
+		 * @return port
+		 */
 		public int getPort() {
 			int ret = 0;
 			ByteArrayInputStream input = new ByteArrayInputStream(message);
@@ -64,7 +70,8 @@ public class EdgeInformation extends Protocol {
 		}
 		
 		/**
-		 * TODO
+		 * Gets the cost from the message in int form.
+		 *@return cost
 		 */
 		public int getCost() {
 			int ret = 0;
@@ -79,7 +86,7 @@ public class EdgeInformation extends Protocol {
 		}
 		
 		/**
-		 * TODO
+		 * String representation as "cost port"
 		 */
 		public String toString() {
 			String ret = "";

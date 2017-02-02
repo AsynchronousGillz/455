@@ -8,27 +8,17 @@ import java.util.*;
  * @author G van Andel
  */
 public class Dijkstra {
-	
+
 	/**
-	 * 
+	 * The index of the current Node in the overlay, dist, pred, hostInfomation
 	 */
 	private int sourceIndex;
-	
+
 	/**
 	 * the overlay as constructed on the server.
 	 */
 	private int[][] overlay;
-	
-	/**
-	 * shortest known distance from "sourceIndex"
-	 */
-	private int[] dist;
-	
-	/**
-	 * Preceeding node in path
-	 */
-	private int[] pred;
-	
+
 	/**
 	 * The node information.
 	 */
@@ -38,22 +28,15 @@ public class Dijkstra {
 	 * Lets get the shortest path.
 	 * 
 	 * @param connections
+	 *            [boise.cs.colostate.edu 129.82.44.133 46283]
 	 * @param address
 	 * @param port
 	 */
-	public Dijkstra (String[] connections, String address, int port) {
-		int length = connections.length;
-		dist = new int [length];  
-		pred = new int [length];
+	public Dijkstra(String[] connections, String address, int port) {
 		hostInformation = connections;
 		this.getSource(address, port);
-		for (int i = 0; i < length; i++) {
-			dist[i] = Integer.MAX_VALUE;
-		}
-		dist[sourceIndex] = 0;
 	}
-	// [boise.cs.colostate.edu 129.82.44.133 46283, dover.cs.colostate.edu 129.82.44.143 44085]
-	
+
 	/**
 	 * Set the sourceIndex of the hostNode
 	 * 
@@ -70,11 +53,12 @@ public class Dijkstra {
 			index++;
 		}
 	}
-	
+
 	/**
 	 * Sets the weights of the nodes in the
 	 * 
-	 * @param bytes
+	 * @param info
+	 *            [ip:port ip:port cost]
 	 */
 	public void addOverlay(String[] info) {
 		int length = info.length;
@@ -89,12 +73,12 @@ public class Dijkstra {
 		}
 		this.overlay = o;
 	}
-	// [ ip:port ip:port cost]
-	
+
 	/**
 	 * Get the index of the connection
 	 * 
-	 * @param address:port
+	 * @param addres
+	 *            [address:port]
 	 */
 	private int getIndex(String address) {
 		int index = 0;
@@ -109,69 +93,73 @@ public class Dijkstra {
 		}
 		return -1;
 	}
-	// [ ip:port ]
-	
+
 	/**
 	 * Returns the Nodes connections
+	 * 
 	 * @return
 	 */
 	public String displayOverlay() {
 		StringBuilder ret = new StringBuilder();
 		int index = 0;
-		for (int[] bytes: overlay) {
+		for (int[] bytes : overlay) {
 			ret.append(String.format("%02d -> ", index++));
-			for (int b: bytes) {
+			for (int b : bytes) {
 				ret.append(b + " ");
 			}
 			ret.append("\n");
 		}
 		return ret.toString();
 	}
-	
-	public int[] getPathInformation(String hostName) {
-		
-		boolean [] visited = new boolean [pred.length]; // all false initially
-		dist[sourceIndex] = 0;
 
-		for (int i = 0; i < dist.length; i++) {
-			final int next = minVertex (dist, visited);
-			visited[next] = true;
-
-			final int [] n = overlay[next];
-			for (int j = 0; j < n.length; j++) {
-				final int v = n[j];
-				final int d = dist[next] + overlay[next][v];
-				if (dist[v] > d) {
-					dist[v] = d;
-					pred[v] = next;
-				}
-			}
+	public int[] getPathInformation() {
+		int len = overlay.length;
+		int[] dist = new int[len];
+		int[] prev = new int[len];
+		boolean[] Q = new boolean[len];
+		for (int i = 0; i < len; i++) {
+			if (overlay[sourceIndex][i] == 0 && i != sourceIndex)
+				dist[i] = Integer.MAX_VALUE;
+			else
+				dist[i] = overlay[sourceIndex][i];
+			prev[i] = -1;
 		}
-		return pred;  // (ignore pred[s]==0!)
+		boolean flag = true;
+		while (flag == true) {
+		}
+		System.out.println(Arrays.toString(dist)); // DEBUG
+		
+		return dist;
 	}
 
-	private int minVertex (int [] dist, boolean [] v) {
+	private int minVertex(int dist) {
 		int x = Integer.MAX_VALUE;
-		int y = -1;   // graph not connected, or no unvisited vertices
-		for (int i = 0; i < dist.length; i++) {
-			if (v[i] == false && dist[i] < x) {
+		int y = -1; // graph not connected, or no unvisited vertices
+		for (int i = 0; i < overlay.length; i++) {
+			if (v[i] == false && overlay[index][i] < x) {
 				y = i;
-				x = dist[i];
+//				x = dist[i];
 			}
 		}
 		return y;
 	}
-
-	public void printPath (String[] connections, int [] pred, int s, int e) {
-		final ArrayList<String> path = new ArrayList<String>();
-//		int x = e;
-//		while (x != s) {
-//			path.add (0, G.getLabel(x));
-//			x = pred[x];
-//		}
-//		path.add (0, G.getLabel(s));
-		System.out.println(path);
+	
+	public static void main(String args[]) {
+		String[] connections =  {
+				"a 1 1", "b 1 2",
+				"c 1 3", "d 1 4"
+				};
+		String one = "1"; int port = 1;
+		Dijkstra d = new Dijkstra(connections, one, port);
+		String[] info =  {
+				"1:1 1:2 1", "1:1 1:3 3",
+				"1:3 1:4 1", "1:1 1:4 1"
+				};
+		d.addOverlay(info);
+		
+		System.out.println(d.displayOverlay());
+		
+		d.getPathInformation();
 	}
 
 }
-
