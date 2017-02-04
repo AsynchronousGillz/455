@@ -71,7 +71,7 @@ public class NodeConnection extends Thread {
 	 * Indicates if the thread is ready to stop. Set to true when closing of the
 	 * connection is initiated.
 	 */
-	private boolean stopping;
+	private boolean complete;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -108,7 +108,7 @@ public class NodeConnection extends Thread {
 		this.ipAddress = getName();
 		this.hostName = null;
 		this.cost = this.port = 0;
-		this.stopping = false;
+		this.complete = false;
 		start(); // Start the thread waits for data from the socket
 	}
 
@@ -138,7 +138,7 @@ public class NodeConnection extends Thread {
 	 *                if an error occurs when closing the socket.
 	 */
 	final public void close() {
-		stopping = true; // Set the flag that tells the thread to stop
+		complete = true; // Set the flag that tells the thread to stop
 
 		try {
 			closeAll();
@@ -199,10 +199,24 @@ public class NodeConnection extends Thread {
 	}
 	
 	/**
-	 * Set the weight of the NodeAddress contained within the NodeConnection
+	 * Set the weight of the connection.
 	 */
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+	
+	/**
+	 * Sets the job to state to true;
+	 */
+	public synchronized void setComplete() {
+		this.complete = true;
+	}
+	
+	/**
+	 * Get the state of the job.
+	 */
+	public boolean getComplete() {
+		return this.complete;
 	}
 	
 	/**
@@ -302,11 +316,9 @@ public class NodeConnection extends Thread {
 	 */
 	final public void run() {
 		server.nodeConnected(this);
-
 		try {
 			int byteSize;
-
-			while (stopping == false) {
+			while (complete == false) {
 				byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
@@ -315,7 +327,7 @@ public class NodeConnection extends Thread {
 		} catch (EOFException ex) {
 			close();
 		} catch (Exception ex) {
-			if (stopping == false) {
+			if (complete == false) {
 				close();
 				server.nodeException(this, ex);
 			}

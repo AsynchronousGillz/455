@@ -20,11 +20,6 @@ public class Dijkstra {
 	private final String[] connections;
 	
 	/**
-	 * 
-	 */
-	private PriorityQueue<Node> queue;
-	
-	/**
 	 * Graph for Dijkstra
 	 */
 	private Graph graph;
@@ -35,7 +30,9 @@ public class Dijkstra {
 	 * @param connections
 	 *            [129.82.44.133:46283]
 	 * @param address
+	 *            [129.82.44.133]
 	 * @param port
+	 *            [46283]
 	 */
 	public Dijkstra(String[] connections, String address, int port) {
 		int index = 0;
@@ -64,7 +61,6 @@ public class Dijkstra {
 			int col = getIndex(connections[1]);
 			int tem = Integer.parseInt(connections[2]);
 			graph.addEdge(row, col, tem);
-			graph.addEdge(col, row, tem);
 		}
 		this.calculate();
 	}
@@ -87,34 +83,26 @@ public class Dijkstra {
 
 
 	/** 
-	* Take the unvisited node with minimum weight, then Visit all its neighbors
-	* update the distances for all the neighbors (In the Priority Queue), you
+	* Take the unvisited node with minimum weight, then Visit all its link
+	* update the distances for all the link (In the Priority Queue), you
 	* repeat the process till all the connected nodes are visited.
 	*/
 	public void calculate() {
 		Node source = graph.getNode(connections[sourceIndex]);
 		source.minDistance = 0;
-		queue = new PriorityQueue<Node>();
+		PriorityQueue<Node> queue = new PriorityQueue<Node>();
 		queue.add(source);
 		
 		while (queue.isEmpty() == false) {
-			
 			Node u = queue.poll();
-		
-			for (Edge neighbors : u.neighbors) {
-				int newDist = u.minDistance + neighbors.cost;
-				
-				if (neighbors.target.minDistance > newDist) {
-					// Remove the node from the queue to update the distance value.
-					queue.remove(neighbors.target);
-					neighbors.target.minDistance = newDist;
-					
-					// Take the path visited till now and add the new node.s
-					neighbors.target.path = new LinkedList<Node>(u.path);
-					neighbors.target.path.add(u);
-					
-					//Reenter the node with new distance.
-					queue.add(neighbors.target);
+			for (Edge link : u.links) {
+				int newDist = u.minDistance + link.cost;
+				if (link.target.minDistance > newDist) {
+					queue.remove(link.target);
+					link.target.minDistance = newDist;
+					link.target.path = new LinkedList<Node>(u.path);
+					link.target.path.add(u);
+					queue.add(link.target);
 				}
 			}
 		}
@@ -124,13 +112,29 @@ public class Dijkstra {
 	 * TODO
 	 * @return
 	 */
+	public String[] getDist() {
+		int len = connections.length;
+		String[] ret = new String[len];
+		int index = 0;
+		for (Node node : graph.getNodes()) 
+			ret[index++] = node + "~"+ node.minDistance;
+		return ret;
+	}
+
+	/**
+	 * TODO
+	 * @return
+	 */
 	public String[] getPaths() {
 		int len = connections.length;
 		String[] ret = new String[len];
-		Node source = graph.getNode(connections[sourceIndex]);
 		int index = 0;
-		for (Edge neighbors : source.neighbors) {
-			ret[index++] = neighbors.target + " " + neighbors.cost;
+		for (Node node : graph.getNodes()) {
+			ret[index] = "";
+			for (Node path : node.path) {
+				ret[index] += path + " ";
+			}
+			ret[index++] += node + " " + node.minDistance;
 		}
 		return ret;
 	}
@@ -142,13 +146,13 @@ public class Dijkstra {
 		public Graph(String[] connections){
 			int len = connections.length;
 			nodes = new ArrayList<Node>(len);
-			for(String i : connections){
+			for (String i : connections)
 				nodes.add(new Node(i));
-			}
 		}
 		
 		public void addEdge(int src, int dest, int cost){
-			nodes.get(src).neighbors.add(new Edge(nodes.get(dest), cost));
+			nodes.get(src).links.add(new Edge(nodes.get(dest), cost));
+			nodes.get(dest).links.add(new Edge(nodes.get(src), cost));
 		}
 		
 		public ArrayList<Node> getNodes() {
@@ -165,6 +169,7 @@ public class Dijkstra {
 	}
 
 	class Edge{
+		
 		public final Node target;
 		public final int cost;
 
@@ -181,14 +186,15 @@ public class Dijkstra {
 	class Node implements Comparable<Node> {
 
 		public final String name;
-		public ArrayList<Edge> neighbors;
+		public ArrayList<Edge> links;
 		public LinkedList<Node> path;
-		public int minDistance = Integer.MAX_VALUE;
+		public int minDistance;
 		public Node previous;
 
 		public Node(String name){
 			this.name = name;
-			neighbors = new ArrayList<Edge>();
+			this.minDistance = Integer.MAX_VALUE;
+			links = new ArrayList<Edge>();
 			path = new LinkedList<Node>();
 		}
 
@@ -208,7 +214,7 @@ public class Dijkstra {
 		}
 
 		public String toString(){
-			return name + " " + minDistance;
+			return name;
 		}
 	}
 

@@ -100,64 +100,44 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 *  Receive all the connections from the server.
+	 * Receive all the connections from the server.
 	 *  
-	 *  @param host [ ip:port ]
+	 * @param host [ ip:port ]
 	 */
 	public void makeDijkstra(String[] info) {
 		String address = super.getHost();
 		int port = super.getPort();
 		dijkstra = new Dijkstra(info, address, port);
-	} 
+	}
+	
+	/**
+	 * Start sending messages.
+	 */
+	public void startMessaging(long number) {
+		NodeConnection[] nodes = super.getNodeConnections();
+		int numberOfConnections = super.getNumberOfClients();
+		Random rand = new Random();
+		for (int i = 0; i < number+1; i++) {
+			int connection = rand.nextInt(numberOfConnections);
+			try {
+				nodes[connection].sendToNode(new TaskMessage(numberOfConnections, 0));
+			} catch (IOException e) {
+				System.out.println(e.toString());
+			}
+		}
+	}
 	
 	// HOOK METHODS -----------------------------------------------------
-	
-	public void nodeConnected(NodeConnection nodeConnection) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
-	}
-
-
-	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
-	}
-
 	/**
-	 * 
+	 * TODO
+	 * @return
 	 */
-	public void listeningException(Throwable exception) {
-		System.out.println("listeningException :: "+exception.toString());
-		System.exit(1);
-	}
-
-	/**
-	 * 
-	 */
-	public void serverStarted() {
-		System.out.println("Node server started "+this.getName());
-	}
-	
-	/**
-	 * 
-	 */
-	protected void serverClosed() {
-		if (debug)
-			System.out.println("serverClosed :: Exitting.");
-	}
-	
-	/**
-	 *  TODO
-	 */
-	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
-		if (debug)
-			System.out.println(m);
-		String ipAddress = client.getAddress();
-		String hostName = super.getTargetHostName(ipAddress);
-		client.setClientInfo(hostName, ipAddress, m.getPort());
-		client.setCost(m.getCost());
+	public String getNodeCost() {
+		String ret = "";
+		String[] info = dijkstra.getDist();
+		for (String i : info)
+			ret += i + "\n";
+		return ret;
 	}
 	
 	/**
@@ -172,6 +152,68 @@ public class NodeServer extends AbstractServer {
 		return ret;
 	}
 	
+	public void nodeConnected(NodeConnection nodeConnection) {
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
+	}
+
+
+	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
+	}
+
+	public void listeningException(Throwable exception) {
+		System.out.println("listeningException :: "+exception.toString());
+		System.exit(1);
+	}
+
+	public void serverStarted() {
+		System.out.println("Node server started "+this.getName());
+	}
+	
+	protected void serverClosed() {
+		if (debug)
+			System.out.println("serverClosed :: Exitting.");
+	}
+	
+	/**
+	 * TODO
+	 */
+	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
+		if (debug)
+			System.out.println(m);
+		String ipAddress = client.getAddress();
+		String hostName = super.getTargetHostName(ipAddress);
+		client.setClientInfo(hostName, ipAddress, m.getPort());
+		client.setCost(m.getCost());
+	}
+	
+	/**
+	 * TODO
+	 */
+	public void forwardMessage(TaskMessage m) {
+		if (debug)
+			System.out.println(m);
+	}
+	
+	/**
+	 * TODO
+	 */
+	public void checkMessage(TaskMessage m, NodeConnection client) {
+		if (debug)
+			System.out.println(m);
+		String dest = m.getDest();
+		if (dest.equals(getName()) == false) {
+			forwardMessage(m);
+			return;
+		}
+		int num = m.getNumber();
+		stats.addReceived(num);
+	}
+	
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
 		if (msg instanceof Protocol == false)
@@ -182,6 +224,7 @@ public class NodeServer extends AbstractServer {
 				updateConnectionWeight(m.convertToEdgeInformation(), client);
 				break;
 			case "TASK_MESSAGE":
+				checkMessage(m.convertToMessage(), client);
 				break;
 			default:
 		}

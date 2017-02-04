@@ -1,69 +1,67 @@
 package cs455.overlay.util;
 
-import java.math.BigInteger;
-
 public class StatisticsCollector {
 
 	/**
 	 * 
 	 */
-	private BigInteger sent;
+	private long sent;
 
 	/**
 	 * 
 	 */
-	private BigInteger received;
+	private long received;
 
 	/**
 	 * 
 	 */
-	private BigInteger sumSent;
+	private long sumSent;
 
 	/**
 	 * 
 	 */
-	private BigInteger sumReceived;
+	private long sumReceived;
 
 	/**
 	 * 
 	 */
 	public StatisticsCollector() {
-		this.sent = BigInteger.valueOf(0);
-		this.received = BigInteger.valueOf(0);
-		this.sumSent = BigInteger.valueOf(0);
-		this.sumReceived = BigInteger.valueOf(0);
+		this.sent = 0;
+		this.received = 0;
+		this.sumSent = 0;
+		this.sumReceived = 0;
 	}
 
-	public BigInteger getSent() {
+	public long getSent() {
 		return sent;
 	}
 
-	public synchronized void addSent(BigInteger x) {
-		this.sent.add(BigInteger.valueOf(1));
-		this.sumSent.add(x);
+	public synchronized void addSent(int x) {
+		this.sent += 1;
+		this.sumSent += x;
 	}
 
-	public BigInteger getReceived() {
+	public long getReceived() {
 		return received;
 	}
 
-	public synchronized void addReceived(BigInteger x) {
-		this.received.add(BigInteger.valueOf(1));
-		this.sumReceived.add(x);
+	public synchronized void addReceived(int x) {
+		this.received += 1;
+		this.sumReceived += x;
 	}
 
-	public BigInteger getSumSent() {
+	public long getSumSent() {
 		return sumSent;
 	}
 
-	public BigInteger getSumReceived() {
+	public long getSumReceived() {
 		return sumReceived;
 	}
 
 	@Override
 	public String toString() {
-		return "NodeInformation [sent=" + sent + ", received=" + received + ", sumSent=" + sumSent + ", sumReceived="
-				+ sumReceived + "]";
+		return "NodeInformation [sent=" + sent + ", received=" + received +
+				", sumSent=" + sumSent + ", sumReceived=" + sumReceived + "]";
 	}
 
 }

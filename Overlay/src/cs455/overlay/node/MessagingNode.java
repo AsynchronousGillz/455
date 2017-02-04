@@ -16,8 +16,8 @@ public class MessagingNode {
 
 	// Instance variables **********************************************
 
-	NodeClient client;
-	NodeServer server;
+	private final NodeClient client;
+	private final NodeServer server;
 
 	// Constructors ****************************************************
 
@@ -88,6 +88,13 @@ public class MessagingNode {
 					this.invalid(message);
 				}
 				break;
+			case "print-cost": case "cost":
+				if (tokens.length == 1) {
+					System.out.println(server.getNodeCost());
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "get-port":
 				if (tokens.length == 1) {
 					System.out.println(server.getPort());
@@ -132,7 +139,7 @@ public class MessagingNode {
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try:\n";
 		info += "\t[ print-shortest-path | get-port | get-host ]\n";
-		info += "\t[ get-paths | exit-overlay ]";
+		info += "\t[ print-cost | get-paths | exit-overlay ]";
 		System.err.println(info);
 	}
 	

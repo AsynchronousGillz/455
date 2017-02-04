@@ -92,19 +92,19 @@ public class Protocol {
 	//******************************************************************************
 	
 	public Registation convertToRegistation() {
-		String msg = new String(message);
-		Registation ret = new Registation(msg, type);
-		return ret;
+		return new Registation(new String(message), type);
 	}
 	
 	public Overlay convertToOverlay() {
-		Overlay ret = new Overlay(message, type);
-		return ret;
+		return new Overlay(message, type);
 	}
 	
 	public EdgeInformation convertToEdgeInformation() {
-		EdgeInformation ret = new EdgeInformation(message);
-		return ret;
+		return new EdgeInformation(message);
+	}
+	
+	public TaskMessage convertToMessage() {
+		return new TaskMessage(message);
 	}
 	
 	//******************************************************************************

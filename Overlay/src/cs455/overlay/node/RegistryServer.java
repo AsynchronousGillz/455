@@ -48,23 +48,14 @@ public class RegistryServer extends AbstractServer {
 		System.exit(1);
 	}
 
-	/**
-	 * TODO
-	 */
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
 	}
 
-	/**
-	 * TODO
-	 */
 	protected void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
 	}
 	
-	/**
-	 * TODO
-	 */
 	public boolean getRegistration() {
 		return this.registationCheck;
 	}
@@ -161,7 +152,9 @@ public class RegistryServer extends AbstractServer {
 	}
 
 	/**
-	 * TODO
+	 * When the command 'list-weights' is entered it will call the
+	 * displayOverlay method. This will return a String of the all the
+	 * connections and links.
 	 * @return
 	 */
 	public String displayOverlay() {
@@ -179,7 +172,9 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * TODO
+	 * The overlay have been constructed and the overlay has yet to 
+	 * be sent to the nodes. Each node will be sent all the connections
+	 * to the registration.
 	 */
 	public void sendOverlay() {
 		if (connectionList.getValidOverlay() == false) {
@@ -203,12 +198,15 @@ public class RegistryServer extends AbstractServer {
 	}
 	
 	/**
-	 * TODO
+	 * The the command is given to start sending with a number of 
+	 * rounds to send 5 messages. These five messages are sent from 
+	 * each node to a random node in the connections. 
 	 * @param numberOfRounds 
 	 */
 	public void sendStart(int numberOfRounds) {
-		// TODO Auto-generated method stub
-		
+		if (numberOfRounds == 0)
+			return;
+		this.sendToAllNodes(new TaskMessage(numberOfRounds, 0));
 	}
 	
 	/**
@@ -285,10 +283,14 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void taskComplete(Registation m, NodeConnection client) {
+	public void taskComplete(TaskMessage m, NodeConnection client) {
 		if (debug)
-			System.out.println(m.getMessageString());
-		// TODO
+			System.out.println(m);
+		client.setComplete();
+		boolean complete = true;
+		for (NodeConnection node : super.getNodeConnections()) {
+			complete = (node.getComplete() && complete);
+		}
 	}
 
 	@Override
@@ -308,7 +310,7 @@ public class RegistryServer extends AbstractServer {
 				break;
 			}
 			case "TASK_COMPLETE": {
-				taskComplete(msg.convertToRegistation(), client);
+				taskComplete(msg.convertToMessage(), client);
 				break;
 			}
 			default:

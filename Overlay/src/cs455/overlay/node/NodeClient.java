@@ -361,7 +361,7 @@ public class NodeClient implements Runnable {
 	 * @param m
 	 *            the message sent.
 	 */
-	public void registerResponse(Registation m) {
+	private void registerResponse(Registation m) {
 		if (debug)
 			System.out.println(m.getMessageString());;
 		if (m.getMessage().equals("False")) {
@@ -388,7 +388,7 @@ public class NodeClient implements Runnable {
 	 * @param o
 	 *            the overlay message sent.
 	 */
-	public void registerConnections(Overlay o) {
+	private void registerConnections(Overlay o) {
 		if (debug)
 			System.out.print(o);
 		nodeServer.setInfo(o.getString());
@@ -403,10 +403,18 @@ public class NodeClient implements Runnable {
 	 * @param e
 	 *            the EdgeInformation message sent.
 	 */
-	public void registerWeights(Overlay o) {
+	private void registerWeights(Overlay o) {
 		if (debug)
 			System.out.print(o);
 		nodeServer.setWeights(o.getString());
+	}
+	
+
+	private void startMessaging(TaskMessage o) {
+		if (debug)
+			System.out.print(o);
+		long i = o.getNumber();
+		nodeServer.startMessaging(i);
 	}
 
 	/**
@@ -437,6 +445,9 @@ public class NodeClient implements Runnable {
 				break;
 			case "LINK_WEIGHTS":
 				registerWeights(m.convertToOverlay());
+				break;
+			case "TASK_INITIATE":
+				startMessaging(m.convertToMessage());
 				break;
 			default:
 		}

@@ -133,7 +133,7 @@ public class Registry {
 	 */
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try:\n";
-		info += "\t[ setup-overlay | send-overlay-link-weights | start ]\n";
+		info += "\t[ setup-overlay | send-overlay-link-weights | start # ]\n";
 		info += "\t[ list-messaging | list-weights | get-port | get-host ]";
 		System.err.println(info);
 	}
