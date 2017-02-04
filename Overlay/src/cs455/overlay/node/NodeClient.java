@@ -65,7 +65,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = false;
+	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -400,7 +400,7 @@ public class NodeClient implements Runnable {
 	 * information about the weights of the connections within 
 	 * the overlay.
 	 * 
-	 * @param e
+	 * @param o
 	 *            the EdgeInformation message sent.
 	 */
 	private void registerWeights(Overlay o) {
@@ -409,12 +409,30 @@ public class NodeClient implements Runnable {
 		nodeServer.setWeights(o.getString());
 	}
 	
-
+	/**
+	 * Recives the TASK_INITIATE message from the registry server
+	 * pulls the number of rounds out of the message and then should 
+	 * send 5 * numberOfRounds, messages to random node in the overlay.
+	 * Then once done sending the messages it will send the TASK_COMPLETE
+	 * message back to the server.
+	 *
+	 * @param o
+	 * 		the TASK_INITIATE Message
+	 */
 	private void startMessaging(TaskMessage o) {
 		if (debug)
 			System.out.print(o);
-		long i = o.getNumber();
+		System.out.println("startMessaging: before i"); //DEBUG
+		int i = o.getNumber();
+		System.out.println("startMessaging: "+i); //DEBUG
 		nodeServer.startMessaging(i);
+		if (nodeSocket == null)
+			return;
+		try {
+			sendToServer(new TaskMessage(0, 1));
+		} catch (IOException e) {
+			System.err.println("Could not send Registration.");
+		}
 	}
 
 	/**

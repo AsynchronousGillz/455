@@ -113,11 +113,12 @@ public class NodeServer extends AbstractServer {
 	/**
 	 * Start sending messages.
 	 */
-	public void startMessaging(long number) {
+	public void startMessaging(int number) {
 		NodeConnection[] nodes = super.getNodeConnections();
 		int numberOfConnections = super.getNumberOfClients();
 		Random rand = new Random();
 		for (int i = 0; i < number+1; i++) {
+			System.out.println(i);
 			int connection = rand.nextInt(numberOfConnections);
 			try {
 				nodes[connection].sendToNode(new TaskMessage(numberOfConnections, 0));
@@ -197,6 +198,13 @@ public class NodeServer extends AbstractServer {
 	public void forwardMessage(TaskMessage m) {
 		if (debug)
 			System.out.println(m);
+		String dest = m.getDest();
+		String hop = dijkstra.getNextHop(dest);
+		String[] address = hop.split(":");
+		int port = super.validateInput(address[1]);
+		try {
+			super.getConnection(address[0], port).sendToNode(m);
+		} catch (IOException e) {};
 	}
 	
 	/**

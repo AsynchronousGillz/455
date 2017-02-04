@@ -1,12 +1,6 @@
 package cs455.overlay.msg;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class TaskMessage extends Protocol {
 	
@@ -40,11 +34,7 @@ public class TaskMessage extends Protocol {
 		switch(type) {
 			case 0:
 				this.setType("TASK_INITIATE");
-				try {
-					this.convertNumber(number);
-				} catch (IOException e) {
-					System.err.println(e.toString());
-				}
+				this.convertNumber(number);
 				break;
 			case 1:
 				this.setType("TASK_COMPLETE");
@@ -60,39 +50,43 @@ public class TaskMessage extends Protocol {
 	public TaskMessage(String dest, int number) {
 		super();
 		this.setType("TASK_MESSAGE");
-		try {
-			this.makeMessage(dest, number);
-		} catch (IOException e) {
-			System.err.println(e.toString());
-		}
+		this.makeMessage(dest, number);
 	}
 	
 	/**
 	 * Convert the String and int into the message byte array.
 	 */
-	public void makeMessage(String dest, int i) throws IOException {
+	public void makeMessage(String dest, int i) {
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
-		output.writeInt(i);
-        byte[] identifierBytes = dest.getBytes();
-        int elementLength = identifierBytes.length;
-        output.writeInt(elementLength);
-        output.write(identifierBytes);
-		this.message = byteOutputStream.toByteArray();
-		byteOutputStream.close();
-		output.close();
+		try {
+			output.writeInt(i);
+	        byte[] identifierBytes = dest.getBytes();
+	        int elementLength = identifierBytes.length;
+	        output.writeInt(elementLength);
+	        output.write(identifierBytes);
+			this.message = byteOutputStream.toByteArray();
+			byteOutputStream.close();
+			output.close();
+		} catch (IOException e){
+			System.err.println(e.toString());
+		}
 	}
 	
 	/**
 	 * Convert the int into the message byte array.
 	 */
-	public void convertNumber(int i) throws IOException {
+	public void convertNumber(int i) {
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
-		output.writeInt(i);
-		this.message = byteOutputStream.toByteArray();
-		byteOutputStream.close();
-		output.close();
+		try {
+			output.writeInt(i);
+			this.message = byteOutputStream.toByteArray();
+			byteOutputStream.close();
+			output.close();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		}
 	}
 	
 	/**
@@ -111,7 +105,7 @@ public class TaskMessage extends Protocol {
 			byteInputStream.close();
 			input.close();
 		} catch (IOException e) {
-			System.out.println();
+			System.out.println(e.toString());
 		}
 		return new String(bytes);
 	}

@@ -291,6 +291,11 @@ public class RegistryServer extends AbstractServer {
 		for (NodeConnection node : super.getNodeConnections()) {
 			complete = (node.getComplete() && complete);
 		}
+		try {
+			if (complete == true)
+				Thread.sleep(5000);
+		} catch (InterruptedException e) {}
+		// SEND PULL_TRAFFIC_SUMMARY
 	}
 
 	@Override

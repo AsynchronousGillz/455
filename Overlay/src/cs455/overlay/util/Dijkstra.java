@@ -138,6 +138,21 @@ public class Dijkstra {
 		}
 		return ret;
 	}
+	
+	/**
+	 * TODO
+	 * @param dest
+	 * @return
+	 */
+	public String getNextHop(String dest) {
+		for (Node node : graph.getNodes()) {
+			String i = node.path.get(0).toString();
+			System.out.println(i); //DEBUG
+			if (i.equals(dest) == true)
+				return node.toString();
+		}
+		return null;
+	}
 
 	public class Graph {
 
