@@ -72,6 +72,11 @@ public class NodeConnection extends Thread {
 	 * connection is initiated.
 	 */
 	private boolean complete;
+	
+	/**
+	 * Debug this.
+	 */
+	private final boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -125,11 +130,11 @@ public class NodeConnection extends Thread {
 	final public void sendToNode(Protocol msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
+		if (debug)
+			System.out.println(msg.toString());
 		byte[] bytes = msg.makeBytes();
-		synchronized (output) {
-			System.out.println("33");
+		synchronized (nodeSocket) {
 			output.writeInt(bytes.length);
-			System.out.println("66");
 			output.write(bytes, 0, bytes.length);
 		}
 	}
@@ -180,9 +185,7 @@ public class NodeConnection extends Thread {
 	 * @return the node's description.
 	 */
 	public String toString() {
-		if (this.ipAddress != null && port != 0 && cost != 0)
-			return this.ipAddress+":"+this.port+":"+this.cost;
-		else if (this.ipAddress != null && port != 0)
+		if (this.ipAddress != null && port != 0)
 			return this.ipAddress+":"+this.port;
 		else
 			return getName();
@@ -324,10 +327,8 @@ public class NodeConnection extends Thread {
 			int byteSize;
 			while (complete == false) {
 				byte[] bytes = null;
-				synchronized (input) {
-					System.out.println("69"); // DEBUG
+				synchronized (nodeSocket) {
 					byteSize = input.readInt();
-					System.out.println("420"); // DEBUG
 					bytes = new byte[byteSize];
 					input.readFully(bytes, 0, byteSize);
 				}

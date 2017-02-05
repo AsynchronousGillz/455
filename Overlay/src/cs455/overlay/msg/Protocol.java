@@ -5,35 +5,35 @@ import java.text.*;
 import java.util.*;
 
 public class Protocol {
-	
-	
+
+
 	protected int type;
 	protected long time;
 	protected byte indicator;
 	protected byte[] message;
 
 	protected final String[] Types = { 
-            "REGISTER_REQUEST",
-            "REGISTER_RESPONSE",
-            "DEREGISTER_REQUEST",
-            "MESSAGING_NODES",
-            "MESSAGING_NODES_LIST",
-            "LINK_WEIGHTS",
-            "SINGLE_WEIGHT",
-            "TASK_INITIATE",
-            "TASK_MESSAGE",
-            "TASK_COMPLETE",
-            "PULL_TRAFFIC_SUMMARY",
-            "TRAFFIC_SUMMARY"
+		"REGISTER_REQUEST",
+		"REGISTER_RESPONSE",
+		"DEREGISTER_REQUEST",
+		"MESSAGING_NODES",
+		"MESSAGING_NODES_LIST",
+		"LINK_WEIGHTS",
+		"SINGLE_WEIGHT",
+		"TASK_INITIATE",
+		"TASK_MESSAGE",
+		"TASK_COMPLETE",
+		"PULL_TRAFFIC_SUMMARY",
+		"TRAFFIC_SUMMARY"
 	};
-	
+
 	public Protocol() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		dateFormat.format(date);// 2016/11/16 12:08:43
 		time = date.getTime();
 	}
-	
+
 	public Protocol(byte[] bytes) {
 		try {
 			makeObject(bytes);
@@ -41,21 +41,21 @@ public class Protocol {
 			System.err.println(e.toString());
 		}
 	}
-	
+
 	//******************************************************************************
-	
+
 	public int getType() {
 		return type;
 	}
-	
+
 	public void setIndicator(byte i) {
 		this.indicator = i;
 	}
-	
+
 	public byte getIndicator() {
 		return indicator;
 	}
-	
+
 	public String getStringType() {
 		return Types[type];
 	}
@@ -80,7 +80,7 @@ public class Protocol {
 	public void setMessage(byte[] message) {
 		this.message = message;
 	}
-	
+
 	public long getTime() {
 		return time;
 	}
@@ -90,23 +90,27 @@ public class Protocol {
 	}
 
 	//******************************************************************************
-	
+
 	public Registation convertToRegistation() {
 		return new Registation(new String(message), type);
 	}
-	
+
 	public Overlay convertToOverlay() {
 		return new Overlay(message, type);
 	}
-	
+
 	public EdgeInformation convertToEdgeInformation() {
 		return new EdgeInformation(message);
 	}
-	
+
+	public TaskInitiate convertToInitiate() {
+		return new TaskInitiate(message);
+	}
+
 	public TaskMessage convertToMessage() {
 		return new TaskMessage(message);
 	}
-	
+
 	//******************************************************************************
 
 	/**

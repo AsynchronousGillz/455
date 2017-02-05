@@ -114,7 +114,11 @@ public class Dijkstra {
 	 * 		random index of connection
 	 * @return "ip:port"
 	 */
-	public String getRandomNode(int index) {
+	public String getRandomNode() {
+		Random rand = new Random();
+		int temp = sourceIndex;
+		int index = sourceIndex;
+		while(temp == (index = rand.nextInt(connections.length)));
 		return connections[index];
 	}
 	
@@ -123,8 +127,7 @@ public class Dijkstra {
 	 * @return
 	 */
 	public String[] getDist() {
-		int len = connections.length;
-		String[] ret = new String[len];
+		String[] ret = new String[connections.length];
 		int index = 0;
 		for (Node node : graph.getNodes()) 
 			ret[index++] = node + "~"+ node.minDistance;
@@ -136,8 +139,7 @@ public class Dijkstra {
 	 * @return
 	 */
 	public String[] getPaths() {
-		int len = connections.length;
-		String[] ret = new String[len];
+		String[] ret = new String[connections.length];
 		int index = 0;
 		for (Node node : graph.getNodes()) {
 			ret[index] = "";
@@ -156,9 +158,9 @@ public class Dijkstra {
 	 */
 	public String getNextHop(String dest) {
 		Node node = graph.getNode(dest);
-		String i = node.path.get(1).toString();
-		System.out.println(dest+" -> "+i); //DEBUG
-		return i;
+		if (dest.equals(node.toString()))
+			return node.toString();
+		return node.path.get(1).toString();
 	}
 
 	public class Graph {

@@ -213,13 +213,9 @@ public class NodeClient implements Runnable {
 		// Additional setting up
 		connectionEstablished();
 
-		// The message from the server
-		int byteSize;
-
-		// Loop waiting for data
 		try {
 			while (stop == false) {
-				byteSize = input.readInt();
+				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
 				messageFromServer(new Protocol(bytes));
@@ -344,9 +340,8 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null)
 			return;
 		String info = nodeServer.getHost()+" "+nodeServer.getPort();
-		Registation m = new Registation(info, 1);
 		try {
-			sendToServer(m);
+			sendToServer(new Registation(info, 1));
 		} catch (IOException e) {
 			System.err.println("Could not send Registration.");
 		}
@@ -417,17 +412,16 @@ public class NodeClient implements Runnable {
 	 * @param o
 	 * 		the TASK_INITIATE Message
 	 */
-	private void startMessaging(TaskMessage o) {
+	private void startMessaging(TaskInitiate o) {
 		if (debug)
 			System.out.print(o);
 		int i = o.getNumber();
 		nodeServer.startMessaging(i);
-		if (nodeSocket == null)
-			return;
+		String info = nodeServer.getHost()+" "+nodeServer.getPort();
 		try {
-			sendToServer(new TaskMessage(0, 1));
+			sendToServer(new Registation(info, 3));
 		} catch (IOException e) {
-			System.err.println("Could not send Registration.");
+			System.err.println("Could not send TASK_COMPLETE.");
 		}
 	}
 
@@ -459,7 +453,7 @@ public class NodeClient implements Runnable {
 				registerWeights(m.convertToOverlay());
 				break;
 			case "TASK_INITIATE":
-				startMessaging(m.convertToMessage());
+				startMessaging(m.convertToInitiate());
 				break;
 			default:
 		}

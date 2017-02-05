@@ -16,23 +16,20 @@ public class Registation extends Protocol {
 		switch(type) {
 			case 0: 
 				this.setType("REGISTER_REQUEST");
-				this.setMessage(message.getBytes());
 				break;
 			case 1:
 				this.setType("DEREGISTER_REQUEST");
-				this.setMessage(message.getBytes());
 				break;
 			case 2:
 				this.setType("REGISTER_RESPONSE");
 				byte i = (message.equals("True")) ? (byte)1 : (byte)0 ;
 				this.setIndicator(i);
-				this.setMessage(message.getBytes());
 				break;
 			case 3:
 				this.setType("TASK_COMPLETE");
-				this.setMessage(message.getBytes());
 				break;
 		}
+		this.setMessage(message.getBytes());
 	}
 	
 	public boolean checkResponse() {
@@ -47,7 +44,7 @@ public class Registation extends Protocol {
 	}
 	
 	public String toString() {
-		return " id :"+type+", type: " + Types[type] + " , message: " + getMessageString();
+		return " id :"+type+", type: " + Types[type] + ", message: " + getMessageString();
 	}
 	
 }

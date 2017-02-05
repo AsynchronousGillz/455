@@ -29,7 +29,7 @@ public class Overlay extends Protocol {
 				this.setType("MESSAGING_NODES");
 				break;
 		}
-		this.setMessage(message);
+		super.setMessage(message);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class Overlay extends Protocol {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		message = output.toByteArray();
+		super.setMessage(output.toByteArray());
 	}
 	
 	/**

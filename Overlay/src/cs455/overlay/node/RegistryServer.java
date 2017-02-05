@@ -214,7 +214,7 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Overlay has not yet been sent.");
 			return;
 		}
-		super.sendToAllNodes(new TaskMessage(numberOfRounds, 0));
+		super.sendToAllNodes(new TaskInitiate(numberOfRounds));
 	}
 	
 	/**
@@ -290,7 +290,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void taskComplete(TaskMessage m, NodeConnection client) {
+	public void taskComplete(Registation m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
 		client.setComplete();
@@ -322,7 +322,7 @@ public class RegistryServer extends AbstractServer {
 				break;
 			}
 			case "TASK_COMPLETE": {
-				taskComplete(msg.convertToMessage(), client);
+				taskComplete(msg.convertToRegistation(), client);
 				break;
 			}
 			default:

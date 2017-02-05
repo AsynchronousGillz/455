@@ -46,10 +46,10 @@ public class NodeServer extends AbstractServer {
 			String[] host = info.split(" ");
 			if (host[0].equals(this.getName()) == false)
 				continue;
-			String[] node = host[1].split(":");
+			String[] node = host[0].split(":");
 			int port = super.validateInput(node[1]);
-			int cost = super.validateInput(host[2]);
 			NodeConnection nodeConnection = super.getConnection(host[1]);
+			int cost = super.validateInput(host[2]);
 			nodeConnection.setCost(cost);
 			try {
 				nodeConnection.sendToNode(new EdgeInformation(port, cost));
@@ -115,12 +115,12 @@ public class NodeServer extends AbstractServer {
 	 * Start sending messages.
 	 */
 	public void startMessaging(int number) {
-		int numberOfConnections = super.getNumberOfClients();
 		Random rand = new Random();
 		for (int i = 0; i < number; i++) {
-			String target = dijkstra.getRandomNode(rand.nextInt(numberOfConnections));
+			String target = dijkstra.getRandomNode();
 			String nextHop = dijkstra.getNextHop(target);
 			NodeConnection node = super.getConnection(nextHop);
+			System.out.println("target: "+target+" nextHop: "+nextHop+" node: "+node);
 			for (int count = 0; count < 5; count++) {
 				int random = rand.nextInt();
 				try {
@@ -129,6 +129,47 @@ public class NodeServer extends AbstractServer {
 					System.out.println(e.toString());
 					e.printStackTrace();
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Start sending messages.
+	 */
+	public void testMessaging() {
+		System.out.println("TEST MESSAGING.");
+		String target = dijkstra.getRandomNode();
+		String nextHop = dijkstra.getNextHop(target);
+		NodeConnection node = super.getConnection(nextHop);
+		System.out.println("Target: "+target+" nextHop: "+nextHop+" node: "+node);
+		Random rand = new Random();
+		for (int count = 0; count < 5; count++) {
+			int random = rand.nextInt();
+			try {
+				node.sendToNode(new TaskMessage(target, random));
+			} catch (IOException e) {
+				System.out.println(e.toString());
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Start sending messages.
+	 */
+	public void testTask() {
+		System.out.println("TEST TASK.");
+		Random rand = new Random();
+		String target = super.getConnectionNames()[0];
+		NodeConnection node = super.getConnection(target);
+		System.out.println("Target: "+target+" node: "+node);
+		for (int count = 0; count < 5; count++) {
+			int random = rand.nextInt();
+			try {
+				node.sendToNode(new TaskMessage(target, random));
+			} catch (IOException e) {
+				System.out.println(e.toString());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -200,31 +241,19 @@ public class NodeServer extends AbstractServer {
 	/**
 	 * TODO
 	 */
-	public void forwardMessage(TaskMessage m) {
-		String dest = m.getDest();
-		String hop = dijkstra.getNextHop(dest);
-		if (debug == false) //DEBUG
-			System.out.println("dest: "+dest+" hop: "+hop);
+	public void checkMessage(TaskMessage m, NodeConnection client) {
+		if (debug)
+			System.out.println(m);
+		if (m.getDest().equals(getName()) == true) {
+			stats.addReceived(m.getNumber());
+			return;
+		}
+		String hop = dijkstra.getNextHop(m.getDest());
 		try {
 			super.getConnection(hop).sendToNode(m);
 			stats.addRelayed();
 		} catch (IOException e) {
 			e.printStackTrace();
-		};
-	}
-	
-	/**
-	 * TODO
-	 */
-	public void checkMessage(TaskMessage m, NodeConnection client) {
-		if (debug == false) // DEBUG
-			System.out.println(m);
-		System.out.printf("I am %s and destination is %s\n", m.getDest(), getName());
-		if (m.getDest().equals(getName()) == false) {
-			forwardMessage(m);
-		} else {
-			System.out.println("WE ARE HERE!"); // DEBUG
-			stats.addReceived(m.getNumber());
 		}
 	}
 	
@@ -233,7 +262,6 @@ public class NodeServer extends AbstractServer {
 		if (msg instanceof Protocol == false)
 			return;
 		Protocol m = (Protocol) msg;
-		System.out.println("MESSAGE TYPE: "+m.getStringType()); //DEBUG
 		switch(m.getStringType()) {
 			case "SINGLE_WEIGHT":
 				updateConnectionWeight(m.convertToEdgeInformation(), client);

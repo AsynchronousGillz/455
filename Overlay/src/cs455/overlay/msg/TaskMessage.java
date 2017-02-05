@@ -7,33 +7,14 @@ public class TaskMessage extends Protocol {
 	/**
 	 * Convert from a {@link Protocol} to a {@link TaskMessage}
 	 * @param message
+	 * 			message in bye form
 	 */
 	public TaskMessage(byte[] message) {
 		super();
-		this.setMessage(message);
+		this.setType("TASK_MESSAGE");
+		super.setMessage(message);
 	}
-	
-	/**
-	 * Make the TaskMessage either a TASK_INITIATE or TASK_COMPLETE
-	 * @param number
-	 * 			The number of rounds.
-	 * @param type
-	 * 			0 for TASK_INITIATE
-	 * 			1 for TASK_COMPLETE
-	 */
-	public TaskMessage(int number, int type) {
-		super();
-		switch(type) {
-			case 0:
-				this.setType("TASK_INITIATE");
-				break;
-			case 1:
-				this.setType("TASK_COMPLETE");
-				break;
-		}
-		this.setNumber(number);
-	}
-	
+
 	/**
 	 * Make the TaskMessage a TASK_MESSAGE
 	 * @param dest
@@ -54,7 +35,7 @@ public class TaskMessage extends Protocol {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(output);
 		byte[] bytes = dest.getBytes();
-        int len = bytes.length;
+		int len = bytes.length;
 		try {
 			out.writeInt(i);
 			out.writeInt(len);
@@ -62,39 +43,7 @@ public class TaskMessage extends Protocol {
 		} catch (IOException e){
 			System.err.println(e.toString());
 		}
-		message = output.toByteArray();
-	}
-	
-	/**
-	 * Convert the int into the message byte array.
-	 */
-	public void setNumber(int i) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(output);
-		try {
-			out.writeInt(i);
-			out.writeInt(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		message = output.toByteArray();
-	}
-	
-	/**
-	 * Gets the long from the message byte array.
-	 * @return long of message
-	 */
-	public int getNumber() {
-		int ret = 0;
-		ByteArrayInputStream input = new ByteArrayInputStream(message);
-		DataInputStream in = new DataInputStream(input);
-		try {
-			ret = in.readInt();
-		} catch (IOException e) {
-			System.out.println(e.toString());
-			e.printStackTrace();
-		}
-		return ret;
+		super.setMessage(output.toByteArray());
 	}
 	
 	/**
@@ -107,14 +56,31 @@ public class TaskMessage extends Protocol {
 		byte[] bytes = null;
 		try {
 			in.readInt();
-	        int identifierLength = in.readInt();
-	        bytes = new byte[identifierLength];
-	        in.readFully(bytes);
+			int identifierLength = in.readInt();
+			bytes = new byte[identifierLength];
+			in.readFully(bytes);
 		} catch (IOException e) {
 			System.out.println(e.toString());
 			e.printStackTrace();
 		}
 		return new String(bytes);
+	}
+
+	/**
+	 * Gets the int from the message byte array.
+	 * @return int of msg payload.
+	 */
+	public int getNumber(){
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
+		int ret = 0;
+		try {
+			ret = in.readInt();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	
 }

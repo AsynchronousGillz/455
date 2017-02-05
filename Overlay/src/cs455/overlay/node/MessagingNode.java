@@ -64,6 +64,14 @@ public class MessagingNode {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
+			case "send":
+				if (tokens.length == 1) {
+					server.testTask();
+					server.testMessaging();
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "exit-overlay": case "exit":
 				if (tokens.length == 1) {
 					client.unregister();
@@ -83,14 +91,14 @@ public class MessagingNode {
 				break;
 			case "print-shortest-path": case "print":
 				if (tokens.length == 1) {
-					System.out.println(server.getShortestPath());
+					System.out.print(server.getShortestPath());
 				} else {
 					this.invalid(message);
 				}
 				break;
 			case "print-cost": case "cost":
 				if (tokens.length == 1) {
-					System.out.println(server.getNodeCost());
+					System.out.print(server.getNodeCost());
 				} else {
 					this.invalid(message);
 				}
