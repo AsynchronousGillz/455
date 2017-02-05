@@ -21,6 +21,11 @@ public class StatisticsCollector {
 	 * 
 	 */
 	private long sumReceived;
+	
+	/**
+	 * 
+	 */
+	private long relayed;
 
 	/**
 	 * 
@@ -30,6 +35,7 @@ public class StatisticsCollector {
 		this.received = 0;
 		this.sumSent = 0;
 		this.sumReceived = 0;
+		this.relayed = 0;
 	}
 
 	public long getSent() {
@@ -57,11 +63,16 @@ public class StatisticsCollector {
 	public long getSumReceived() {
 		return sumReceived;
 	}
+	
+	public synchronized void addRelayed() {
+		this.relayed += 1;
+	}
 
 	@Override
 	public String toString() {
 		return "NodeInformation [sent=" + sent + ", received=" + received +
-				", sumSent=" + sumSent + ", sumReceived=" + sumReceived + "]";
+				", sumSent=" + sumSent + ", sumReceived=" + sumReceived + 
+				", relayed=" + relayed +"]";
 	}
 
 }

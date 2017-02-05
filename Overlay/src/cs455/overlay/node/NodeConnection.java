@@ -126,8 +126,12 @@ public class NodeConnection extends Thread {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
-		output.writeInt(bytes.length);
-		output.write(bytes, 0, bytes.length);
+		synchronized (output) {
+			System.out.println("33");
+			output.writeInt(bytes.length);
+			System.out.println("66");
+			output.write(bytes, 0, bytes.length);
+		}
 	}
 
 	/**
@@ -319,9 +323,14 @@ public class NodeConnection extends Thread {
 		try {
 			int byteSize;
 			while (complete == false) {
-				byteSize = input.readInt();
-				byte[] bytes = new byte[byteSize];
-				input.readFully(bytes, 0, byteSize);
+				byte[] bytes = null;
+				synchronized (input) {
+					System.out.println("69"); // DEBUG
+					byteSize = input.readInt();
+					System.out.println("420"); // DEBUG
+					bytes = new byte[byteSize];
+					input.readFully(bytes, 0, byteSize);
+				}
 				server.receiveMessageFromNode(new Protocol(bytes), this);
 			}
 		} catch (EOFException ex) {

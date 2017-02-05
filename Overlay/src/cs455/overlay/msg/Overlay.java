@@ -90,7 +90,7 @@ public class Overlay extends Protocol {
 			for (int i = 0; i < size; i ++) {
 				int length = in.readInt();
 				bytes = new byte[length];
-				in.read(bytes, 0, length);
+				in.readFully(bytes, 0, length);
 				ret[i] = new String(bytes);
 			}
 		} catch (IOException e) {
@@ -112,7 +112,7 @@ public class Overlay extends Protocol {
 			for (int i = 0; i < size; i ++) {
 				int length = in.readInt();
 				bytes = new byte[length];
-				in.read(bytes, 0, length);
+				in.readFully(bytes, 0, length);
 				sb.append(new String(bytes)+"\n");
 			}
 		} catch (IOException e) {

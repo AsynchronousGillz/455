@@ -65,7 +65,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = true;
+	final private boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -225,10 +225,8 @@ public class NodeClient implements Runnable {
 				messageFromServer(new Protocol(bytes));
 			}
 		} catch (Exception exception) {
-			if (stop == false) {
-				close(1);
-				connectionException(exception);
-			}
+			close(1);
+			connectionException(exception);
 		} finally {
 			nodeReader = null;
 		}
@@ -422,9 +420,7 @@ public class NodeClient implements Runnable {
 	private void startMessaging(TaskMessage o) {
 		if (debug)
 			System.out.print(o);
-		System.out.println("startMessaging: before i"); //DEBUG
 		int i = o.getNumber();
-		System.out.println("startMessaging: "+i); //DEBUG
 		nodeServer.startMessaging(i);
 		if (nodeSocket == null)
 			return;
@@ -449,8 +445,6 @@ public class NodeClient implements Runnable {
 		if (o instanceof Protocol == false)
 			return;
 		Protocol m = (Protocol) o;
-		if (debug)
-			System.out.println(m);
 		switch (m.getStringType()) {
 			case "REGISTER_RESPONSE":
 				registerResponse(m.convertToRegistation());

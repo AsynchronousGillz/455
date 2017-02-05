@@ -62,7 +62,7 @@ public class Dijkstra {
 			int tem = Integer.parseInt(connections[2]);
 			graph.addEdge(row, col, tem);
 		}
-		this.calculate();
+		this.calculatePaths();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class Dijkstra {
 	* update the distances for all the link (In the Priority Queue), you
 	* repeat the process till all the connected nodes are visited.
 	*/
-	public void calculate() {
+	public void calculatePaths() {
 		Node source = graph.getNode(connections[sourceIndex]);
 		source.minDistance = 0;
 		PriorityQueue<Node> queue = new PriorityQueue<Node>();
@@ -106,6 +106,16 @@ public class Dijkstra {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Get a random node in the overlay.
+	 * @param index
+	 * 		random index of connection
+	 * @return "ip:port"
+	 */
+	public String getRandomNode(int index) {
+		return connections[index];
 	}
 	
 	/**
@@ -145,13 +155,10 @@ public class Dijkstra {
 	 * @return
 	 */
 	public String getNextHop(String dest) {
-		for (Node node : graph.getNodes()) {
-			String i = node.path.get(0).toString();
-			System.out.println(i); //DEBUG
-			if (i.equals(dest) == true)
-				return node.toString();
-		}
-		return null;
+		Node node = graph.getNode(dest);
+		String i = node.path.get(1).toString();
+		System.out.println(dest+" -> "+i); //DEBUG
+		return i;
 	}
 
 	public class Graph {

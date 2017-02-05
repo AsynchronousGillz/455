@@ -154,7 +154,9 @@ public abstract class AbstractServer extends Thread {
 			for (int i = 0; i < clientThreadList.length; i++) {
 				try {
 					((NodeConnection) clientThreadList[i]).close();
-				} catch (Exception ex) {}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 			serverSocket = null;
 			serverClosed();
@@ -173,7 +175,9 @@ public abstract class AbstractServer extends Thread {
 		for (int i = 0; i < clientThreadList.length; i++) {
 			try {
 				clientThreadList[i].sendToNode(msg);
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -218,17 +222,17 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * Returns the NodeConnection Object that has both port and ip 
 	 * matching.
-	 *
+	 * @param address
+	 * 		"ip:port"
 	 * @return an array of Strings containing NodeConnection Names.
 	 */
-	synchronized final public NodeConnection getConnection(String address, int port) {
+	synchronized final public NodeConnection getConnection(String address) {
 		NodeConnection ret = null;
 		int size = nodeThreadGroup.activeCount();
 		NodeConnection[] nodeThreadList = new NodeConnection[size];
 		nodeThreadGroup.enumerate(nodeThreadList);
-		String match = address+":"+port;
 		for (NodeConnection node : nodeThreadList) {
-			if (match.equals(node.getConnection()) == true) {
+			if (address.equals(node.getConnection()) == true) {
 				ret = node;
 				break;
 			}

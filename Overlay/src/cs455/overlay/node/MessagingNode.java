@@ -118,9 +118,7 @@ public class MessagingNode {
 	 * Build the shortest path string.
 	 */
 	public String getShortestPath() {
-		String ret = "";
-		ret += server.getShortestPath();
-		return ret;
+		return server.getShortestPath();
 	}
 	
 	/**
@@ -151,7 +149,7 @@ public class MessagingNode {
 		try {
 			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "venus";
+			registryIP = "mars";
 		}
 		
 		try {

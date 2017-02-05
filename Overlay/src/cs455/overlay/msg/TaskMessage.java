@@ -10,22 +10,14 @@ public class TaskMessage extends Protocol {
 	 */
 	public TaskMessage(byte[] message) {
 		super();
-		switch(super.getStringType()) {
-			case "TASK_INITIATE":
-			case "TASK_COMPLETE":
-				this.setMessage(message);
-				break;
-			case "TASK_MESSAGE":
-				this.setMessage(message);
-				break;
-		}
+		this.setMessage(message);
 	}
 	
 	/**
 	 * Make the TaskMessage either a TASK_INITIATE or TASK_COMPLETE
-	 * @param
+	 * @param number
 	 * 			The number of rounds.
-	 * @param
+	 * @param type
 	 * 			0 for TASK_INITIATE
 	 * 			1 for TASK_COMPLETE
 	 */
@@ -34,16 +26,18 @@ public class TaskMessage extends Protocol {
 		switch(type) {
 			case 0:
 				this.setType("TASK_INITIATE");
-				this.convertNumber(number);
 				break;
 			case 1:
 				this.setType("TASK_COMPLETE");
 				break;
 		}
+		this.setNumber(number);
 	}
 	
 	/**
 	 * Make the TaskMessage a TASK_MESSAGE
+	 * @param dest
+	 * 			string "ip:port"
 	 * @param number
 	 * 			random number for message
 	 */
@@ -57,57 +51,33 @@ public class TaskMessage extends Protocol {
 	 * Convert the String and int into the message byte array.
 	 */
 	public void makeMessage(String dest, int i) {
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(output);
+		byte[] bytes = dest.getBytes();
+        int len = bytes.length;
 		try {
-			output.writeInt(i);
-	        byte[] identifierBytes = dest.getBytes();
-	        int elementLength = identifierBytes.length;
-	        output.writeInt(elementLength);
-	        output.write(identifierBytes);
-			this.message = byteOutputStream.toByteArray();
-			byteOutputStream.close();
-			output.close();
+			out.writeInt(i);
+			out.writeInt(len);
+			out.write(bytes);
 		} catch (IOException e){
 			System.err.println(e.toString());
 		}
+		message = output.toByteArray();
 	}
 	
 	/**
 	 * Convert the int into the message byte array.
 	 */
-	public void convertNumber(int i) {
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
+	public void setNumber(int i) {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(output);
 		try {
-			output.writeInt(i);
-			this.message = byteOutputStream.toByteArray();
-			byteOutputStream.close();
-			output.close();
+			out.writeInt(i);
+			out.writeInt(0);
 		} catch (IOException e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Gets the String from the message byte array.
-	 * @return String of message destination.
-	 */
-	public String getDest(){
-		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(message);
-		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
-		byte[] bytes = null;
-		try {
-			input.readInt();
-	        int identifierLength = input.readInt();
-	        bytes = new byte[identifierLength];
-	        input.readFully(bytes);
-			byteInputStream.close();
-			input.close();
-		} catch (IOException e) {
-			System.out.println(e.toString());
-		}
-		return new String(bytes);
+		message = output.toByteArray();
 	}
 	
 	/**
@@ -116,16 +86,35 @@ public class TaskMessage extends Protocol {
 	 */
 	public int getNumber() {
 		int ret = 0;
-		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(message);
-		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
 		try {
-			ret = input.readInt();
-			byteInputStream.close();
-			input.close();
+			ret = in.readInt();
 		} catch (IOException e) {
-			System.out.println();
+			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 		return ret;
+	}
+	
+	/**
+	 * Gets the String from the message byte array.
+	 * @return String of message destination.
+	 */
+	public String getDest(){
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
+		byte[] bytes = null;
+		try {
+			in.readInt();
+	        int identifierLength = in.readInt();
+	        bytes = new byte[identifierLength];
+	        in.readFully(bytes);
+		} catch (IOException e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
+		return new String(bytes);
 	}
 	
 }

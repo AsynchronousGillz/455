@@ -206,7 +206,15 @@ public class RegistryServer extends AbstractServer {
 	public void sendStart(int numberOfRounds) {
 		if (numberOfRounds == 0)
 			return;
-		this.sendToAllNodes(new TaskMessage(numberOfRounds, 0));
+		if (connectionList.getValidOverlay() == false) {
+			System.err.println("Overlay has not been constructed.");
+			return;
+		}
+		if (connectionList.getOverlaySent() == false) {
+			System.err.println("Overlay has not yet been sent.");
+			return;
+		}
+		super.sendToAllNodes(new TaskMessage(numberOfRounds, 0));
 	}
 	
 	/**
@@ -219,9 +227,8 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
 		String message = (status)?"True":"False";
-		Registation m = new Registation(message, 2);
 		try {
-			client.sendToNode(m);
+			client.sendToNode(new Registation(message, 2));
 		} catch (IOException e) {
 			System.err.println(e.toString());
 		}

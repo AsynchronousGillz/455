@@ -100,8 +100,7 @@ public class Registry {
 				break;
 			case "start":
 				if (tokens.length == 2) {
-					int numberOfRounds = server.validateInput(tokens[1]);
-					server.sendStart(numberOfRounds);
+					server.sendStart(server.validateInput(tokens[1]));
 				} else {
 					this.invalid(message);
 				}
