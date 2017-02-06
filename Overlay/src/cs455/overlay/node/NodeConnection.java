@@ -76,7 +76,7 @@ public class NodeConnection extends Thread {
 	/**
 	 * Debug this.
 	 */
-	private final boolean debug = true;
+	private final boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -136,7 +136,6 @@ public class NodeConnection extends Thread {
 		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
-			output.flush();
 		}
 	}
 
@@ -333,7 +332,7 @@ public class NodeConnection extends Thread {
 					bytes = new byte[byteSize];
 					input.readFully(bytes, 0, byteSize);
 				}
-				server.receiveMessageFromNode(new Protocol(bytes), this);
+				server.MessageFromNode(new Protocol(bytes), this);
 			}
 		} catch (EOFException ex) {
 			close();

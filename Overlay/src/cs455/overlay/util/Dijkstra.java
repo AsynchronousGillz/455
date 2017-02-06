@@ -158,7 +158,7 @@ public class Dijkstra {
 	 */
 	public String getNextHop(String dest) {
 		Node node = graph.getNode(dest);
-		if (dest.equals(node.toString()))
+		if (node.path.size() == 1)
 			return node.toString();
 		return node.path.get(1).toString();
 	}

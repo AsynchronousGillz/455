@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.StatisticsCollector;
 
 /**
  * 
@@ -63,7 +64,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = true;
+	final private boolean debug = false;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -124,7 +125,6 @@ public class NodeClient implements Runnable {
 		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
-			output.flush();
 		}
 	}
 
@@ -424,6 +424,20 @@ public class NodeClient implements Runnable {
 			System.err.println("Could not send TASK_COMPLETE.");
 		}
 	}
+	
+	/**
+	 * Recives the PULL_TRAFFIC_SUMMARY message from the registry server
+	 * pulls the stats from the local {@link StatisticsCollector} and sends 
+	 * them back to the registry server.
+	 *
+	 * @param o
+	 * 		the PULL_TRAFFIC_SUMMARY Message
+	 */
+	private void getInfo(Registation o) {
+		if (debug)
+			System.out.print(o);
+		System.out.println(nodeServer.getStats()); //DEBUG
+	}
 
 	/**
 	 * Handles a message sent from the server to this node.
@@ -454,6 +468,9 @@ public class NodeClient implements Runnable {
 				break;
 			case "TASK_INITIATE":
 				startMessaging(m.convertToInitiate());
+				break;
+			case "PULL_TRAFFIC_SUMMARY":
+				getInfo(m.convertToRegistation());
 				break;
 			default:
 		}

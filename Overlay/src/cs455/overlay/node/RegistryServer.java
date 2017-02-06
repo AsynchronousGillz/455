@@ -293,15 +293,16 @@ public class RegistryServer extends AbstractServer {
 		if (debug)
 			System.out.println(m);
 		client.setComplete();
+		System.out.println("Client: "+m.toString()+" has finshed sending.");
 		boolean complete = true;
 		for (NodeConnection node : super.getNodeConnections()) {
 			complete = (node.getComplete() && complete);
 		}
-		try {
-			if (complete == true)
-				Thread.sleep(5000);
-		} catch (InterruptedException e) {}
-		// SEND PULL_TRAFFIC_SUMMARY
+		if (complete == false)
+			return;
+		this.sleep(5000);
+		System.out.println("Task Complete."); //DEBUG
+		this.sendToAllNodes(new Registation("Task Complete.", 4));
 	}
 
 	@Override

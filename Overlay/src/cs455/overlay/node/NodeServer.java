@@ -119,11 +119,11 @@ public class NodeServer extends AbstractServer {
 			String target = dijkstra.getRandomNode();
 			String nextHop = dijkstra.getNextHop(target);
 			NodeConnection node = super.getConnection(nextHop);
-			System.out.println("target: "+target+" nextHop: "+nextHop+" node: "+node);
 			for (int count = 0; count < 5; count++) {
 				int random = rand.nextInt();
 				try {
 					node.sendToNode(new TaskMessage(target, random));
+					stats.addSent(random);
 				} catch (IOException e) {
 					System.out.println(e.toString());
 					e.printStackTrace();
@@ -133,7 +133,27 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 * Start sending messages.
+	 * Test sending messages to host with 0 hops.
+	 */
+	public void testTask() {
+		System.out.println("TEST TASK.");
+		Random rand = new Random();
+		String target = super.getConnectionNames()[0];
+		NodeConnection node = super.getConnection(target);
+		System.out.println("Target: "+target+" node: "+node);
+		for (int count = 0; count < 5; count++) {
+			int random = rand.nextInt();
+			try {
+				node.sendToNode(new TaskMessage(target, random));
+			} catch (IOException e) {
+				System.out.println(e.toString());
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Test sending messages to any host in the overlay.
 	 */
 	public void testMessaging() {
 		System.out.println("TEST MESSAGING.");
@@ -152,26 +172,7 @@ public class NodeServer extends AbstractServer {
 			}
 		}
 	}
-	
-	/**
-	 * Start sending messages.
-	 */
-	public void testTask() {
-		System.out.println("TEST TASK.");
-		Random rand = new Random();
-		String target = super.getConnectionNames()[0];
-		NodeConnection node = super.getConnection(target);
-		System.out.println("Target: "+target+" node: "+node);
-		for (int count = 0; count < 5; count++) {
-			int random = rand.nextInt();
-			try {
-				node.sendToNode(new TaskMessage(target, random));
-			} catch (IOException e) {
-				System.out.println(e.toString());
-				e.printStackTrace();
-			}
-		}
-	}
+
 	
 	// HOOK METHODS -----------------------------------------------------
 	/**

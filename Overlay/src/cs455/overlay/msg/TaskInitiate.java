@@ -3,6 +3,7 @@ package cs455.overlay.msg;
 import java.io.*;
 
 public class TaskInitiate extends Protocol {
+	
 	/**
 	 * Convert from a {@link Protocol} to a {@link TaskInitiate}
 	 * @param message

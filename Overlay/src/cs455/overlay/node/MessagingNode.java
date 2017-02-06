@@ -80,6 +80,15 @@ public class MessagingNode {
 					this.invalid(message);
 				}
 				break;
+			case "get-stats": case "stats":
+				if (tokens.length == 1) {
+					String[] info = server.getConnectionNames();
+					for (String i : info)
+						System.out.println(i);
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "get-paths":
 				if (tokens.length == 1) {
 					String[] info = server.getConnectionNames();

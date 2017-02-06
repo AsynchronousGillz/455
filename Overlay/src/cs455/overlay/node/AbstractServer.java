@@ -131,6 +131,17 @@ public abstract class AbstractServer extends Thread {
 	final public void stopListening() {
 		stop = true;
 	}
+	
+	/**
+	 * Causes the server to stop accepting new connections.
+	 */
+	final public void sleep(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Closes the server socket and the connections with all clients. Any
@@ -508,26 +519,8 @@ public abstract class AbstractServer extends Thread {
 	 * @param client
 	 *            the connection connected to the client that sent the message.
 	 */
+
 	protected abstract void MessageFromNode(Object msg, NodeConnection client);
-
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Receives a command sent from the client to the server. Called by the run
-	 * method of NodeConnection instances that are watching for
-	 * messages coming from the server. This method is synchronized to ensure
-	 * that whatever effects it has do not conflict with work being done by
-	 * other threads. The method simply calls the
-	 * <code>MessageFromNode</code> slot method.
-	 *
-	 * @param msg
-	 *            the message sent.
-	 * @param client
-	 *            the connection connected to the client that sent the message.
-	 */
-	final synchronized void receiveMessageFromNode(Object msg, NodeConnection client) {
-		this.MessageFromNode(msg, client);
-	}
 
 }
 // End of AbstractServer Class

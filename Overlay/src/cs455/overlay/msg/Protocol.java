@@ -92,7 +92,7 @@ public class Protocol {
 	//******************************************************************************
 
 	public Registation convertToRegistation() {
-		return new Registation(new String(message), type);
+		return new Registation(message, type);
 	}
 
 	public Overlay convertToOverlay() {
