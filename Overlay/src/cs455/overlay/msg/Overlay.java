@@ -70,10 +70,12 @@ public class Overlay extends Protocol {
 				out.writeInt(n.length());
 				out.write(n.getBytes());
 			}
+			super.setMessage(output.toByteArray());
+			output.close();
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		super.setMessage(output.toByteArray());
 	}
 	
 	/**
@@ -93,6 +95,8 @@ public class Overlay extends Protocol {
 				in.readFully(bytes, 0, length);
 				ret[i] = new String(bytes);
 			}
+			input.close();
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,6 +119,8 @@ public class Overlay extends Protocol {
 				in.readFully(bytes, 0, length);
 				sb.append(new String(bytes)+"\n");
 			}
+			input.close();
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

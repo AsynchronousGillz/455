@@ -1,10 +1,9 @@
-// File name NodeServer.java
 package cs455.overlay.node;
 
 import java.text.*;
 import java.util.*;
 import java.io.*;
-import java.net.Socket;
+import java.net.*;
 
 import cs455.overlay.msg.*;
 import cs455.overlay.util.*;

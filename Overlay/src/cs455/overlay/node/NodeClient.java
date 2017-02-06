@@ -1,5 +1,3 @@
-// File name NodeClient.java
-
 package cs455.overlay.node;
 
 import java.io.*;
@@ -65,7 +63,7 @@ public class NodeClient implements Runnable {
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = false;
+	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -123,8 +121,11 @@ public class NodeClient implements Runnable {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
-		output.writeInt(bytes.length);
-		output.write(bytes, 0, bytes.length);
+		synchronized (output) {
+			output.writeInt(bytes.length);
+			output.write(bytes, 0, bytes.length);
+			output.flush();
+		}
 	}
 
 	/**
@@ -215,9 +216,12 @@ public class NodeClient implements Runnable {
 
 		try {
 			while (stop == false) {
-				int byteSize = input.readInt();
-				byte[] bytes = new byte[byteSize];
-				input.readFully(bytes, 0, byteSize);
+				byte[] bytes = null;
+				synchronized (input) {
+					int byteSize = input.readInt();
+					bytes = new byte[byteSize];
+					input.readFully(bytes, 0, byteSize);
+				}
 				messageFromServer(new Protocol(bytes));
 			}
 		} catch (Exception exception) {
@@ -323,10 +327,6 @@ public class NodeClient implements Runnable {
 			if (input != null)
 				input.close();
 		} finally {
-			// Set the streams and the sockets to NULL no matter what
-			// Doing so allows, but does not require, any finalizers
-			// of these objects to reclaim system resources if and
-			// when they are garbage collected.
 			output = null;
 			input = null;
 			nodeSocket = null;

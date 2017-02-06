@@ -34,6 +34,8 @@ public class TaskInitiate extends Protocol {
 		try {
 			out.writeInt(i);
 			out.writeInt(0);
+			output.close();
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -50,6 +52,8 @@ public class TaskInitiate extends Protocol {
 		DataInputStream in = new DataInputStream(input);
 		try {
 			ret = in.readInt();
+			input.close();
+			in.close();
 		} catch (IOException e) {
 			System.out.println(e.toString());
 			e.printStackTrace();

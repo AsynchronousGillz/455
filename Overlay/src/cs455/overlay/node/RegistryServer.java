@@ -1,4 +1,3 @@
-// File Name RegistryServer.java
 package cs455.overlay.node;
 
 /**

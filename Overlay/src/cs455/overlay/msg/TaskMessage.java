@@ -56,9 +56,9 @@ public class TaskMessage extends Protocol {
 		byte[] bytes = null;
 		try {
 			in.readInt();
-			int identifierLength = in.readInt();
-			bytes = new byte[identifierLength];
-			in.readFully(bytes);
+			int len = in.readInt();
+			bytes = new byte[len];
+			in.readFully(bytes, 0, len);
 		} catch (IOException e) {
 			System.out.println(e.toString());
 			e.printStackTrace();

@@ -65,7 +65,7 @@ public class Registry {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "list-messaging":
+			case "list-messaging": case "list":
 				if (tokens.length == 1) {
 					System.out.print(server.getList());
 				} else if (tokens.length == 2) {

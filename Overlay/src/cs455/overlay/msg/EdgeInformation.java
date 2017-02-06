@@ -46,6 +46,8 @@ public class EdgeInformation extends Protocol {
 			try {
 				out.writeInt(cost);
 				out.writeInt(port);
+				output.close();
+				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -63,6 +65,8 @@ public class EdgeInformation extends Protocol {
 			try {
 				in.readInt();
 				ret = in.readInt();
+				input.close();
+				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -79,6 +83,8 @@ public class EdgeInformation extends Protocol {
 			DataInputStream in = new DataInputStream(input);
 			try {
 				ret = in.readInt();
+				input.close();
+				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -94,6 +100,8 @@ public class EdgeInformation extends Protocol {
 			DataInputStream in = new DataInputStream(input);
 			try {
 				ret = in.readInt()+" "+in.readInt();
+				input.close();
+				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

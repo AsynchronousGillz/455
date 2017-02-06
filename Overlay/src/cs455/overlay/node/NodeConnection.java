@@ -76,7 +76,7 @@ public class NodeConnection extends Thread {
 	/**
 	 * Debug this.
 	 */
-	private final boolean debug = false;
+	private final boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -133,9 +133,10 @@ public class NodeConnection extends Thread {
 		if (debug)
 			System.out.println(msg.toString());
 		byte[] bytes = msg.makeBytes();
-		synchronized (nodeSocket) {
+		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
+			output.flush();
 		}
 	}
 
@@ -327,7 +328,7 @@ public class NodeConnection extends Thread {
 			int byteSize;
 			while (complete == false) {
 				byte[] bytes = null;
-				synchronized (nodeSocket) {
+				synchronized (input) {
 					byteSize = input.readInt();
 					bytes = new byte[byteSize];
 					input.readFully(bytes, 0, byteSize);
