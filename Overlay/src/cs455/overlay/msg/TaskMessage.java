@@ -2,10 +2,10 @@ package cs455.overlay.msg;
 
 import java.io.*;
 
-public class TaskMessage extends Protocol {
+public class TaskMessage extends ProtocolMessage {
 	
 	/**
-	 * Convert from a {@link Protocol} to a {@link TaskMessage}
+	 * Convert from a {@link ProtocolMessage} to a {@link TaskMessage}
 	 * @param message
 	 * 			message in bye form
 	 */

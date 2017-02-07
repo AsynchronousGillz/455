@@ -1,9 +1,9 @@
 package cs455.overlay.msg;
 
-public class Registation extends Protocol {
+public class RegistationMessage extends ProtocolMessage {
 
 	/**
-	 * Convert from a {@link Protocol} to a {@link Registation}
+	 * Convert from a {@link ProtocolMessage} to a {@link RegistationMessage}
 	 * @param message
 	 * 			message in bye form
 	 * @param type
@@ -13,7 +13,7 @@ public class Registation extends Protocol {
 	 * 			3 for TASK_COMPLETE
 	 * 			4 for PULL_TRAFFIC_SUMMARY
 	 */
-	public Registation(byte[] message, int type) {
+	public RegistationMessage(byte[] message, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -24,8 +24,6 @@ public class Registation extends Protocol {
 				break;
 			case 2:
 				this.setType("REGISTER_RESPONSE");
-				byte i = (message.equals("True")) ? (byte)1 : (byte)0 ;
-				this.setIndicator(i);
 				break;
 			case 3:
 				this.setType("TASK_COMPLETE");
@@ -47,7 +45,7 @@ public class Registation extends Protocol {
 	 * 			3 for TASK_COMPLETE
 	 * 			4 for PULL_TRAFFIC_SUMMARY
 	 */
-	public Registation(String message, int type) {
+	public RegistationMessage(String message, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -58,8 +56,6 @@ public class Registation extends Protocol {
 				break;
 			case 2:
 				this.setType("REGISTER_RESPONSE");
-				byte i = (message.equals("True")) ? (byte)1 : (byte)0 ;
-				this.setIndicator(i);
 				break;
 			case 3:
 				this.setType("TASK_COMPLETE");
@@ -69,13 +65,6 @@ public class Registation extends Protocol {
 				break;
 		}
 		this.setMessage(message.getBytes());
-	}
-	
-	public boolean checkResponse() {
-		if (getIndicator() == 0)
-			return false;
-		else
-			return true;
 	}
 	
 	public String getMessageString() {

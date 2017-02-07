@@ -70,7 +70,7 @@ public class RegistryServer extends AbstractServer {
 		for (NodeConnection node : connectionList.getData()) {
 			String[] info = connectionList.getRegistration(node);
 			try {
-				node.sendToNode(new Overlay(info, 0));
+				node.sendToNode(new OverlayMessage(info, 0));
 			} catch (IOException e) {
 				System.out.println("Error: Could not send overlay to node: "+node);
 			}
@@ -79,7 +79,7 @@ public class RegistryServer extends AbstractServer {
 		try {
 			info = connectionList.getList();
 		} catch (Exception e) {}
-		super.sendToAllNodes(new Overlay(info, 2));
+		super.sendToAllNodes(new OverlayMessage(info, 2));
 		System.out.println("The overlay has been succesfully setup.");
 	}
 
@@ -191,7 +191,7 @@ public class RegistryServer extends AbstractServer {
 			System.err.println(e.getMessage());
 			return;
 		}
-		this.sendToAllNodes(new Overlay(info, 1));
+		this.sendToAllNodes(new OverlayMessage(info, 1));
 		connectionList.setOverlaySent();
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
@@ -213,7 +213,7 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Overlay has not yet been sent.");
 			return;
 		}
-		super.sendToAllNodes(new TaskInitiate(numberOfRounds));
+		super.sendToAllNodes(new InitiateMessage(numberOfRounds));
 	}
 	
 	/**
@@ -227,7 +227,7 @@ public class RegistryServer extends AbstractServer {
 	public void sendRegistrationResponse(boolean status, NodeConnection client) {
 		String message = (status)?"True":"False";
 		try {
-			client.sendToNode(new Registation(message, 2));
+			client.sendToNode(new RegistationMessage(message, 2));
 		} catch (IOException e) {
 			System.err.println(e.toString());
 		}
@@ -241,7 +241,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void registerNode(Registation m, NodeConnection client) {
+	public void registerNode(RegistationMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
 		if (registationCheck == true) {
@@ -267,7 +267,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void unregisterNode(Registation m, NodeConnection client) {
+	public void unregisterNode(RegistationMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
 		String[] tokens = m.getMessageString().split(" ");
@@ -289,11 +289,11 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void taskComplete(Registation m, NodeConnection client) {
+	public synchronized void taskComplete(RegistationMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
 		client.setComplete();
-		System.out.println("Client: "+m.toString()+" has finshed sending.");
+		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
 		for (NodeConnection node : super.getNodeConnections()) {
 			complete = (node.getComplete() && complete);
@@ -301,31 +301,24 @@ public class RegistryServer extends AbstractServer {
 		if (complete == false)
 			return;
 		this.sleep(5000);
-		System.out.println("Task Complete."); //DEBUG
-		this.sendToAllNodes(new Registation("Task Complete.", 4));
+		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {
-		if (o instanceof Protocol == false)
+		if (o instanceof ProtocolMessage == false)
 			return;
-		Protocol msg = (Protocol) o;
-		if (debug)
-			System.out.println(msg);
+		ProtocolMessage msg = (ProtocolMessage) o;
 		switch(msg.getStringType()) {
-			case "REGISTER_REQUEST": {
+			case "REGISTER_REQUEST":
 				registerNode(msg.convertToRegistation(), client);
 				break;
-			}
-			case "DEREGISTER_REQUEST": {
+			case "DEREGISTER_REQUEST":
 				unregisterNode(msg.convertToRegistation(), client);
 				break;
-			}
-			case "TASK_COMPLETE": {
+			case "TASK_COMPLETE":
 				taskComplete(msg.convertToRegistation(), client);
 				break;
-			}
-			default:
 		}
 	}
 	

@@ -180,12 +180,10 @@ public abstract class AbstractServer extends Thread {
 	 * @param msg
 	 *            Object The message to be sent
 	 */
-	public void sendToAllNodes(Protocol msg) {
-		NodeConnection[] clientThreadList = getNodeConnections();
-
-		for (int i = 0; i < clientThreadList.length; i++) {
+	public void sendToAllNodes(ProtocolMessage msg) {
+		for (NodeConnection node : getNodeConnections()) {
 			try {
-				clientThreadList[i].sendToNode(msg);
+				node.sendToNode(msg);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -412,15 +410,10 @@ public abstract class AbstractServer extends Thread {
 		serverStarted();
 
 		try {
-			// Repeatedly waits for a new client connection, accepts it, and
-			// starts a new thread to handle data exchange.
 			while (stop == false) {
 				try {
-					// Wait here for new connection attempts, or a timeout
 					Socket clientSocket = serverSocket.accept();
 
-					// When a client is accepted, create a thread to handle
-					// the data exchange, then add it to thread group
 					synchronized (this) {
 						new NodeConnection(this.nodeThreadGroup, clientSocket, this);
 					}

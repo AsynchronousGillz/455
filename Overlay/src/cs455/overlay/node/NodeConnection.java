@@ -127,7 +127,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occur when sending the message.
 	 */
-	final public void sendToNode(Protocol msg) throws IOException {
+	final public void sendToNode(ProtocolMessage msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		if (debug)
@@ -142,13 +142,9 @@ public class NodeConnection extends Thread {
 	/**
 	 * Closes the node. If the connection is already closed, this call has no
 	 * effect.
-	 * 
-	 * @exception IOException
-	 *                if an error occurs when closing the socket.
 	 */
 	final public void close() {
 		complete = true; // Set the flag that tells the thread to stop
-
 		try {
 			closeAll();
 		} catch (IOException ex) {
@@ -325,14 +321,14 @@ public class NodeConnection extends Thread {
 		server.nodeConnected(this);
 		try {
 			int byteSize;
-			while (complete == false) {
+			while (super.isInterrupted() == false) {
 				byte[] bytes = null;
 				synchronized (input) {
 					byteSize = input.readInt();
 					bytes = new byte[byteSize];
 					input.readFully(bytes, 0, byteSize);
 				}
-				server.MessageFromNode(new Protocol(bytes), this);
+				server.MessageFromNode(new ProtocolMessage(bytes), this);
 			}
 		} catch (EOFException ex) {
 			close();

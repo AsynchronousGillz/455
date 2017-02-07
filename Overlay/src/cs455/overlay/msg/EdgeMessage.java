@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class EdgeInformation extends Protocol {
+public class EdgeMessage extends ProtocolMessage {
 	
 	//******************************************************************************
 	
@@ -17,7 +17,7 @@ public class EdgeInformation extends Protocol {
 		 * @param weight
 		 * 			connection information int form
 		 */
-		public EdgeInformation(int port, int cost) {
+		public EdgeMessage(int port, int cost) {
 			super();
 			this.setType("SINGLE_WEIGHT");
 			convertMessage(port, cost);
@@ -28,14 +28,14 @@ public class EdgeInformation extends Protocol {
 		 * @param message
 		 * 			connection information in byte form.
 		 */
-		public EdgeInformation(byte[] message) {
+		public EdgeMessage(byte[] message) {
 			super();
 			this.setType("TASK_MESSAGE");
 			this.setMessage(message);
 		}
 		
 		/**
-		 * {@link EdgeInformation} contains the information when a link between nodes 
+		 * {@link EdgeMessage} contains the information when a link between nodes 
 		 * is setup and the cost and port of the server is sent over.
 		 * @param port
 		 * @param cost

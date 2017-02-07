@@ -2,14 +2,14 @@ package cs455.overlay.msg;
 
 import java.io.*;
 
-public class TaskInitiate extends Protocol {
+public class InitiateMessage extends ProtocolMessage {
 	
 	/**
-	 * Convert from a {@link Protocol} to a {@link TaskInitiate}
+	 * Convert from a {@link ProtocolMessage} to a {@link InitiateMessage}
 	 * @param message
 	 * 			message in bye form
 	 */
-	public TaskInitiate(byte[] message) {
+	public InitiateMessage(byte[] message) {
 		super();
 		this.setType("TASK_INITIATE");
 		this.setMessage(message);
@@ -20,7 +20,7 @@ public class TaskInitiate extends Protocol {
 	 * @param number
 	 * 			The number of rounds.
 	 */
-	public TaskInitiate(int number) {
+	public InitiateMessage(int number) {
 		super();
 		this.setType("TASK_INITIATE");
 		this.setNumber(number);

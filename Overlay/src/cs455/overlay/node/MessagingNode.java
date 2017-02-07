@@ -82,9 +82,7 @@ public class MessagingNode {
 				break;
 			case "get-stats": case "stats":
 				if (tokens.length == 1) {
-					String[] info = server.getConnectionNames();
-					for (String i : info)
-						System.out.println(i);
+					System.out.println(server.getStats());
 				} else {
 					this.invalid(message);
 				}

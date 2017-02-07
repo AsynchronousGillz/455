@@ -13,7 +13,7 @@ import cs455.overlay.util.StatisticsCollector;
  * @see MessagingNode.NodeMain
  */
 
-public class NodeClient implements Runnable {
+public class NodeClient extends Thread {
 
 	// INSTANCE VARIABLES ***********************************************
 
@@ -36,17 +36,6 @@ public class NodeClient implements Runnable {
 	private DataInputStream input;
 
 	/**
-	 * The thread created to read data from the server.
-	 */
-	private Thread nodeReader;
-
-	/**
-	 * Indicates if the thread is ready to stop. Needed so that the loop in the
-	 * run method knows when to stop waiting for incoming messages.
-	 */
-	private boolean stop = false;
-
-	/**
 	 * The server's host name.
 	 */
 	private String registryIP;
@@ -55,7 +44,7 @@ public class NodeClient implements Runnable {
 	 * The port number.
 	 */
 	private int registryPort;
-	
+
 	/**
 	 * The node server
 	 */
@@ -81,21 +70,6 @@ public class NodeClient implements Runnable {
 		this.nodeServer = nodeServer;
 		this.registryIP = registryIP;
 		this.registryPort = registryPort;
-		openConnection();
-	}
-
-	// INSTANCE METHODS *************************************************
-
-	/**
-	 * Opens the connection with the server. If the connection is already
-	 * opened, this call has no effect.
-	 */
-	final public void openConnection() {
-		// Do not do anything if the connection is already open
-		if (isConnected() == true)
-			return;
-
-		// Create the sockets and the data streams
 		try {
 			nodeSocket = new Socket(registryIP, registryPort);
 			output = new DataOutputStream(nodeSocket.getOutputStream());
@@ -103,10 +77,8 @@ public class NodeClient implements Runnable {
 		} catch (IOException ex) {
 			closeConnection();
 		}
-
-		nodeReader = new Thread(this); // Create the data reader thread
-		stop = false;
-		nodeReader.start(); // Start the thread
+		super.setName("client_" + nodeServer.getHost() + ":" + nodeServer.getPort());
+		this.start(); // Start the thread
 	}
 
 	/**
@@ -118,7 +90,7 @@ public class NodeClient implements Runnable {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final public void sendToServer(Protocol msg) throws IOException {
+	final public void sendToServer(ProtocolMessage msg) throws IOException {
 		if (nodeSocket == null || output == null)
 			throw new SocketException("socket does not exist");
 		byte[] bytes = msg.makeBytes();
@@ -135,9 +107,6 @@ public class NodeClient implements Runnable {
 	 *                if an I/O error occurs when closing.
 	 */
 	final public void closeConnection() {
-		// Prevent the thread from looping any more
-		stop = true;
-
 		try {
 			closeAll();
 		} catch (Exception exc) {
@@ -154,7 +123,7 @@ public class NodeClient implements Runnable {
 	 * @return true if the node is connnected.
 	 */
 	final public boolean isConnected() {
-		return nodeReader != null && nodeReader.isAlive();
+		return this.isAlive();
 	}
 
 	/**
@@ -215,20 +184,18 @@ public class NodeClient implements Runnable {
 		connectionEstablished();
 
 		try {
-			while (stop == false) {
+			while (super.isInterrupted() == false) {
 				byte[] bytes = null;
 				synchronized (input) {
 					int byteSize = input.readInt();
 					bytes = new byte[byteSize];
 					input.readFully(bytes, 0, byteSize);
 				}
-				messageFromServer(new Protocol(bytes));
+				messageFromServer(new ProtocolMessage(bytes));
 			}
 		} catch (Exception exception) {
 			close(1);
 			connectionException(exception);
-		} finally {
-			nodeReader = null;
 		}
 	}
 
@@ -254,10 +221,9 @@ public class NodeClient implements Runnable {
 	protected void connectionEstablished() {
 		if (nodeSocket == null)
 			return;
-		String info = nodeServer.getHost()+" "+nodeServer.getPort();
-		Registation m = new Registation(info, 0);
+		String info = nodeServer.getHost() + " " + nodeServer.getPort();
 		try {
-			sendToServer(m);
+			sendToServer(new RegistationMessage(info, 0));
 		} catch (IOException e) {
 			System.err.println("Could not send Registration.");
 		}
@@ -269,10 +235,9 @@ public class NodeClient implements Runnable {
 	protected void connectionClosed() {
 		if (nodeSocket == null)
 			return;
-		String info = nodeServer.getHost()+" "+nodeServer.getPort();
-		Registation m = new Registation(info, 1);
+		String info = nodeServer.getHost() + " " + nodeServer.getPort();
 		try {
-			sendToServer(m);
+			sendToServer(new RegistationMessage(info, 1));
 		} catch (IOException e) {
 			System.err.println("Could not send Deregistration.");
 		}
@@ -283,15 +248,13 @@ public class NodeClient implements Runnable {
 	/**
 	 * Closes the node. If the connection is already closed, this call has no
 	 * effect.
+	 * 
 	 * @param node
-	 * 			0 for exit
-	 * 			1 for error 
+	 *            0 for exit 1 for error
 	 * @exception IOException
-	 * 			if an error occurs when closing the socket.
+	 *                if an error occurs when closing the socket.
 	 */
 	final public void close(int mode) {
-		stop = true; // Set the flag that tells the thread to stop
-
 		try {
 			closeAll();
 		} catch (IOException ex) {
@@ -335,144 +298,142 @@ public class NodeClient implements Runnable {
 
 	// ----------------------------------------------------------
 
-
 	public void unregister() {
 		if (nodeSocket == null)
 			return;
-		String info = nodeServer.getHost()+" "+nodeServer.getPort();
+		String info = nodeServer.getHost() + " " + nodeServer.getPort();
 		try {
-			sendToServer(new Registation(info, 1));
+			sendToServer(new RegistationMessage(info, 1));
 		} catch (IOException e) {
 			System.err.println("Could not send Registration.");
 		}
 		close(0);
 	}
-	
+
 	/**
 	 * Handles a the response message sent from the server to this node.
 	 * 
 	 * @param m
 	 *            the message sent.
 	 */
-	private void registerResponse(Registation m) {
+	private void registerResponse(RegistationMessage m) {
 		if (debug)
-			System.out.println(m.getMessageString());;
+			System.out.println(m.getMessageString());
+		;
 		if (m.getMessage().equals("False")) {
 			close(0);
 		}
 	}
-	
+
 	/**
-	 * Handles a the overlay message sent from the server.
-	 * This Message contains all of the nodes in the Overlay.
+	 * Handles a the overlay message sent from the server. This Message contains
+	 * all of the nodes in the Overlay.
 	 * 
 	 * @param o
-	 * 			the overlay message sent.
+	 *            the overlay message sent.
 	 */
-	private void registerNodes(Overlay o) {
+	private void registerNodes(OverlayMessage o) {
 		if (debug)
 			System.out.print(o);
 		nodeServer.makeDijkstra(o.getString());
 	}
-	
+
 	/**
-	 * Handles a the overlay message sent from the server. With 
-	 * information about the connections within the overlay.
+	 * Handles a the overlay message sent from the server. With information
+	 * about the connections within the overlay.
+	 * 
 	 * @param o
 	 *            the overlay message sent.
 	 */
-	private void registerConnections(Overlay o) {
+	private void registerConnections(OverlayMessage o) {
 		if (debug)
 			System.out.print(o);
 		nodeServer.setInfo(o.getString());
 		nodeServer.setStats();
 	}
-	
+
 	/**
-	 * Handles a the Weight message sent from the server. With 
-	 * information about the weights of the connections within 
-	 * the overlay.
+	 * Handles a the Weight message sent from the server. With information about
+	 * the weights of the connections within the overlay.
 	 * 
 	 * @param o
 	 *            the EdgeInformation message sent.
 	 */
-	private void registerWeights(Overlay o) {
+	private void registerWeights(OverlayMessage o) {
 		if (debug)
 			System.out.print(o);
 		nodeServer.setWeights(o.getString());
 	}
-	
+
 	/**
-	 * Recives the TASK_INITIATE message from the registry server
-	 * pulls the number of rounds out of the message and then should 
-	 * send 5 * numberOfRounds, messages to random node in the overlay.
-	 * Then once done sending the messages it will send the TASK_COMPLETE
-	 * message back to the server.
+	 * Recives the TASK_INITIATE message from the registry server pulls the
+	 * number of rounds out of the message and then should send 5 *
+	 * numberOfRounds, messages to random node in the overlay. Then once done
+	 * sending the messages it will send the TASK_COMPLETE message back to the
+	 * server.
 	 *
 	 * @param o
-	 * 		the TASK_INITIATE Message
+	 *            the TASK_INITIATE Message
 	 */
-	private void startMessaging(TaskInitiate o) {
+	private void startMessaging(InitiateMessage o) {
 		if (debug)
 			System.out.print(o);
 		int i = o.getNumber();
 		nodeServer.startMessaging(i);
-		String info = nodeServer.getHost()+" "+nodeServer.getPort();
+		String info = nodeServer.getHost() + " " + nodeServer.getPort();
 		try {
-			sendToServer(new Registation(info, 3));
+			sendToServer(new RegistationMessage(info, 3));
 		} catch (IOException e) {
 			System.err.println("Could not send TASK_COMPLETE.");
 		}
 	}
-	
+
 	/**
-	 * Recives the PULL_TRAFFIC_SUMMARY message from the registry server
-	 * pulls the stats from the local {@link StatisticsCollector} and sends 
-	 * them back to the registry server.
+	 * Recives the PULL_TRAFFIC_SUMMARY message from the registry server pulls
+	 * the stats from the local {@link StatisticsCollector} and sends them back
+	 * to the registry server.
 	 *
 	 * @param o
-	 * 		the PULL_TRAFFIC_SUMMARY Message
+	 *            the PULL_TRAFFIC_SUMMARY Message
 	 */
-	private void getInfo(Registation o) {
+	private void getInfo(RegistationMessage o) {
 		if (debug)
 			System.out.print(o);
-		System.out.println(nodeServer.getStats()); //DEBUG
+		System.out.println(nodeServer.getStats()); // DEBUG
 	}
 
 	/**
 	 * Handles a message sent from the server to this node.
 	 * 
-	 * Then checks if the message is a protocol then if so
-	 * converts it to a Protocol. Then switch based on the 
-	 * message type. 
+	 * Then checks if the message is a protocol then if so converts it to a
+	 * Protocol. Then switch based on the message type.
 	 * 
 	 * @param o
 	 *            the incoming message.
 	 */
 	protected void messageFromServer(Object o) {
-		if (o instanceof Protocol == false)
+		if (o instanceof ProtocolMessage == false)
 			return;
-		Protocol m = (Protocol) o;
+		ProtocolMessage m = (ProtocolMessage) o;
 		switch (m.getStringType()) {
-			case "REGISTER_RESPONSE":
-				registerResponse(m.convertToRegistation());
-				break;
-			case "MESSAGING_NODES":
-				registerNodes(m.convertToOverlay());
-				break;
-			case "MESSAGING_NODES_LIST":
-				registerConnections(m.convertToOverlay());
-				break;
-			case "LINK_WEIGHTS":
-				registerWeights(m.convertToOverlay());
-				break;
-			case "TASK_INITIATE":
-				startMessaging(m.convertToInitiate());
-				break;
-			case "PULL_TRAFFIC_SUMMARY":
-				getInfo(m.convertToRegistation());
-				break;
-			default:
+		case "REGISTER_RESPONSE":
+			registerResponse(m.convertToRegistation());
+			break;
+		case "MESSAGING_NODES":
+			registerNodes(m.convertToOverlay());
+			break;
+		case "MESSAGING_NODES_LIST":
+			registerConnections(m.convertToOverlay());
+			break;
+		case "LINK_WEIGHTS":
+			registerWeights(m.convertToOverlay());
+			break;
+		case "TASK_INITIATE":
+			startMessaging(m.convertToInitiate());
+			break;
+		case "PULL_TRAFFIC_SUMMARY":
+			getInfo(m.convertToRegistation());
+			break;
 		}
 	}
 

@@ -4,12 +4,11 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class Protocol {
+public class ProtocolMessage {
 
 
 	protected int type;
 	protected long time;
-	protected byte indicator;
 	protected byte[] message;
 
 	protected final String[] Types = { 
@@ -27,18 +26,33 @@ public class Protocol {
 		"TRAFFIC_SUMMARY"
 	};
 
-	public Protocol() {
+	public ProtocolMessage() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		dateFormat.format(date);// 2016/11/16 12:08:43
 		time = date.getTime();
 	}
-
-	public Protocol(byte[] bytes) {
+	
+	/**
+	 * Takes the bytes sent on the socket and assigns values.
+	 * 
+	 * @param bytes byte array from socket.
+	 * @throws IOException
+	 */
+	public ProtocolMessage(byte[] bytes) {
+		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
+		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
 		try {
-			makeObject(bytes);
-		} catch (Exception e) {
-			System.err.println(e.toString());
+			this.type = input.readInt();
+			this.time = input.readLong();
+			int identifierLength = input.readInt();
+			byte[] messageBytes = new byte[identifierLength];
+			input.readFully(messageBytes);
+			this.message = messageBytes;
+			byteInputStream.close();
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -46,14 +60,6 @@ public class Protocol {
 
 	public int getType() {
 		return type;
-	}
-
-	public void setIndicator(byte i) {
-		this.indicator = i;
-	}
-
-	public byte getIndicator() {
-		return indicator;
 	}
 
 	public String getStringType() {
@@ -91,23 +97,23 @@ public class Protocol {
 
 	//******************************************************************************
 
-	public Registation convertToRegistation() {
-		return new Registation(message, type);
+	public RegistationMessage convertToRegistation() {
+		return new RegistationMessage(message, type);
 	}
 
-	public Overlay convertToOverlay() {
-		return new Overlay(message, type);
+	public OverlayMessage convertToOverlay() {
+		return new OverlayMessage(message, type);
 	}
 
-	public EdgeInformation convertToEdgeInformation() {
-		return new EdgeInformation(message);
+	public EdgeMessage convertToEdgeInformation() {
+		return new EdgeMessage(message);
 	}
 
-	public TaskInitiate convertToInitiate() {
-		return new TaskInitiate(message);
+	public InitiateMessage convertToInitiate() {
+		return new InitiateMessage(message);
 	}
 
-	public TaskMessage convertToMessage() {
+	public TaskMessage convertToTask() {
 		return new TaskMessage(message);
 	}
 
@@ -135,24 +141,5 @@ public class Protocol {
 		output.close();
 		return bytes;
 	}
-
-	/**
-	 * Takes the bytes sent on the socket and assigns values.
-	 * 
-	 * @param bytes byte array from socket.
-	 * @throws IOException
-	 */
-	public final void makeObject(byte[] bytes) throws IOException {
-		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
-		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
-		this.type = input.readInt();
-		this.time = input.readLong();
-		int identifierLength = input.readInt();
-		byte[] messageBytes = new byte[identifierLength];
-		input.readFully(messageBytes);
-		this.message = messageBytes;
-		byteInputStream.close();
-		input.close();
-	}
-
+	
 }

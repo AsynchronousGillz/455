@@ -2,7 +2,7 @@ package cs455.overlay.msg;
 
 import java.io.*;
 
-public class Overlay extends Protocol {
+public class OverlayMessage extends ProtocolMessage {
 	
 	
 	//******************************************************************************
@@ -16,7 +16,7 @@ public class Overlay extends Protocol {
 	 * 			1 for LINK_WEIGHTS
 	 * 			2 for MESSAGING_NODES
 	 */
-	public Overlay(byte[] message, int type) {
+	public OverlayMessage(byte[] message, int type) {
 		super();
 		switch(type) {
 			case 0: 
@@ -41,7 +41,7 @@ public class Overlay extends Protocol {
 	 * 			1 for LINK_WEIGHTS
 	 * 			2 for MESSAGING_NODES
 	 */
-	public Overlay(String[] nodes, int type) {
+	public OverlayMessage(String[] nodes, int type) {
 		super();
 		switch(type) {
 			case 0: 

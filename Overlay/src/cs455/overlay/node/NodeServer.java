@@ -51,7 +51,7 @@ public class NodeServer extends AbstractServer {
 			int cost = super.validateInput(host[2]);
 			nodeConnection.setCost(cost);
 			try {
-				nodeConnection.sendToNode(new EdgeInformation(port, cost));
+				nodeConnection.sendToNode(new EdgeMessage(port, cost));
 			} catch (IOException e) {
 				System.err.println("Error when sending wieght information.");
 			}
@@ -114,21 +114,10 @@ public class NodeServer extends AbstractServer {
 	 * Start sending messages.
 	 */
 	public void startMessaging(int number) {
-		Random rand = new Random();
 		for (int i = 0; i < number; i++) {
 			String target = dijkstra.getRandomNode();
 			String nextHop = dijkstra.getNextHop(target);
-			NodeConnection node = super.getConnection(nextHop);
-			for (int count = 0; count < 5; count++) {
-				int random = rand.nextInt();
-				try {
-					node.sendToNode(new TaskMessage(target, random));
-					stats.addSent(random);
-				} catch (IOException e) {
-					System.out.println(e.toString());
-					e.printStackTrace();
-				}
-			}
+			sendTaskMessage(super.getConnection(nextHop), target);
 		}
 	}
 	
@@ -136,36 +125,47 @@ public class NodeServer extends AbstractServer {
 	 * Test sending messages to host with 0 hops.
 	 */
 	public void testTask() {
-		System.out.println("TEST TASK.");
-		Random rand = new Random();
-		String target = super.getConnectionNames()[0];
-		NodeConnection node = super.getConnection(target);
-		System.out.println("Target: "+target+" node: "+node);
-		for (int count = 0; count < 5; count++) {
-			int random = rand.nextInt();
-			try {
-				node.sendToNode(new TaskMessage(target, random));
-			} catch (IOException e) {
-				System.out.println(e.toString());
-				e.printStackTrace();
-			}
+		if (dijkstra == null) {
+			System.err.println("Overlay has not been setup yet.");
+			return;
 		}
+		System.out.println("TEST TASK.");
+		String target = super.getConnectionNames()[0];
+		sendTaskMessage(super.getConnection(target), target);
 	}
 	
 	/**
 	 * Test sending messages to any host in the overlay.
 	 */
 	public void testMessaging() {
+		if (dijkstra == null) {
+			System.err.println("Overlay has not been setup yet.");
+			return;
+		}
 		System.out.println("TEST MESSAGING.");
 		String target = dijkstra.getRandomNode();
 		String nextHop = dijkstra.getNextHop(target);
-		NodeConnection node = super.getConnection(nextHop);
-		System.out.println("Target: "+target+" nextHop: "+nextHop+" node: "+node);
+		sendTaskMessage(super.getConnection(nextHop), target);
+
+	}
+	
+	/**
+	 * Send the task message to the {@link NodeConnection} for the 
+	 * destination of target.
+	 * @param node
+	 * @param target
+	 */
+	private void sendTaskMessage(NodeConnection node, String target) {
+		if (debug)
+			System.out.println("Target: "+target+" node: "+node);
+		if (node == null)
+			System.err.println("sendTaskMessage: FIRE! FIRE!");
 		Random rand = new Random();
 		for (int count = 0; count < 5; count++) {
 			int random = rand.nextInt();
 			try {
 				node.sendToNode(new TaskMessage(target, random));
+				stats.addSent(random);
 			} catch (IOException e) {
 				System.out.println(e.toString());
 				e.printStackTrace();
@@ -180,6 +180,8 @@ public class NodeServer extends AbstractServer {
 	 * @return
 	 */
 	public String getNodeCost() {
+		if (dijkstra == null)
+			return "Overlay has not been setup yet.";
 		String ret = "";
 		String[] info = dijkstra.getDist();
 		for (String i : info)
@@ -192,6 +194,8 @@ public class NodeServer extends AbstractServer {
 	 * @return
 	 */
 	public String getShortestPath() {
+		if (dijkstra == null)
+			return "Overlay has not been setup yet.";
 		String ret = "";
 		String[] info = dijkstra.getPaths();
 		for (String i : info)
@@ -229,7 +233,7 @@ public class NodeServer extends AbstractServer {
 	/**
 	 * TODO
 	 */
-	public void updateConnectionWeight(EdgeInformation m, NodeConnection client) {
+	public void updateConnectionWeight(EdgeMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
 		String ipAddress = client.getAddress();
@@ -242,8 +246,6 @@ public class NodeServer extends AbstractServer {
 	 * TODO
 	 */
 	public void checkMessage(TaskMessage m, NodeConnection client) {
-		if (debug)
-			System.out.println(m);
 		if (m.getDest().equals(getName()) == true) {
 			stats.addReceived(m.getNumber());
 			return;
@@ -259,17 +261,16 @@ public class NodeServer extends AbstractServer {
 	
 	@Override
 	protected void MessageFromNode(Object msg, NodeConnection client) {
-		if (msg instanceof Protocol == false)
+		if (msg instanceof ProtocolMessage == false)
 			return;
-		Protocol m = (Protocol) msg;
+		ProtocolMessage m = (ProtocolMessage) msg;
 		switch(m.getStringType()) {
 			case "SINGLE_WEIGHT":
 				updateConnectionWeight(m.convertToEdgeInformation(), client);
 				break;
 			case "TASK_MESSAGE":
-				checkMessage(m.convertToMessage(), client);
+				checkMessage(m.convertToTask(), client);
 				break;
-			default:
 		}
 	}
 	

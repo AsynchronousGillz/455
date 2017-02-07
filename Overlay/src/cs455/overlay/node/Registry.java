@@ -105,7 +105,7 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
-			case "print":
+			case "print-stats": case "print":
 				if (tokens.length == 1) {
 					System.out.println(server.getStats());
 				} else {
@@ -140,7 +140,7 @@ public class Registry {
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try:\n";
 		info += "\t[ setup-overlay | send-overlay-link-weights | start # ]\n";
-		info += "\t[ list-messaging | list-weights | print | get-port | get-host ]";
+		info += "\t[ list-messaging | list-weights | print-stats | get-port | get-host ]";
 		System.err.println(info);
 	}
 
