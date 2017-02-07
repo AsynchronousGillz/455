@@ -322,7 +322,7 @@ public class RegistryServer extends AbstractServer {
 			e.printStackTrace();
 		}
 		int index = 0;
-		System.out.println("Name \t Sent \t Received \t Sum Sent \t Sum Received \t Relayed");
+		System.out.println("\tName \t Sent \t Received \t Sum Sent \t Sum Received \t Relayed");
 		for (StatisticsCollector s : connectionInfo.getStats()) {
 			System.out.println(names[index++] + s); 
 		}

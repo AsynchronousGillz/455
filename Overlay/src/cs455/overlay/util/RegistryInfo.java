@@ -251,7 +251,10 @@ public class RegistryInfo {
 	}
 	
 	public boolean getInfoStatus() {
-		return info.size() == data.size();
+		for (StatisticsCollector s : info)
+			if (s == null)
+				return false;
+		return true; 
 	}
 	
 	/**
