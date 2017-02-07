@@ -64,6 +64,10 @@ public class StatisticsCollector {
 		return sumReceived;
 	}
 	
+	public long getRelayed() {
+		return relayed;
+	}
+	
 	public synchronized void addRelayed() {
 		this.relayed += 1;
 	}

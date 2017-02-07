@@ -319,6 +319,9 @@ public class RegistryServer extends AbstractServer {
 			case "TASK_COMPLETE":
 				taskComplete(msg.convertToRegistation(), client);
 				break;
+			case "TRAFFIC_SUMMARY":
+				taskComplete(msg.convertToRegistation(), client);
+				break;
 		}
 	}
 	

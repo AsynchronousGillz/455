@@ -399,7 +399,13 @@ public class NodeClient extends Thread {
 	private void getInfo(RegistationMessage o) {
 		if (debug)
 			System.out.print(o);
-		System.out.println(nodeServer.getStats()); // DEBUG
+		StatisticsCollector s = nodeServer.getStats();
+		System.out.println(s); // DEBUG
+		try {
+			sendToServer(new StatisticsMessage(s));
+		} catch (IOException e) {
+			System.err.println("Could not send TRAFFIC_SUMMARY.");
+		}
 	}
 
 	/**
