@@ -10,12 +10,17 @@ import cs455.overlay.node.*;
  *
  */
 
-public class RegistryList {
+public class RegistryInfo {
 	
 	/**
 	 * The list of node connected to the register.
 	 */
 	ArrayList<NodeConnection> data;
+	
+	/**
+	 * The list of node connected to the register.
+	 */
+	ArrayList<StatisticsCollector> info;
 	
 	/**
 	 * The number of connections for each node.
@@ -42,7 +47,7 @@ public class RegistryList {
 	 * 
 	 * @param numberOfConnections
 	 */
-	public RegistryList(int numberOfConnections) {
+	public RegistryInfo(int numberOfConnections) {
 		this.numberOfConnections = numberOfConnections;
 		data = new ArrayList<>();
 	}
@@ -52,7 +57,7 @@ public class RegistryList {
 	 * 
 	 * @return true if the overlay has been built.
 	 */
-	public boolean getValidOverlay() {
+	final public boolean getValidOverlay() {
 		return validOverlay;
 	}
 	
@@ -62,7 +67,7 @@ public class RegistryList {
 	 * 
 	 * @return true if sent.
 	 */
-	public boolean getOverlaySent() {
+	final public boolean getOverlaySent() {
 		return overlaySent;
 	}
 	
@@ -71,7 +76,7 @@ public class RegistryList {
 	 * 
 	 * @return true if sent.
 	 */
-	public void setOverlaySent() {
+	final public void setOverlaySent() {
 		this.overlaySent = true;
 	}
 	
@@ -93,6 +98,16 @@ public class RegistryList {
 	public ArrayList<NodeConnection> getData() {
 		return data;
 	}
+	
+	/**
+	 * Get the {@link ArrayList} of {@link StatisticsCollector}
+	 * to build the {@link StatisticsCollector}.
+	 * 
+	 * @return
+	 */
+	public ArrayList<StatisticsCollector> getStats() {
+		return info;
+	}
 
 	/**
 	 * Set the number of connections for each node.
@@ -112,7 +127,7 @@ public class RegistryList {
 	 * 
 	 * @return (numberOfConnections < data.size())
 	 */
-	public boolean checkOverlay() {
+	final public boolean checkOverlay() {
 		return (numberOfConnections < data.size());
 	}
 
@@ -205,7 +220,7 @@ public class RegistryList {
 	
 	/**
 	 * Returns the Nodes connections from the overlay.
-	 * @return String array format host:port host:port:weight 
+	 * @return String array format host:port host:port weight 
 	 */
 	public String[] getConnections() throws Exception {
 		if (data.size() == 0) 
@@ -223,6 +238,20 @@ public class RegistryList {
 			}
 		}
 		return ret;
+	}
+	
+	/**
+	 * When a node connects to the Server and sends 
+	 * the registry request and is added to the list.
+	 * @param node
+	 * @param stats
+	 */
+	public synchronized void addStats(NodeConnection node, StatisticsCollector stats) {
+		info.add(data.indexOf(node), stats);
+	}
+	
+	public boolean getInfoStatus() {
+		return info.size() == data.size();
 	}
 	
 	/**
@@ -271,6 +300,7 @@ public class RegistryList {
 			if (sum == (size * numberOfConnections))
 				validOverlay = true;
 		}
+		info = new ArrayList<StatisticsCollector>(data.size());
 	}
 	/**
 	 * To ensure that every node can connect to every other node

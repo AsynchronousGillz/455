@@ -61,7 +61,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * The connection registration list.
 	 */
-	protected RegistryList connectionList;
+	protected RegistryInfo connectionInfo;
 
 	/**
 	 * The connection master statistics holder.

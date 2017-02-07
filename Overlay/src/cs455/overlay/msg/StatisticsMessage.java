@@ -44,6 +44,31 @@ public class StatisticsMessage extends ProtocolMessage {
 	}
 	
 	/**
+	 * Makes a {@link StatisticsCollector} out of the message.
+	 * @return
+	 */
+	public StatisticsCollector makeCollector() {
+		ByteArrayInputStream input = new ByteArrayInputStream(message);
+		DataInputStream in = new DataInputStream(input);
+		long sent = 0;
+		long received = 0;
+		long sentSum = 0;
+		long receivedSum = 0;
+		long relayed = 0;
+		try {
+			sent = in.readLong();
+			received = in.readLong();
+			sentSum = in.readLong();
+			receivedSum = in.readLong();
+			relayed = in.readLong();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
+		return new StatisticsCollector(sent, received, sentSum, receivedSum, relayed);
+	}
+	
+	/**
 	 * Gets the sent.
 	 * @return long of sent.
 	 */

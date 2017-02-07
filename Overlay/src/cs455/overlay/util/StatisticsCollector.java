@@ -1,5 +1,7 @@
 package cs455.overlay.util;
 
+import cs455.overlay.msg.StatisticsMessage;
+
 public class StatisticsCollector {
 
 	/**
@@ -36,6 +38,22 @@ public class StatisticsCollector {
 		this.sumSent = 0;
 		this.sumReceived = 0;
 		this.relayed = 0;
+	}
+	
+	/**
+	 * Makes a {@link StatisticsCollector} from a {@link StatisticsMessage}
+	 * @param sent sent
+	 * @param received received
+	 * @param sumSent sumSent
+	 * @param sumReceived sumReceived
+	 * @param relayed relayed
+	 */
+	public StatisticsCollector(long sent, long received, long sumSent, long sumReceived, long relayed) {
+		this.sent = sent;
+		this.received = received;
+		this.sumSent = sumSent;
+		this.sumReceived = sumReceived;
+		this.relayed = relayed;
 	}
 
 	public long getSent() {
@@ -74,9 +92,7 @@ public class StatisticsCollector {
 
 	@Override
 	public String toString() {
-		return "NodeInformation [sent=" + sent + ", received=" + received +
-				", sumSent=" + sumSent + ", sumReceived=" + sumReceived + 
-				", relayed=" + relayed +"]";
+		return "\t" + sent + "\t" + received + "\t" + sumSent + "\t" + sumReceived +"\t" + relayed;
 	}
 
 }

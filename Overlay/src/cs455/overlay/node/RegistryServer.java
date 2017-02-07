@@ -21,7 +21,7 @@ public class RegistryServer extends AbstractServer {
 
 	public RegistryServer(int port) throws IOException {
 		super(port);
-		connectionList = new RegistryList(4);
+		connectionInfo = new RegistryInfo(4);
 		registationCheck = false;
 	}
 	
@@ -38,7 +38,7 @@ public class RegistryServer extends AbstractServer {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
-		connectionList.removeFromList(nodeConnection);
+		connectionInfo.removeFromList(nodeConnection);
 	}
 
 	public void listeningException(Throwable exception) {
@@ -66,9 +66,9 @@ public class RegistryServer extends AbstractServer {
 	 */
 	private void setRegistration() {
 		this.registationCheck = true;
-		connectionList.buildOverlay();
-		for (NodeConnection node : connectionList.getData()) {
-			String[] info = connectionList.getRegistration(node);
+		connectionInfo.buildOverlay();
+		for (NodeConnection node : connectionInfo.getData()) {
+			String[] info = connectionInfo.getRegistration(node);
 			try {
 				node.sendToNode(new OverlayMessage(info, 0));
 			} catch (IOException e) {
@@ -77,7 +77,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		String[] info = null;
 		try {
-			info = connectionList.getList();
+			info = connectionInfo.getList();
 		} catch (Exception e) {}
 		super.sendToAllNodes(new OverlayMessage(info, 2));
 		System.out.println("The overlay has been succesfully setup.");
@@ -91,7 +91,7 @@ public class RegistryServer extends AbstractServer {
 	public String getList() {
 		String[] info = null;
 		try {
-			info = connectionList.getList();
+			info = connectionInfo.getList();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -110,7 +110,7 @@ public class RegistryServer extends AbstractServer {
 	 * @return
 	 */
 	public String getNode(String info) {
-		return connectionList.getNodeInfo(info);
+		return connectionInfo.getNodeInfo(info);
 	}
 
 	
@@ -121,7 +121,7 @@ public class RegistryServer extends AbstractServer {
 	 * RegistryList build the overlay and print success.
 	 */
 	public void makeOverlay() {
-		if (connectionList.checkOverlay() == false) {
+		if (connectionInfo.checkOverlay() == false) {
 			System.err.println("Invalid connections to node ratio.");
 			return;
 		}
@@ -138,12 +138,12 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void makeOverlay(int numberConnections) {
 		try {
-			connectionList.setNumberOfConnections(numberConnections);
+			connectionInfo.setNumberOfConnections(numberConnections);
 		} catch (Exception e) {
 			System.err.println(e.toString());
 			return;
 		}
-		if (connectionList.checkOverlay() == false) {
+		if (connectionInfo.checkOverlay() == false) {
 			System.err.println("Invalid connections to node ratio.");
 			return;
 		}
@@ -159,7 +159,7 @@ public class RegistryServer extends AbstractServer {
 	public String displayOverlay() {
 		String info[] = null;
 		try {
-			info = connectionList.getConnections();
+			info = connectionInfo.getConnections();
 		} catch (Exception e) {
 			return e.getMessage();
 		}
@@ -176,23 +176,23 @@ public class RegistryServer extends AbstractServer {
 	 * to the registration.
 	 */
 	public void sendOverlay() {
-		if (connectionList.getValidOverlay() == false) {
+		if (connectionInfo.getValidOverlay() == false) {
 			System.err.println("Overlay has not been constructed.");
 			return;
 		}
-		if (connectionList.getOverlaySent() == true) {
+		if (connectionInfo.getOverlaySent() == true) {
 			System.err.println("Overlay has already been sent.");
 			return;
 		}
 		String info[] = null;
 		try {
-			info = connectionList.getConnections();
+			info = connectionInfo.getConnections();
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			return;
 		}
 		this.sendToAllNodes(new OverlayMessage(info, 1));
-		connectionList.setOverlaySent();
+		connectionInfo.setOverlaySent();
 		System.out.println("The overlay has been succesfully sent to all nodes.");
 	}
 	
@@ -205,11 +205,11 @@ public class RegistryServer extends AbstractServer {
 	public void sendStart(int numberOfRounds) {
 		if (numberOfRounds == 0)
 			return;
-		if (connectionList.getValidOverlay() == false) {
+		if (connectionInfo.getValidOverlay() == false) {
 			System.err.println("Overlay has not been constructed.");
 			return;
 		}
-		if (connectionList.getOverlaySent() == false) {
+		if (connectionInfo.getOverlaySent() == false) {
 			System.err.println("Overlay has not yet been sent.");
 			return;
 		}
@@ -257,7 +257,7 @@ public class RegistryServer extends AbstractServer {
 		String hostName = getTargetHostName(tokens[0]);
 		int clientPort = Integer.parseInt(tokens[1]);
 		client.setClientInfo(hostName, tokens[0], clientPort);
-		connectionList.addToList(client);
+		connectionInfo.addToList(client);
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -280,7 +280,7 @@ public class RegistryServer extends AbstractServer {
 			sendRegistrationResponse(false, client);
 			return;
 		}
-		connectionList.removeFromList(client);
+		connectionInfo.removeFromList(client);
 		sendRegistrationResponse(true, client);
 	}
 	
@@ -303,6 +303,31 @@ public class RegistryServer extends AbstractServer {
 		this.sleep(5000);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
+	
+	/**
+	 * The node has sent a task-complete request to the registry.
+	 * @param m
+	 * @param client
+	 */
+	public synchronized void statisticsCompiler(StatisticsMessage m, NodeConnection client) {
+		if (debug)
+			System.out.println(m);
+		connectionInfo.addStats(client, m.makeCollector());
+		if (connectionInfo.getInfoStatus() == false)
+			return;
+		String[] names = null;
+		try {
+			 names = connectionInfo.getList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int index = 0;
+		System.out.println("Name \t Sent \t Received \t Sum Sent \t Sum Received \t Relayed");
+		for (StatisticsCollector s : connectionInfo.getStats()) {
+			System.out.println(names[index++] + s); 
+		}
+	}
+	
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {
@@ -320,7 +345,7 @@ public class RegistryServer extends AbstractServer {
 				taskComplete(msg.convertToRegistation(), client);
 				break;
 			case "TRAFFIC_SUMMARY":
-				taskComplete(msg.convertToRegistation(), client);
+				statisticsCompiler(msg.convertToStats(), client);
 				break;
 		}
 	}

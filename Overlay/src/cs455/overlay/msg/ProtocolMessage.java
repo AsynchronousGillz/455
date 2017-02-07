@@ -116,6 +116,10 @@ public class ProtocolMessage {
 	public TaskMessage convertToTask() {
 		return new TaskMessage(message);
 	}
+	
+	public StatisticsMessage convertToStats() {
+		return new StatisticsMessage(message);
+	}
 
 	//******************************************************************************
 
