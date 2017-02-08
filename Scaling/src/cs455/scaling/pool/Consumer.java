@@ -1,3 +1,6 @@
+package cs455.scaling.pool;
+
+
 
 public class Consumer extends Thread {
 	private Queue quex;

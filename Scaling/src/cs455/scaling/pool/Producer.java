@@ -1,3 +1,5 @@
+package cs455.scaling.pool;
+
 import java.util.Random;
 
 public class Producer extends Thread{
