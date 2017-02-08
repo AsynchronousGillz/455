@@ -1,5 +1,7 @@
 package cs455.overlay.util;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import cs455.overlay.msg.StatisticsMessage;
 
 public class StatisticsCollector {
@@ -12,12 +14,17 @@ public class StatisticsCollector {
 	/**
 	 * 
 	 */
-	private long received;
-
+	private long sumSent;
+	
 	/**
 	 * 
 	 */
-	private long sumSent;
+	private ReentrantLock sentLock;
+	
+	/**
+	 * 
+	 */
+	private long received;
 
 	/**
 	 * 
@@ -27,7 +34,17 @@ public class StatisticsCollector {
 	/**
 	 * 
 	 */
+	private ReentrantLock receivedLock;
+	
+	/**
+	 * 
+	 */
 	private long relayed;
+	
+	/**
+	 * 
+	 */
+	private ReentrantLock relayedLock;
 
 	/**
 	 * 
@@ -38,6 +55,9 @@ public class StatisticsCollector {
 		this.sumSent = 0;
 		this.sumReceived = 0;
 		this.relayed = 0;
+		sentLock = new ReentrantLock();
+		receivedLock = new ReentrantLock();
+		relayedLock = new ReentrantLock();
 	}
 	
 	/**
@@ -54,24 +74,43 @@ public class StatisticsCollector {
 		this.sumSent = sumSent;
 		this.sumReceived = sumReceived;
 		this.relayed = relayed;
+		sentLock = new ReentrantLock();
+		receivedLock = new ReentrantLock();
+		relayedLock = new ReentrantLock();
 	}
+	
+	/**
+	 * Reset back to zero.
+	 */
+	public void reset() {
+		this.sent = 0;
+		this.received = 0;
+		this.sumSent = 0;
+		this.sumReceived = 0;
+		this.relayed = 0;
+	}
+
 
 	public long getSent() {
 		return sent;
 	}
 
-	public synchronized void addSent(int x) {
+	public void addSent(int x) {
+		sentLock.lock();
 		this.sent += 1;
 		this.sumSent += x;
+		sentLock.unlock();
 	}
 
 	public long getReceived() {
 		return received;
 	}
 
-	public synchronized void addReceived(int x) {
+	public void addReceived(int x) {
+		receivedLock.lock();
 		this.received += 1;
 		this.sumReceived += x;
+		receivedLock.unlock();
 	}
 
 	public long getSumSent() {
@@ -86,13 +125,24 @@ public class StatisticsCollector {
 		return relayed;
 	}
 	
-	public synchronized void addRelayed() {
+	public void addRelayed() {
+		relayedLock.lock();
 		this.relayed += 1;
+		relayedLock.unlock();
 	}
 
 	@Override
 	public String toString() {
-		return "\t" + sent + "\t" + received + "\t" + sumSent + "\t" + sumReceived +"\t" + relayed;
+		try {
+			sentLock.lock();
+			receivedLock.lock();
+			relayedLock.lock();
+			return new String(String.format("%1$10d %2$15d %3$10d %4$15d %5$10d", sent, sumSent, received, sumReceived, relayed));
+		} finally {
+			sentLock.unlock();
+			receivedLock.unlock();
+			relayedLock.unlock();
+		}
 	}
 
 }

@@ -20,7 +20,7 @@ public class RegistryInfo {
 	/**
 	 * The list of node connected to the register.
 	 */
-	ArrayList<StatisticsCollector> info;
+	StatisticsCollector[] info;
 	
 	/**
 	 * The number of connections for each node.
@@ -105,8 +105,16 @@ public class RegistryInfo {
 	 * 
 	 * @return
 	 */
-	public ArrayList<StatisticsCollector> getStats() {
+	public StatisticsCollector[] getStats() {
 		return info;
+	}
+	
+	/**
+	 * Reset the local Array of {@link StatisticsCollector} back 
+	 * to null.
+	 */
+	public void resetCollector() {
+		info = new StatisticsCollector[data.size()];
 	}
 
 	/**
@@ -246,8 +254,8 @@ public class RegistryInfo {
 	 * @param node
 	 * @param stats
 	 */
-	public synchronized void addStats(NodeConnection node, StatisticsCollector stats) {
-		info.add(data.indexOf(node), stats);
+	synchronized public void addStats(NodeConnection node, StatisticsCollector stats) {
+		info[data.indexOf(node)] = stats;
 	}
 	
 	public boolean getInfoStatus() {
@@ -261,7 +269,7 @@ public class RegistryInfo {
 	 * When a node connects to the Server and sends 
 	 * the registry request and is added to the list. 
 	 */
-	public synchronized void addToList(NodeConnection node) {
+	synchronized public void addToList(NodeConnection node) {
 		data.add(node);
 	}
 	
@@ -270,7 +278,7 @@ public class RegistryInfo {
 	 * 'send-overlay-link-weights' then it will notify the
 	 * server about the change, and make the overlay void.
 	 */
-	public synchronized void removeFromList(NodeConnection node) {
+	synchronized public void removeFromList(NodeConnection node) {
 		if (validOverlay == true) {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");
@@ -282,7 +290,7 @@ public class RegistryInfo {
 	 * The overlay is a byte[][] that when byte[x][y] != 0
 	 * lists the weight of the connection.
 	 */
-	public synchronized void buildOverlay() {
+	public void buildOverlay() {
 		Random rand = new Random();
 		while (validOverlay == false) {
 			
@@ -303,7 +311,7 @@ public class RegistryInfo {
 			if (sum == (size * numberOfConnections))
 				validOverlay = true;
 		}
-		info = new ArrayList<StatisticsCollector>(data.size());
+		info = new StatisticsCollector[data.size()];
 	}
 	/**
 	 * To ensure that every node can connect to every other node

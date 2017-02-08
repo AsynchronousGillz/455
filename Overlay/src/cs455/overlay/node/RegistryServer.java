@@ -213,6 +213,14 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Overlay has not yet been sent.");
 			return;
 		}
+		boolean complete = false;
+		for (NodeConnection node : super.getNodeConnections()) {
+			complete = (node.getComplete() || complete);
+		}
+		if (complete == true) {
+			System.err.println("Messaging in progress.");
+			return;
+		}
 		super.sendToAllNodes(new InitiateMessage(numberOfRounds));
 	}
 	
@@ -300,7 +308,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		this.sleep(5000);
+		this.sleep(7500);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
@@ -322,12 +330,29 @@ public class RegistryServer extends AbstractServer {
 			e.printStackTrace();
 		}
 		int index = 0;
-		System.out.println("\tName \t Sent \t Received \t Sum Sent \t Sum Received \t Relayed");
+		long[] total = new long[5];
+		System.out.printf("%-18s %10s %15s %10s %15s %10s\n", "Name", "Sent", "Sum Sent", "Received", "Sum Received", "Relayed");
 		for (StatisticsCollector s : connectionInfo.getStats()) {
 			System.out.println(names[index++] + s); 
+			total[0] += s.getSent();
+			total[1] += s.getSumSent();
+			total[2] += s.getReceived();
+			total[3] += s.getSumReceived();
+			total[4] += s.getRelayed();
 		}
+		System.out.printf("%-18s %10d %15d %10d %15d %10d\n", "Total", total[0], total[1], total[2], total[3], total[4]);
+		for (NodeConnection node : super.getNodeConnections()) {
+			node.resetComplete();
+		}
+		connectionInfo.resetCollector();
 	}
 	
+	/**
+	 * 
+	 */
+	public void sendStop() {
+		
+	}
 
 	@Override
 	protected void MessageFromNode(Object o, NodeConnection client) {

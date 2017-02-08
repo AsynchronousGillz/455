@@ -123,8 +123,9 @@ public class Dijkstra {
 	}
 	
 	/**
-	 * TODO
-	 * @return
+	 * Show the cost of each node in the overlay without the path 
+	 * to get there.
+	 * @return info an Array of Strings
 	 */
 	public String[] getDist() {
 		String[] ret = new String[connections.length];
@@ -135,8 +136,9 @@ public class Dijkstra {
 	}
 
 	/**
-	 * TODO
-	 * @return
+	 * Show the cost of each node in the overlay with the
+	 * path information of each hop.
+	 * @return info an Array of strings
 	 */
 	public String[] getPaths() {
 		String[] ret = new String[connections.length];
@@ -152,9 +154,11 @@ public class Dijkstra {
 	}
 	
 	/**
-	 * TODO
+	 * Returns the next hop in String form. This is used to 
+	 * get from one hop to another until it has reached its 
+	 * destination. 
 	 * @param dest
-	 * @return
+	 * @return nextHop in String form.
 	 */
 	public String getNextHop(String dest) {
 		Node node = graph.getNode(dest);
@@ -163,7 +167,7 @@ public class Dijkstra {
 		return node.path.get(1).toString();
 	}
 
-	public class Graph {
+	private class Graph {
 
 		private ArrayList<Node> nodes;
 
@@ -192,7 +196,7 @@ public class Dijkstra {
 		}
 	}
 
-	class Edge{
+	private class Edge{
 		
 		public final Node target;
 		public final int cost;
@@ -207,13 +211,12 @@ public class Dijkstra {
 		}
 	}
 
-	class Node implements Comparable<Node> {
+	private class Node implements Comparable<Node> {
 
 		public final String name;
 		public ArrayList<Edge> links;
 		public LinkedList<Node> path;
 		public int minDistance;
-		public Node previous;
 
 		public Node(String name){
 			this.name = name;

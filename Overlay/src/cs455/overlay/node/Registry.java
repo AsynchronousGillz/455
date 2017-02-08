@@ -105,6 +105,13 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
+			case "exit":
+				if (tokens.length == 1) {
+					server.sendStop();
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "print-stats": case "print":
 				if (tokens.length == 1) {
 					System.out.println(server.getStats());

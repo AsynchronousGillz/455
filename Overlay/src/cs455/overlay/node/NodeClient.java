@@ -444,4 +444,3 @@ public class NodeClient extends Thread {
 	}
 
 }
-// end of Client class

@@ -58,7 +58,8 @@ public class OverlayMessage extends ProtocolMessage {
 	}
 	
 	/**
-	 * TODO
+	 * Take an array of strings and convert it to a the payload of 
+	 * the message in byte formats.
 	 * @param nodes
 	 */
 	public void convertArray(String[] nodes) {
@@ -79,7 +80,9 @@ public class OverlayMessage extends ProtocolMessage {
 	}
 	
 	/**
-	 * TODO
+	 * Take the byte array in the payload of the message and convert it back 
+	 * to an array of Strings.
+	 * @return String array.
 	 */
 	public String[] getString() {
 		String[] ret = null;
@@ -102,30 +105,5 @@ public class OverlayMessage extends ProtocolMessage {
 		}
 		return ret;
 	}
-	
-	/**
-	 * TODO
-	 */
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		ByteArrayInputStream input = new ByteArrayInputStream(message);
-		DataInputStream in = new DataInputStream(input);
-		try {
-			byte[] bytes = null;
-			int size = in.readInt();
-			for (int i = 0; i < size; i ++) {
-				int length = in.readInt();
-				bytes = new byte[length];
-				in.readFully(bytes, 0, length);
-				sb.append(new String(bytes)+"\n");
-			}
-			input.close();
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
-	}
-	
 	
 }

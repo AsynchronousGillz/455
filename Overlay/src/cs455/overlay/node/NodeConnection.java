@@ -114,7 +114,6 @@ public class NodeConnection extends Thread {
 		this.hostName = null;
 		this.cost = this.port = 0;
 		this.complete = false;
-		start(); // Start the thread waits for data from the socket
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -206,6 +205,13 @@ public class NodeConnection extends Thread {
 	 */
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+	
+	/**
+	 * Sets the job to state to true;
+	 */
+	public synchronized void resetComplete() {
+		this.complete = false;
 	}
 	
 	/**
@@ -322,12 +328,9 @@ public class NodeConnection extends Thread {
 		try {
 			int byteSize;
 			while (super.isInterrupted() == false) {
-				byte[] bytes = null;
-				synchronized (input) {
-					byteSize = input.readInt();
-					bytes = new byte[byteSize];
-					input.readFully(bytes, 0, byteSize);
-				}
+				byteSize = input.readInt();
+				byte[] bytes = new byte[byteSize];
+				input.readFully(bytes, 0, byteSize);
 				server.MessageFromNode(new ProtocolMessage(bytes), this);
 			}
 		} catch (EOFException ex) {

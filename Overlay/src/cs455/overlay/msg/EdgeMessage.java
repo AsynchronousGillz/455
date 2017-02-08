@@ -30,7 +30,7 @@ public class EdgeMessage extends ProtocolMessage {
 		 */
 		public EdgeMessage(byte[] message) {
 			super();
-			this.setType("TASK_MESSAGE");
+			this.setType("SINGLE_WEIGHT");
 			this.setMessage(message);
 		}
 		

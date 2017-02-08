@@ -57,8 +57,8 @@ public class StatisticsMessage extends ProtocolMessage {
 		long relayed = 0;
 		try {
 			sent = in.readLong();
-			received = in.readLong();
 			sentSum = in.readLong();
+			received = in.readLong();
 			receivedSum = in.readLong();
 			relayed = in.readLong();
 		} catch (IOException e) {

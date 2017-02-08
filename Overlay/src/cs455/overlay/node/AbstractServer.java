@@ -18,11 +18,6 @@ public abstract class AbstractServer extends Thread {
 	private ServerSocket serverSocket = null;
 
 	/**
-	 * The connection listener thread.
-	 */
-	private Thread connectionListener;
-
-	/**
 	 * The port number
 	 */
 	private int port;
@@ -112,8 +107,7 @@ public abstract class AbstractServer extends Thread {
 
 			serverSocket.setSoTimeout(timeout);
 			stop = false;
-			connectionListener = new Thread(this);
-			connectionListener.start();
+			this.start();
 		}
 	}
 
@@ -198,7 +192,7 @@ public abstract class AbstractServer extends Thread {
 	 * @return true if the server is listening.
 	 */
 	final public boolean isListening() {
-		return (connectionListener != null);
+		return stop;
 	}
 
 	/**
@@ -410,32 +404,23 @@ public abstract class AbstractServer extends Thread {
 		serverStarted();
 
 		try {
-			while (stop == false) {
+			while (super.isInterrupted() == false) {
 				try {
 					Socket clientSocket = serverSocket.accept();
-
 					synchronized (this) {
-						new NodeConnection(this.nodeThreadGroup, clientSocket, this);
+						new NodeConnection(this.nodeThreadGroup, clientSocket, this).start();
 					}
-
-				} catch (InterruptedIOException exception) {
-					// This will be thrown when a timeout occurs.
-					// The server will continue to listen if not ready to stop.
-				}
+				} catch (InterruptedIOException exception) {}
 			}
-
-			// call the hook method to notify that the server has stopped
 			serverClosed();
 		} catch (IOException exception) {
-			if (stop == false) {
-				// Closing the socket must have thrown a SocketException
+			if (super.isInterrupted() == true) {
 				listeningException(exception);
 			} else {
 				serverClosed();
 			}
 		} finally {
 			stop = true;
-			connectionListener = null;
 		}
 	}
 
@@ -504,8 +489,7 @@ public abstract class AbstractServer extends Thread {
 
 	/**
 	 * Handles a command sent from one client to the server. This MUST be
-	 * implemented by subclasses, who should respond to messages. This method is
-	 * called by a synchronized method so it is also implicitly synchronized.
+	 * implemented by subclasses, who should respond to messages.
 	 *
 	 * @param msg
 	 *            the message sent.
