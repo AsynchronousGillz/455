@@ -1,6 +1,7 @@
 package cs455.overlay.util;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.node.*;
 
 public class MessageQueue {
 	
@@ -27,19 +28,33 @@ public class MessageQueue {
 	/**
 	 * 
 	 */
-	private ProtocolMessage contents[];
+	private MessagePair contents[];
 
+	/**
+	 * MessageQueue Constructor, store messages to be processed 
+	 * by the {@link MessagingProcessor}.
+	 * @param size
+	 * 			size of the queue.
+	 */
 	public MessageQueue(int size) {
 		this.size = size;
 		this.used = this.front = this.back = 0;
-		this.contents = new ProtocolMessage[size];
+		this.contents = new MessagePair[size];
 	}
-
+	
+	/**
+	 * Gets the size of the queue.
+	 * @return size
+	 */
 	public int get_size() {
 		return (size);
 	}
 
-	public synchronized ProtocolMessage get() {
+	/**
+	 * Get a message from the queue.
+	 * @return a {@link ProtocolMessage}
+	 */
+	public synchronized MessagePair get() {
 		while (used == 0) {
 			try {
 				this.wait();
@@ -52,7 +67,12 @@ public class MessageQueue {
 		return (contents[this.front++ % this.size]);
 	}
 
-	public synchronized void put(ProtocolMessage m) {
+	/**
+	 * Place a {@link MessagePair} into the queue to be 
+	 * processed by a {@link MessagingProcessor}.
+	 * @param m
+	 */
+	public synchronized void put(MessagePair m) {
 		while (used == size) {
 			try {
 				this.wait();

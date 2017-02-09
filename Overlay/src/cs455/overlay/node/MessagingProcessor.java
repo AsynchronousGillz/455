@@ -1,6 +1,6 @@
-package cs455.overlay.util;
+package cs455.overlay.node;
 
-import cs455.overlay.node.AbstractServer;
+import cs455.overlay.util.MessagePair;
 import cs455.overlay.util.MessageQueue;
 
 /**
@@ -9,7 +9,7 @@ import cs455.overlay.util.MessageQueue;
  *
  */
 
-public class MessageProcessor extends Thread {
+public class MessagingProcessor extends Thread {
 	// INSTANCE VARIABLES ***********************************************
 
 	/**
@@ -32,13 +32,14 @@ public class MessageProcessor extends Thread {
 	 *            the thread groupSystem.out.println("node at "+ node +
 	 *            "connected"); that contains the connections.
 	 * @param queue
-	 *            a reference to the queue that the {@link MessageProcessor} will 
+	 *            a reference to the queue that the {@link MessagingProcessor} will 
 	 *            read messages from.
 	 * @param server
 	 *            a reference to the server that created this instance
 	 */
-	public MessageProcessor(ThreadGroup group, MessageQueue queue, AbstractServer server) {
+	public MessagingProcessor(ThreadGroup group, MessageQueue queue, AbstractServer server) {
 		super(group, (Runnable) null);
+		setName("MP-"+getId());
 		this.queue = queue;
 	}
 
@@ -46,7 +47,8 @@ public class MessageProcessor extends Thread {
 	
 	public void run() {
 		while (isInterrupted() == false) {
-//			server.processMessage(queue.get());
+			MessagePair msg = queue.get();
+			server.MessageFromNode(msg.getMsg(), msg.getNode());
 		}
 	}
 	

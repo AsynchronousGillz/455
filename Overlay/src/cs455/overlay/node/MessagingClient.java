@@ -13,7 +13,7 @@ import cs455.overlay.util.StatisticsCollector;
  * @see MessagingNode.NodeMain
  */
 
-public class NodeClient extends Thread {
+public class MessagingClient extends Thread {
 
 	// INSTANCE VARIABLES ***********************************************
 
@@ -48,7 +48,7 @@ public class NodeClient extends Thread {
 	/**
 	 * The node server
 	 */
-	private NodeServer nodeServer;
+	private MessagingServer nodeServer;
 
 	/**
 	 * For debug purposes
@@ -65,7 +65,7 @@ public class NodeClient extends Thread {
 	 * @param registryPort
 	 *            the port number.
 	 */
-	public NodeClient(NodeServer nodeServer, String registryIP, int registryPort) {
+	public MessagingClient(MessagingServer nodeServer, String registryIP, int registryPort) {
 		// Initialize variables
 		this.nodeServer = nodeServer;
 		this.registryIP = registryIP;
@@ -77,7 +77,7 @@ public class NodeClient extends Thread {
 		} catch (IOException ex) {
 			closeConnection();
 		}
-		super.setName("client_" + nodeServer.getHost() + ":" + nodeServer.getPort());
+		super.setName("C-" + nodeServer.getHost() + ":" + nodeServer.getPort());
 	}
 
 	/**
@@ -159,8 +159,8 @@ public class NodeClient extends Thread {
 	 * @param host
 	 *            the host name.
 	 */
-	final public void setRegistryHost(String host) {
-		this.registryIP = host;
+	final public void setRegistryHost(String registryIP) {
+		this.registryIP = registryIP;
 	}
 
 	/**
@@ -417,24 +417,24 @@ public class NodeClient extends Thread {
 			return;
 		ProtocolMessage m = (ProtocolMessage) o;
 		switch (m.getStringType()) {
-		case "REGISTER_RESPONSE":
-			registerResponse(m.convertToRegistation());
-			break;
-		case "MESSAGING_NODES":
-			registerNodes(m.convertToOverlay());
-			break;
-		case "MESSAGING_NODES_LIST":
-			registerConnections(m.convertToOverlay());
-			break;
-		case "LINK_WEIGHTS":
-			registerWeights(m.convertToOverlay());
-			break;
-		case "TASK_INITIATE":
-			startMessaging(m.convertToInitiate());
-			break;
-		case "PULL_TRAFFIC_SUMMARY":
-			getInfo(m.convertToRegistation());
-			break;
+			case "REGISTER_RESPONSE":
+				registerResponse(m.convertToRegistation());
+				break;
+			case "MESSAGING_NODES":
+				registerNodes(m.convertToOverlay());
+				break;
+			case "MESSAGING_NODES_LIST":
+				registerConnections(m.convertToOverlay());
+				break;
+			case "LINK_WEIGHTS":
+				registerWeights(m.convertToOverlay());
+				break;
+			case "TASK_INITIATE":
+				startMessaging(m.convertToInitiate());
+				break;
+			case "PULL_TRAFFIC_SUMMARY":
+				getInfo(m.convertToRegistation());
+				break;
 		}
 	}
 

@@ -5,15 +5,16 @@ import java.io.*;
 import java.net.*;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.MessagePair;
 
 /**
  * 
  * @author G van Andel
  *
- * @see node.NodeServer
+ * @see MessagingServer.NodeServer
  */
 
-public class NodeConnection extends Thread {
+public class MessagingConnection extends Thread {
 	// INSTANCE VARIABLES ***********************************************
 
 	/**
@@ -93,7 +94,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error oclcur when creating the connection.
 	 */
-	public NodeConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
+	public MessagingConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
 		super(group, (Runnable) null);
 		// Initialize variables
 		this.nodeSocket = nodeSocket;
@@ -302,7 +303,7 @@ public class NodeConnection extends Thread {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NodeConnection other = (NodeConnection) obj;
+		MessagingConnection other = (MessagingConnection) obj;
 		if (hostName == null && other.hostName != null)
 			return false;
 		else if (hostName.equals(other.hostName) == false)
@@ -329,7 +330,7 @@ public class NodeConnection extends Thread {
 				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				server.MessageFromNode(new ProtocolMessage(bytes), this);
+				server.addPair(new MessagePair(new ProtocolMessage(bytes), this));
 			}
 		} catch (EOFException ex) {
 			close();

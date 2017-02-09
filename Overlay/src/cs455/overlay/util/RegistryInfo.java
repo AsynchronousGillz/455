@@ -15,7 +15,7 @@ public class RegistryInfo {
 	/**
 	 * The list of node connected to the register.
 	 */
-	ArrayList<NodeConnection> data;
+	ArrayList<MessagingConnection> data;
 
 	/**
 	 * The list of node connected to the register.
@@ -94,7 +94,7 @@ public class RegistryInfo {
 	 * 
 	 * @return
 	 */
-	public ArrayList<NodeConnection> getData() {
+	public ArrayList<MessagingConnection> getData() {
 		return data;
 	}
 
@@ -144,7 +144,7 @@ public class RegistryInfo {
 	 *
 	 * @return list of all the nodes
 	 */
-	public String[] getRegistration(NodeConnection node) {
+	public String[] getRegistration(MessagingConnection node) {
 		int length = data.size();
 		int index = data.indexOf(node);
 		int connection = 0;
@@ -171,7 +171,7 @@ public class RegistryInfo {
 			new Exception("Node list is currently empty.");
 		String[] ret = new String[data.size()];
 		int index = 0;
-		for (NodeConnection node : data) {
+		for (MessagingConnection node : data) {
 			ret[index++] = node.getConnection();
 		}
 		return ret;
@@ -191,7 +191,7 @@ public class RegistryInfo {
 			port = Integer.parseInt(search);
 		} catch (NumberFormatException e) {
 		}
-		for (NodeConnection node : data) {
+		for (MessagingConnection node : data) {
 			if (node.getAddress().contains(search))
 				ret += node.getInfo() + "\n";
 			else if (node.getHost().contains(search))
@@ -256,7 +256,7 @@ public class RegistryInfo {
 	 * @param node
 	 * @param stats
 	 */
-	public void addStats(NodeConnection node, StatisticsCollector stats) {
+	public void addStats(MessagingConnection node, StatisticsCollector stats) {
 		info[data.indexOf(node)] = stats;
 	}
 
@@ -271,7 +271,7 @@ public class RegistryInfo {
 	 * When a node connects to the Server and sends the registry request and is
 	 * added to the list.
 	 */
-	public void addToList(NodeConnection node) {
+	public void addToList(MessagingConnection node) {
 		synchronized (data) {
 			data.add(node);
 
@@ -283,7 +283,7 @@ public class RegistryInfo {
 	 * 'send-overlay-link-weights' then it will notify the server about the
 	 * change, and make the overlay void.
 	 */
-	public void removeFromList(NodeConnection node) {
+	public void removeFromList(MessagingConnection node) {
 		if (validOverlay == true) {
 			validOverlay = false;
 			System.out.println("The overlay is no longer correct. Please run 'setup-overlay' again.");

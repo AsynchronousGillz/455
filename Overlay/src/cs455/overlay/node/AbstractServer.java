@@ -23,34 +23,34 @@ public abstract class AbstractServer extends Thread {
 	private int port;
 
 	/**
-	 * The server timeout while for accepting connections. After timing out, the
-	 * server will check to see if a command to stop the server has been issued;
-	 * it not it will resume accepting connections. Set to half a second by
-	 * default.
+	 * The server timeout while for accepting connections.
 	 */
-	private int timeout = 500;
+	private int timeout = 5000;
 
 	/**
 	 * The maximum queue length; i.e. the maximum number of clients that can be
-	 * waiting to connect. Set to 10 by default.
+	 * waiting to connect. Set to 15 by default.
 	 */
-	private int backlog = 10;
+	private int backlog = 15;
 
 	/**
 	 * The thread group associated with client threads. Each member of the
-	 * thread group is a <code> ConnectionToClient </code>.
+	 * thread group is a <code> MessagingConnection </code>.
 	 */
-	protected ThreadGroup nodeThreadGroup;
-
+	protected ThreadGroup connectionGroup;
+	
 	/**
-	 * The setup-overlay has begun.
+	 * The thread group associated with client threads. Each member of the
+	 * thread group is a <code> MessagingProcessor </code>.
 	 */
-	protected boolean registationCheck;
-
+	protected ThreadGroup processorGroup;
+	
 	/**
-	 * The connection registration list.
+	 * The connection master statistics holder. Each message will be placed in 
+	 * the queue until the a {@link MessagingProcessor} can process the message.
+	 * The default size is 10000. 
 	 */
-	protected RegistryInfo connectionInfo;
+	protected MessageQueue queue;
 
 	/**
 	 * The connection master statistics holder.
@@ -60,7 +60,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = false;
+	protected final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -71,15 +71,18 @@ public abstract class AbstractServer extends Thread {
 	 *            the port number on which to listen.
 	 */
 	public AbstractServer(int port) {
-		this.nodeThreadGroup = new ThreadGroup("NodeConnection threads") {
-			// All uncaught exceptions in connection threads will
-			// be sent to the clientException callback method.
+		this.connectionGroup = new ThreadGroup("MessagingConnection threads") {
 			public void uncaughtException(Thread thread, Throwable exception) {
-				nodeException((NodeConnection) thread, exception);
+				nodeException((MessagingConnection) thread, exception);
+			}
+		};
+		this.processorGroup = new ThreadGroup("MessagingProcessor threads") {
+			public void uncaughtException(Thread thread, Throwable exception) {
+				nodeException((MessagingConnection) thread, exception);
 			}
 		};
 		this.port = port;
-		serverSocket = null;
+		queue = new MessageQueue(10000);
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -98,7 +101,6 @@ public abstract class AbstractServer extends Thread {
 		if (getPort() == 0)
 			this.setPort(this.serverSocket.getLocalPort());
 		setName();
-
 		serverSocket.setSoTimeout(timeout);
 	}
 
@@ -107,7 +109,7 @@ public abstract class AbstractServer extends Thread {
 	 */
 	final public void setName() throws IOException {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
-		this.setName(ipAddress + ":" + this.port);
+		super.setName(ipAddress + ":" + this.port);
 	}
 
 	/**
@@ -118,6 +120,43 @@ public abstract class AbstractServer extends Thread {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Add a connection to the server to another server.
+	 * @param host
+	 * @param sPort
+	 */
+	final public void addConnection(String host, String sPort) {
+		int port = validateInput(sPort);
+		if (port == 0)
+			return;
+		// Wait here for new connection attempts, or a timeout
+		Socket clientSocket = null;
+		try {
+			clientSocket = new Socket(host, port);
+		} catch (IOException e) {
+			System.err.println("Could not connect to: "+host+":"+port);
+			return;
+		}
+		MessagingConnection node = createConnection(clientSocket);
+		String hostName = this.getTargetHostName(host);
+		node.setClientInfo(hostName, host, port);
+		node.start();
+	}
+	
+	/**
+	 * Create a new MessagingNode connection. This will also add MessagingProcessors
+	 * 
+	 */
+	synchronized final private MessagingConnection createConnection(Socket clientSocket) {
+		try {
+			new MessagingProcessor(processorGroup, queue, this).start();
+			return new MessagingConnection(this.connectionGroup, clientSocket, this);
+		} catch (IOException e) {
+			System.err.println("Error: could not create MessagingConnection.");
+			return null;
 		}
 	}
 
@@ -138,10 +177,9 @@ public abstract class AbstractServer extends Thread {
 			System.err.println(ex.toString());
 		} finally {
 			// Close the client sockets of the already connected clients
-			Thread[] clientThreadList = getNodeConnections();
-			for (int i = 0; i < clientThreadList.length; i++) {
+			for (MessagingConnection node : getNodeConnections()) {
 				try {
-					((NodeConnection) clientThreadList[i]).close();
+					node.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -158,7 +196,7 @@ public abstract class AbstractServer extends Thread {
 	 *            Object The message to be sent
 	 */
 	public void sendToAllNodes(ProtocolMessage msg) {
-		for (NodeConnection node : getNodeConnections()) {
+		for (MessagingConnection node : getNodeConnections()) {
 			try {
 				node.sendToNode(msg);
 			} catch (Exception ex) {
@@ -176,9 +214,9 @@ public abstract class AbstractServer extends Thread {
 	 * @return an array of Strings containing NodeConnection Names.
 	 */
 	synchronized final public String[] getConnectionNames() {
-		int size = nodeThreadGroup.activeCount();
-		NodeConnection[] nodeThreadList = new NodeConnection[size];
-		nodeThreadGroup.enumerate(nodeThreadList);
+		int size = connectionGroup.activeCount();
+		MessagingConnection[] nodeThreadList = new MessagingConnection[size];
+		connectionGroup.enumerate(nodeThreadList);
 		String[] ret = new String[size];
 		for (int i = 0; i < size; i++) {
 			ret[i] = nodeThreadList[i].toString();
@@ -193,18 +231,16 @@ public abstract class AbstractServer extends Thread {
 	 *            "ip:port"
 	 * @return an array of Strings containing NodeConnection Names.
 	 */
-	final public NodeConnection getConnection(String address) {
-		NodeConnection ret = null;
-		int size = nodeThreadGroup.activeCount();
-		NodeConnection[] nodeThreadList = new NodeConnection[size];
-		nodeThreadGroup.enumerate(nodeThreadList);
-		for (NodeConnection node : nodeThreadList) {
+	final public MessagingConnection getConnection(String address) {
+		int size = connectionGroup.activeCount();
+		MessagingConnection[] nodeThreadList = new MessagingConnection[size];
+		connectionGroup.enumerate(nodeThreadList);
+		for (MessagingConnection node : nodeThreadList) {
 			if (address.equals(node.getConnection()) == true) {
-				ret = node;
-				break;
+				return node;
 			}
 		}
-		return ret;
+		return null;
 	}
 
 	/**
@@ -213,9 +249,9 @@ public abstract class AbstractServer extends Thread {
 	 *
 	 * @return an array of NodeConnection containing NodeConnection instances.
 	 */
-	final public NodeConnection[] getNodeConnections() {
-		NodeConnection[] nodeThreadList = new NodeConnection[nodeThreadGroup.activeCount()];
-		nodeThreadGroup.enumerate(nodeThreadList);
+	final public MessagingConnection[] getNodeConnections() {
+		MessagingConnection[] nodeThreadList = new MessagingConnection[connectionGroup.activeCount()];
+		connectionGroup.enumerate(nodeThreadList);
 		return nodeThreadList;
 	}
 
@@ -225,7 +261,7 @@ public abstract class AbstractServer extends Thread {
 	 * @return the number of clients currently connected.
 	 */
 	final public int getNumberOfClients() {
-		return nodeThreadGroup.activeCount();
+		return connectionGroup.activeCount();
 	}
 
 	/**
@@ -359,6 +395,14 @@ public abstract class AbstractServer extends Thread {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Add the {@link MessagePair} to the queue.
+	 * @param pair
+	 */
+	public void addPair(MessagePair pair) {
+		queue.put(pair);
+	}
 
 	// RUN METHOD -------------------------------------------------------
 
@@ -373,12 +417,8 @@ public abstract class AbstractServer extends Thread {
 		try {
 			while (super.isInterrupted() == false) {
 				try {
-					Socket clientSocket = serverSocket.accept();
-					synchronized (this) {
-						new NodeConnection(this.nodeThreadGroup, clientSocket, this).start();
-					}
-				} catch (InterruptedIOException exception) {
-				}
+					createConnection(serverSocket.accept()).start();
+				} catch (InterruptedIOException exception) {}
 			}
 			serverClosed();
 		} catch (IOException exception) {
@@ -397,7 +437,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param client
 	 *            the connection connected to the client.
 	 */
-	protected abstract void nodeConnected(NodeConnection client);
+	protected abstract void nodeConnected(MessagingConnection client);
 
 	/**
 	 * Hook method called each time a client disconnects. The default
@@ -407,7 +447,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param client
 	 *            the connection with the client.
 	 */
-	synchronized protected void nodeDisconnected(NodeConnection node) {
+	synchronized protected void nodeDisconnected(MessagingConnection node) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(node.getAddress() + " disconnected at " + dateFormat.format(date));
@@ -423,7 +463,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param Throwable
 	 *            the exception thrown.
 	 */
-	synchronized protected void nodeException(NodeConnection client, Throwable exception) {
+	synchronized protected void nodeException(MessagingConnection client, Throwable exception) {
 		System.err.println(client + " has thrown Exception: " + exception.toString());
 		exception.printStackTrace();
 	}
@@ -461,7 +501,7 @@ public abstract class AbstractServer extends Thread {
 	 *            the connection connected to the client that sent the message.
 	 */
 
-	protected abstract void MessageFromNode(Object msg, NodeConnection client);
-
+	protected abstract void MessageFromNode(ProtocolMessage msg, MessagingConnection client);
+	
 }
 // End of AbstractServer Class

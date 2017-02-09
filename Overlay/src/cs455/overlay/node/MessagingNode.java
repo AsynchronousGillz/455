@@ -16,8 +16,8 @@ public class MessagingNode {
 
 	// Instance variables **********************************************
 
-	private final NodeClient client;
-	private final NodeServer server;
+	private final MessagingClient client;
+	private final MessagingServer server;
 
 	// Constructors ****************************************************
 
@@ -30,7 +30,7 @@ public class MessagingNode {
 	 * 		The server for the messaging nodes to connect to.
 	 */
 
-	public MessagingNode(NodeClient client, NodeServer server) {
+	public MessagingNode(MessagingClient client, MessagingServer server) {
 		this.client = client;
 		this.server = server;
 	}
@@ -165,17 +165,17 @@ public class MessagingNode {
 			registryPort = 60100;
 		}
 		
-		NodeServer nodeServer = null;
+		MessagingServer nodeServer = null;
 
 		try {
-			nodeServer = new NodeServer();
+			nodeServer = new MessagingServer();
 			nodeServer.listen();
 			nodeServer.start();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		}
 		
-		NodeClient nodeClient = new NodeClient(nodeServer, registryIP, registryPort);
+		MessagingClient nodeClient = new MessagingClient(nodeServer, registryIP, registryPort);
 		nodeClient.start();
 		
 		MessagingNode node = new MessagingNode(nodeClient, nodeServer);

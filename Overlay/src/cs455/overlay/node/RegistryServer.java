@@ -17,6 +17,16 @@ import cs455.overlay.util.*;
 
 public class RegistryServer extends AbstractServer {
 
+	/**
+	 * The setup-overlay has begun.
+	 */
+	protected boolean registationCheck;
+	
+	/**
+	 * The connection registration list.
+	 */
+	protected RegistryInfo connectionInfo;
+	
 	// CONSTRUCTOR ******************************************************
 
 	public RegistryServer(int port) throws IOException {
@@ -28,13 +38,13 @@ public class RegistryServer extends AbstractServer {
 	// INSTANCE METHODS *************************************************
 
 
-	public void nodeConnected(NodeConnection nodeConnection) {
+	public void nodeConnected(MessagingConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
 	}
 
-	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
+	synchronized public void nodeDisconnected(MessagingConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
@@ -67,7 +77,7 @@ public class RegistryServer extends AbstractServer {
 	private void setRegistration() {
 		this.registationCheck = true;
 		connectionInfo.buildOverlay();
-		for (NodeConnection node : connectionInfo.getData()) {
+		for (MessagingConnection node : connectionInfo.getData()) {
 			String[] info = connectionInfo.getRegistration(node);
 			try {
 				node.sendToNode(new OverlayMessage(info, 0));
@@ -222,7 +232,7 @@ public class RegistryServer extends AbstractServer {
 			return;
 		}
 		boolean complete = false;
-		for (NodeConnection node : super.getNodeConnections()) {
+		for (MessagingConnection node : super.getNodeConnections()) {
 			complete = (node.getComplete() || complete);
 		}
 		if (complete == true) {
@@ -240,7 +250,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param status
 	 * @param client
 	 */
-	public void sendRegistrationResponse(boolean status, NodeConnection client) {
+	public void sendRegistrationResponse(boolean status, MessagingConnection client) {
 		String message = (status)?"True":"False";
 		try {
 			client.sendToNode(new RegistationMessage(message, 2));
@@ -257,9 +267,10 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void registerNode(RegistationMessage m, NodeConnection client) {
-		if (debug)
+	public void registerNode(RegistationMessage m, MessagingConnection client) {
+		if (true)
 			System.out.println(m.getMessageString());
+		System.out.println("ERROR");
 		if (registationCheck == true) {
 			sendRegistrationResponse(false, client);
 			return;
@@ -283,7 +294,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void unregisterNode(RegistationMessage m, NodeConnection client) {
+	public void unregisterNode(RegistationMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
 		String[] tokens = m.getMessageString().split(" ");
@@ -305,7 +316,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void taskComplete(RegistationMessage m, NodeConnection client) {
+	public void taskComplete(RegistationMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m);
 		//synchronized (client) { TODO: Maybe put this back
@@ -313,12 +324,12 @@ public class RegistryServer extends AbstractServer {
 		//}
 		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
-		for (NodeConnection node : super.getNodeConnections()) {
+		for (MessagingConnection node : super.getNodeConnections()) {
 			complete = (node.getComplete() && complete);
 		}
 		if (complete == false)
 			return;
-		super.sleep(10000);
+		super.sleep(75000);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
@@ -327,7 +338,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public void statisticsCompiler(StatisticsMessage m, NodeConnection client) {
+	public void statisticsCompiler(StatisticsMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m);
 		connectionInfo.addStats(client, m.makeCollector());
@@ -351,17 +362,16 @@ public class RegistryServer extends AbstractServer {
 			total[4] += s.getRelayed();
 		}
 		System.out.printf("%-18s %10d %15d %10d %15d %10d\n", "Total", total[0], total[1], total[2], total[3], total[4]);
-		for (NodeConnection node : super.getNodeConnections()) {
+		for (MessagingConnection node : super.getNodeConnections()) {
 			node.resetComplete();
 		}
 		connectionInfo.resetCollector();
 	}
 
 	@Override
-	protected void MessageFromNode(Object o, NodeConnection client) {
-		if (o instanceof ProtocolMessage == false)
-			return;
-		ProtocolMessage msg = (ProtocolMessage) o;
+	protected void MessageFromNode(ProtocolMessage msg, MessagingConnection client) {
+		System.out.println(msg);
+		System.out.println(msg.getStringType());
 		switch(msg.getStringType()) {
 			case "REGISTER_REQUEST":
 				registerNode(msg.convertToRegistation(), client);
