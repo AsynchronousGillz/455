@@ -64,14 +64,6 @@ public class MessagingNode {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
-			case "send":
-				if (tokens.length == 1) {
-					server.testTask();
-					server.testMessaging();
-				} else {
-					this.invalid(message);
-				}
-				break;
 			case "exit-overlay": case "exit":
 				if (tokens.length == 1) {
 					client.unregister();
@@ -178,11 +170,13 @@ public class MessagingNode {
 		try {
 			nodeServer = new NodeServer();
 			nodeServer.listen();
+			nodeServer.start();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		}
 		
 		NodeClient nodeClient = new NodeClient(nodeServer, registryIP, registryPort);
+		nodeClient.start();
 		
 		MessagingNode node = new MessagingNode(nodeClient, nodeServer);
 		node.runConsole();

@@ -78,7 +78,6 @@ public class NodeClient extends Thread {
 			closeConnection();
 		}
 		super.setName("client_" + nodeServer.getHost() + ":" + nodeServer.getPort());
-		this.start(); // Start the thread
 	}
 
 	/**
@@ -182,15 +181,11 @@ public class NodeClient extends Thread {
 	final public void run() {
 		// Additional setting up
 		connectionEstablished();
-
 		try {
 			while (super.isInterrupted() == false) {
-				byte[] bytes = null;
-				synchronized (input) {
-					int byteSize = input.readInt();
-					bytes = new byte[byteSize];
-					input.readFully(bytes, 0, byteSize);
-				}
+				int byteSize = input.readInt();
+				byte[] bytes = new byte[byteSize];
+				input.readFully(bytes, 0, byteSize);
 				messageFromServer(new ProtocolMessage(bytes));
 			}
 		} catch (Exception exception) {
@@ -319,7 +314,6 @@ public class NodeClient extends Thread {
 	private void registerResponse(RegistationMessage m) {
 		if (debug)
 			System.out.println(m.getMessageString());
-		;
 		if (m.getMessage().equals("False")) {
 			close(0);
 		}

@@ -40,7 +40,7 @@ public class RegistryInfo {
 	/**
 	 * The list of connections to other nodes.
 	 */
-	private byte[][] overlay;
+	private int[][] overlay;
 
 	/**
 	 * When the server is given the command to set up the overlay.
@@ -216,9 +216,9 @@ public class RegistryInfo {
 			return "Overlay has not been constructed.";
 		StringBuilder ret = new StringBuilder();
 		int index = 0;
-		for (byte[] bytes: overlay) {
+		for (int[] bytes: overlay) {
 			ret.append(String.format("%02d -> ", index++));
-			for (byte b: bytes) {
+			for (int b: bytes) {
 				ret.append(b + " ");
 			}
 			ret.append("\n");
@@ -288,22 +288,33 @@ public class RegistryInfo {
 	
 	/**
 	 * The overlay is a byte[][] that when byte[x][y] != 0
-	 * lists the weight of the connection.
+	 * lists the weight of the connection. To ensure that 
+	 * every node can connect to every other node first loop 
+	 * around the array and connect every node to two of its
+	 * N closest nodes.
 	 */
 	public void buildOverlay() {
 		Random rand = new Random();
 		while (validOverlay == false) {
 			
-			overlay = new byte[data.size()][data.size()];
+			overlay = new int[data.size()][data.size()];
 			int size = overlay.length;
-			int sum = setOverlayStart(rand, size);
+			int sum = 0;
+			
+			int weight = 0;
+			for (int i = 0; i < size; i++) {
+				int aI = ((i-1) % size + size) % size;
+				int bI = (i % size + size) % size;
+				weight = (rand.nextInt(9) + 1);
+				overlay[aI][bI] = overlay[bI][aI] = weight;
+				sum += 2;
+			}
 
 			for (int row = 0; row < size; row++) {
 				for (int column = 0; column < size; column++) {
 					if (checkConnection(size, row, column) == true) {
-						byte weight = (byte)((byte)rand.nextInt(9) + 1);
-						overlay[row][column] = weight;
-						overlay[column][row] = weight;
+						weight = rand.nextInt(9) + 1;
+						overlay[row][column] = overlay[column][row] = weight;
 						sum += 2;
 					}
 				}
@@ -312,28 +323,6 @@ public class RegistryInfo {
 				validOverlay = true;
 		}
 		info = new StatisticsCollector[data.size()];
-	}
-	/**
-	 * To ensure that every node can connect to every other node
-	 * first loop around the array and connect every node to two
-	 * of its N closest nodes.
-	 * @param size
-	 * 			The size of the array.
-	 * @return sum
-	 * 			The sum of the number of connections made.
-	 */
-	private int setOverlayStart(Random rand, int size) {
-		int ret = 2;
-		byte weight = (byte)((byte)rand.nextInt(9) + 1);
-		overlay[0][size-1] = weight;
-		overlay[size-1][0] = weight;
-		for (int i = 1; i < size; i++) {
-			weight = (byte)((byte)rand.nextInt(9) + 1);
-			overlay[i-1][i] = weight;
-			overlay[i][i-1] = weight;
-			ret += 2;
-		}
-		return ret;
 	}
 
 	/**

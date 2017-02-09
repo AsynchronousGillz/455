@@ -113,7 +113,6 @@ public class NodeConnection extends Thread {
 		this.ipAddress = getName();
 		this.hostName = null;
 		this.cost = this.port = 0;
-		this.complete = false;
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -143,7 +142,6 @@ public class NodeConnection extends Thread {
 	 * effect.
 	 */
 	final public void close() {
-		complete = true; // Set the flag that tells the thread to stop
 		try {
 			closeAll();
 		} catch (IOException ex) {
@@ -326,9 +324,8 @@ public class NodeConnection extends Thread {
 	final public void run() {
 		server.nodeConnected(this);
 		try {
-			int byteSize;
 			while (super.isInterrupted() == false) {
-				byteSize = input.readInt();
+				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
 				server.MessageFromNode(new ProtocolMessage(bytes), this);
@@ -336,10 +333,8 @@ public class NodeConnection extends Thread {
 		} catch (EOFException ex) {
 			close();
 		} catch (Exception ex) {
-			if (complete == false) {
-				close();
-				server.nodeException(this, ex);
-			}
+			close();
+			server.nodeException(this, ex);
 		}
 	}
 	

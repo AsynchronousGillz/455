@@ -43,12 +43,6 @@ public abstract class AbstractServer extends Thread {
 	protected ThreadGroup nodeThreadGroup;
 
 	/**
-	 * Indicates if the listening thread is ready to stop. Set to false by
-	 * default.
-	 */
-	private boolean stop = true;
-	
-	/**
 	 * The setup-overlay has begun.
 	 */
 	protected boolean registationCheck;
@@ -85,6 +79,7 @@ public abstract class AbstractServer extends Thread {
 			}
 		};
 		this.port = port;
+		serverSocket = null;
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -97,18 +92,14 @@ public abstract class AbstractServer extends Thread {
 	 *                if an I/O error occurs when creating the server socket.
 	 */
 	final public void listen() throws IOException {
-		if (isListening() == false) {
-			if (serverSocket == null) {
-				serverSocket = new ServerSocket(getPort(), backlog);
-			}
-			if (getPort() == 0)
-				this.setPort(this.serverSocket.getLocalPort());
-			setName();
-
-			serverSocket.setSoTimeout(timeout);
-			stop = false;
-			this.start();
+		if (serverSocket == null) {
+			serverSocket = new ServerSocket(getPort(), backlog);
 		}
+		if (getPort() == 0)
+			this.setPort(this.serverSocket.getLocalPort());
+		setName();
+
+		serverSocket.setSoTimeout(timeout);
 	}
 
 	/**
@@ -119,13 +110,6 @@ public abstract class AbstractServer extends Thread {
 		this.setName(ipAddress+":"+this.port);
 	}
 
-	/**
-	 * Causes the server to stop accepting new connections.
-	 */
-	final public void stopListening() {
-		stop = true;
-	}
-	
 	/**
 	 * Causes the server to stop accepting new connections.
 	 */
@@ -148,7 +132,6 @@ public abstract class AbstractServer extends Thread {
 	final synchronized public void close() {
 		if (serverSocket == null)
 			return;
-		stopListening();
 		try {
 			serverSocket.close();
 		} catch (IOException ex) {
@@ -185,25 +168,6 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
-
-	/**
-	 * Returns true if the server is ready to accept new clients.
-	 *
-	 * @return true if the server is listening.
-	 */
-	final public boolean isListening() {
-		return stop;
-	}
-
-	/**
-	 * Returns true if the server has stopped.
-	 *
-	 * @return true if the server has stopped.
-	 */
-	final public boolean getStatus() {
-		return stop;
-	}
-
 
 	/**
 	 * Returns a String array containing the names of the existing node 
@@ -415,12 +379,8 @@ public abstract class AbstractServer extends Thread {
 			serverClosed();
 		} catch (IOException exception) {
 			if (super.isInterrupted() == true) {
-				listeningException(exception);
-			} else {
 				serverClosed();
 			}
-		} finally {
-			stop = true;
 		}
 	}
 

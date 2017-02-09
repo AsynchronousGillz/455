@@ -124,34 +124,6 @@ public class NodeServer extends AbstractServer {
 	}
 	
 	/**
-	 * Test sending messages to host with 0 hops.
-	 */
-	public void testTask() {
-		if (dijkstra == null) {
-			System.err.println("Overlay has not been setup yet.");
-			return;
-		}
-		System.out.println("TEST TASK.");
-		String target = super.getConnectionNames()[0];
-		sendTaskMessage(super.getConnection(target), target);
-	}
-	
-	/**
-	 * Test sending messages to any host in the overlay.
-	 */
-	public void testMessaging() {
-		if (dijkstra == null) {
-			System.err.println("Overlay has not been setup yet.");
-			return;
-		}
-		System.out.println("TEST MESSAGING.");
-		String target = dijkstra.getRandomNode();
-		String nextHop = dijkstra.getNextHop(target);
-		sendTaskMessage(super.getConnection(nextHop), target);
-
-	}
-	
-	/**
 	 * Send the task message to the {@link NodeConnection} for the 
 	 * destination of target.
 	 * @param node
@@ -160,8 +132,6 @@ public class NodeServer extends AbstractServer {
 	private void sendTaskMessage(NodeConnection node, String target) {
 		if (debug)
 			System.out.println("Target: "+target+" node: "+node);
-		if (node == null)
-			System.err.println("sendTaskMessage: FIRE! FIRE!");
 		Random rand = new Random();
 		for (int count = 0; count < 5; count++) {
 			int random = rand.nextInt();
@@ -266,6 +236,7 @@ public class NodeServer extends AbstractServer {
 			return;
 		}
 		String hop = dijkstra.getNextHop(m.getDest());
+		System.out.println(Thread.currentThread().getName() +" to: "+ hop);
 		try {
 			super.getConnection(hop).sendToNode(m);
 			stats.addRelayed();

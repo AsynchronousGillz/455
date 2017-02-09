@@ -74,6 +74,13 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
+			case "show-overlay": case "show":
+				if (tokens.length == 1) {
+					System.out.print(server.testDisplayOverlay());
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "setup-overlay": case "setup":
 				if (tokens.length == 1) {
 					server.makeOverlay();
@@ -156,7 +163,7 @@ public class Registry {
 	 * It closes the server.
 	 */
 	public void shutdown() throws IOException {
-		server.stopListening();
+		server.interrupt();
 	}
 
 	public static void main(String [] args) {
@@ -172,6 +179,7 @@ public class Registry {
 		try {
 			server = new RegistryServer(port);
 			server.listen();
+			server.start();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 		}

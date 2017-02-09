@@ -149,6 +149,14 @@ public class RegistryServer extends AbstractServer {
 		}
 		this.setRegistration();
 	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public String testDisplayOverlay() {
+		return connectionInfo.displayOverlay();
+	}
 
 	/**
 	 * When the command 'list-weights' is entered it will call the
@@ -308,7 +316,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		this.sleep(7500);
+		super.sleep(15000);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
