@@ -305,10 +305,12 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public synchronized void taskComplete(RegistationMessage m, NodeConnection client) {
+	public void taskComplete(RegistationMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
-		client.setComplete();
+		//synchronized (client) { TODO: Maybe put this back
+			client.setComplete();
+		//}
 		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
 		for (NodeConnection node : super.getNodeConnections()) {
@@ -316,7 +318,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		super.sleep(15000);
+		super.sleep(10000);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
@@ -325,7 +327,7 @@ public class RegistryServer extends AbstractServer {
 	 * @param m
 	 * @param client
 	 */
-	public synchronized void statisticsCompiler(StatisticsMessage m, NodeConnection client) {
+	public void statisticsCompiler(StatisticsMessage m, NodeConnection client) {
 		if (debug)
 			System.out.println(m);
 		connectionInfo.addStats(client, m.makeCollector());
@@ -353,13 +355,6 @@ public class RegistryServer extends AbstractServer {
 			node.resetComplete();
 		}
 		connectionInfo.resetCollector();
-	}
-	
-	/**
-	 * 
-	 */
-	public void sendStop() {
-		
 	}
 
 	@Override

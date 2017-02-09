@@ -5,8 +5,14 @@ NC='\033[0m' # No Color
 
 mFile="${HOME}/.ssh/randomLab"
 
+if [ $TMUX -z ];then
+	echo must run from tmux. >&2
+	exit 1
+fi
+
 if [ $# -ne 1 ];then
 	echo "Usage: $0 <#>" >&2
+	exit 1
 fi
 
 

@@ -46,7 +46,7 @@ public abstract class AbstractServer extends Thread {
 	 * The setup-overlay has begun.
 	 */
 	protected boolean registationCheck;
-	
+
 	/**
 	 * The connection registration list.
 	 */
@@ -107,7 +107,7 @@ public abstract class AbstractServer extends Thread {
 	 */
 	final public void setName() throws IOException {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
-		this.setName(ipAddress+":"+this.port);
+		this.setName(ipAddress + ":" + this.port);
 	}
 
 	/**
@@ -123,8 +123,8 @@ public abstract class AbstractServer extends Thread {
 
 	/**
 	 * Closes the server socket and the connections with all clients. Any
-	 * exception thrown while closing a client is ignored. If the server 
-	 * is already closed, this call has no effect.
+	 * exception thrown while closing a client is ignored. If the server is
+	 * already closed, this call has no effect.
 	 *
 	 * @exception IOException
 	 *                if an I/O error occurs while closing the server socket.
@@ -170,7 +170,7 @@ public abstract class AbstractServer extends Thread {
 	// ACCESSING METHODS ------------------------------------------------
 
 	/**
-	 * Returns a String array containing the names of the existing node 
+	 * Returns a String array containing the names of the existing node
 	 * connections.
 	 *
 	 * @return an array of Strings containing NodeConnection Names.
@@ -180,20 +180,20 @@ public abstract class AbstractServer extends Thread {
 		NodeConnection[] nodeThreadList = new NodeConnection[size];
 		nodeThreadGroup.enumerate(nodeThreadList);
 		String[] ret = new String[size];
-		for (int i = 0; i < size; i ++) {
+		for (int i = 0; i < size; i++) {
 			ret[i] = nodeThreadList[i].toString();
 		}
 		return ret;
 	}
 
 	/**
-	 * Returns the NodeConnection Object that has both port and ip 
-	 * matching.
+	 * Returns the NodeConnection Object that has both port and ip matching.
+	 * 
 	 * @param address
-	 * 		"ip:port"
+	 *            "ip:port"
 	 * @return an array of Strings containing NodeConnection Names.
 	 */
-	synchronized final public NodeConnection getConnection(String address) {
+	final public NodeConnection getConnection(String address) {
 		NodeConnection ret = null;
 		int size = nodeThreadGroup.activeCount();
 		NodeConnection[] nodeThreadList = new NodeConnection[size];
@@ -208,12 +208,12 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * Returns an array containing the existing node connections. New
-	 * node can also connect. This is only for that time.
+	 * Returns an array containing the existing node connections. New node can
+	 * also connect. This is only for that time.
 	 *
 	 * @return an array of NodeConnection containing NodeConnection instances.
 	 */
-	synchronized final public NodeConnection[] getNodeConnections() {
+	final public NodeConnection[] getNodeConnections() {
 		NodeConnection[] nodeThreadList = new NodeConnection[nodeThreadGroup.activeCount()];
 		nodeThreadGroup.enumerate(nodeThreadList);
 		return nodeThreadList;
@@ -237,7 +237,8 @@ public abstract class AbstractServer extends Thread {
 		String ret = null;
 		try {
 			ret = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {}
+		} catch (UnknownHostException e) {
+		}
 		return ret;
 	}
 
@@ -250,14 +251,16 @@ public abstract class AbstractServer extends Thread {
 		String ret = null;
 		try {
 			ret = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {}
+		} catch (UnknownHostException e) {
+		}
 		return ret;
 	}
 
 	/**
 	 * Returns a string host name.
 	 *
-	 * @param ip of target machine.
+	 * @param ip
+	 *            of target machine.
 	 * @return machine host name.
 	 */
 	final public String getTargetHostName(String targetIP) {
@@ -270,7 +273,7 @@ public abstract class AbstractServer extends Thread {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Returns the port number.
 	 *
@@ -292,8 +295,9 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * Each Server will have a {@link StatisticsCollector} even the registry
-	 * to add up the total of the Statistics.
+	 * Each Server will have a {@link StatisticsCollector} even the registry to
+	 * add up the total of the Statistics.
+	 * 
 	 * @return
 	 */
 	final public StatisticsCollector getStats() {
@@ -303,6 +307,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * Each Server will have a {@link StatisticsCollector} even the registry
 	 * this will create the StatisticsCollector for the server.
+	 * 
 	 * @param list
 	 */
 	final public void setStats() {
@@ -334,11 +339,9 @@ public abstract class AbstractServer extends Thread {
 		this.backlog = backlog;
 	}
 
-
 	/**
-	 * Validate input is a valid number. If number is zero
-	 * then parse int failed and an error will be printed
-	 * and return zero.
+	 * Validate input is a valid number. If number is zero then parse int failed
+	 * and an error will be printed and return zero.
 	 * 
 	 * @param input
 	 *            The string to be validated.
@@ -374,7 +377,8 @@ public abstract class AbstractServer extends Thread {
 					synchronized (this) {
 						new NodeConnection(this.nodeThreadGroup, clientSocket, this).start();
 					}
-				} catch (InterruptedIOException exception) {}
+				} catch (InterruptedIOException exception) {
+				}
 			}
 			serverClosed();
 		} catch (IOException exception) {
@@ -406,7 +410,7 @@ public abstract class AbstractServer extends Thread {
 	synchronized protected void nodeDisconnected(NodeConnection node) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
-		System.out.println(node.getAddress()+" disconnected at "+dateFormat.format(date));
+		System.out.println(node.getAddress() + " disconnected at " + dateFormat.format(date));
 	}
 
 	/**
@@ -433,6 +437,7 @@ public abstract class AbstractServer extends Thread {
 	 *            the exception raised.
 	 */
 	protected abstract void listeningException(Throwable exception);
+
 	/**
 	 * Hook method called when the server starts listening for connections. The
 	 * default implementation does nothing. The method may be overridden by
@@ -441,9 +446,8 @@ public abstract class AbstractServer extends Thread {
 	protected abstract void serverStarted();
 
 	/**
-	 * Hook method called when the server is closed. When the server
-	 * is closed while still listening, serverStopped() will also be 
-	 * called.
+	 * Hook method called when the server is closed. When the server is closed
+	 * while still listening, serverStopped() will also be called.
 	 */
 	protected abstract void serverClosed();
 

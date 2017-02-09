@@ -90,6 +90,7 @@ public class NodeServer extends AbstractServer {
 			return;
 		}
 		NodeConnection node = null;
+
 		synchronized (this) {
 			try {
 				node = new NodeConnection(this.nodeThreadGroup, clientSocket, this);
@@ -117,6 +118,8 @@ public class NodeServer extends AbstractServer {
 	public void startMessaging(int number) {
 		stats.reset();
 		for (int i = 0; i < number; i++) {
+			if (i % 1000 == 0)
+				System.out.println("At number " + i);
 			String target = dijkstra.getRandomNode();
 			String nextHop = dijkstra.getNextHop(target);
 			sendTaskMessage(super.getConnection(nextHop), target);
@@ -186,7 +189,7 @@ public class NodeServer extends AbstractServer {
 	}
 
 
-	synchronized public void nodeDisconnected(NodeConnection nodeConnection) {
+	public void nodeDisconnected(NodeConnection nodeConnection) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
@@ -236,7 +239,7 @@ public class NodeServer extends AbstractServer {
 			return;
 		}
 		String hop = dijkstra.getNextHop(m.getDest());
-		System.out.println(Thread.currentThread().getName() +" to: "+ hop);
+//		System.out.println(Thread.currentThread().getName() +" to: "+ hop);
 		try {
 			super.getConnection(hop).sendToNode(m);
 			stats.addRelayed();

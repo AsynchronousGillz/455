@@ -112,13 +112,6 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
-			case "exit":
-				if (tokens.length == 1) {
-					server.sendStop();
-				} else {
-					this.invalid(message);
-				}
-				break;
 			case "print-stats": case "print":
 				if (tokens.length == 1) {
 					System.out.println(server.getStats());
@@ -170,6 +163,8 @@ public class Registry {
 		int port = 0;
 		try {
 			port = Integer.parseInt(args[0]);
+		} catch (NumberFormatException ex) {
+			System.err.println("Port argument must be a number.");
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			port = 60100;
 		}

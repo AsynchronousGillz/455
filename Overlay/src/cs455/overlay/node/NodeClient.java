@@ -258,6 +258,7 @@ public class NodeClient extends Thread {
 		} finally {
 			if (mode == 0) {
 				System.out.println("Disconnecting from the server. Exitting.");
+				System.exit(0);
 			} else {
 				System.err.println("An error occured connecting to the server. Exitting.");
 				System.exit(1);

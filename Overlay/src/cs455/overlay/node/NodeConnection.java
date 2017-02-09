@@ -71,7 +71,7 @@ public class NodeConnection extends Thread {
 	 * Indicates if the thread is ready to stop. Set to true when closing of the
 	 * connection is initiated.
 	 */
-	private boolean complete;
+	private volatile boolean complete;
 	
 	/**
 	 * Debug this.
@@ -196,6 +196,7 @@ public class NodeConnection extends Thread {
 		this.hostName = hostName;
 		this.ipAddress = ipAddress;
 		this.port = port;
+		super.setName(this.ipAddress+":"+this.port);
 	}
 	
 	/**
@@ -208,14 +209,14 @@ public class NodeConnection extends Thread {
 	/**
 	 * Sets the job to state to true;
 	 */
-	public synchronized void resetComplete() {
+	public void resetComplete() {
 		this.complete = false;
 	}
 	
 	/**
 	 * Sets the job to state to true;
 	 */
-	public synchronized void setComplete() {
+	public void setComplete() {
 		this.complete = true;
 	}
 	
@@ -324,7 +325,7 @@ public class NodeConnection extends Thread {
 	final public void run() {
 		server.nodeConnected(this);
 		try {
-			while (super.isInterrupted() == false) {
+			while (super.isInterrupted() == false && this.isAlive() == true) {
 				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
