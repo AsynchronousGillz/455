@@ -88,8 +88,6 @@ public class MessagingServer extends AbstractServer {
 	public void startMessaging(int number) {
 		stats.reset();
 		for (int i = 0; i < number; i++) {
-			if (i % 1000 == 0)
-				System.out.println("At number " + i);
 			String target = dijkstra.getRandomNode();
 			String nextHop = dijkstra.getNextHop(target);
 			sendTaskMessage(super.getConnection(nextHop), target);

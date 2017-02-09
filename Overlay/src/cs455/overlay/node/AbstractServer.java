@@ -50,7 +50,14 @@ public abstract class AbstractServer extends Thread {
 	 * the queue until the a {@link MessagingProcessor} can process the message.
 	 * The default size is 10000. 
 	 */
-	protected MessageQueue queue;
+	protected MessageQueue inbox;
+	
+	/**
+	 * The connection master statistics holder. Each message will be placed in 
+	 * the queue until the a {@link MessagingProcessor} can process the message.
+	 * The default size is 10000. 
+	 */
+	protected MessageQueue outbox;
 
 	/**
 	 * The connection master statistics holder.
@@ -60,7 +67,7 @@ public abstract class AbstractServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	protected final boolean debug = true;
+	protected final boolean debug = false;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -73,16 +80,17 @@ public abstract class AbstractServer extends Thread {
 	public AbstractServer(int port) {
 		this.connectionGroup = new ThreadGroup("MessagingConnection threads") {
 			public void uncaughtException(Thread thread, Throwable exception) {
-				nodeException((MessagingConnection) thread, exception);
+				connectionException((MessagingConnection) thread, exception);
 			}
 		};
 		this.processorGroup = new ThreadGroup("MessagingProcessor threads") {
 			public void uncaughtException(Thread thread, Throwable exception) {
-				nodeException((MessagingConnection) thread, exception);
+				processorException((MessagingProcessor) thread, exception);
 			}
 		};
 		this.port = port;
-		queue = new MessageQueue(10000);
+		inbox = new MessageQueue(10000);
+		outbox = new MessageQueue(10000);
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -152,7 +160,8 @@ public abstract class AbstractServer extends Thread {
 	 */
 	synchronized final private MessagingConnection createConnection(Socket clientSocket) {
 		try {
-			new MessagingProcessor(processorGroup, queue, this).start();
+			new MessagingProcessor(this.processorGroup, inbox, this).start();
+			new MessagingProcessor(this.processorGroup, outbox, this).start();
 			return new MessagingConnection(this.connectionGroup, clientSocket, this);
 		} catch (IOException e) {
 			System.err.println("Error: could not create MessagingConnection.");
@@ -401,7 +410,7 @@ public abstract class AbstractServer extends Thread {
 	 * @param pair
 	 */
 	public void addPair(MessagePair pair) {
-		queue.put(pair);
+		inbox.put(pair);
 	}
 
 	// RUN METHOD -------------------------------------------------------
@@ -454,16 +463,27 @@ public abstract class AbstractServer extends Thread {
 	}
 
 	/**
-	 * Hook method called each time an exception is thrown in a
-	 * ConnectionToClient thread. The method may be overridden by subclasses but
-	 * should remains synchronized.
+	 * Called each time an exception is thrown in a MessagingConnection thread.
 	 *
 	 * @param client
 	 *            the client that raised the exception.
 	 * @param Throwable
 	 *            the exception thrown.
 	 */
-	synchronized protected void nodeException(MessagingConnection client, Throwable exception) {
+	final synchronized protected void connectionException(MessagingConnection client, Throwable exception) {
+		System.err.println(client + " has thrown Exception: " + exception.toString());
+		exception.printStackTrace();
+	}
+	
+	/**
+	 * Called each time an exception is thrown in a  thread.
+	 *
+	 * @param client
+	 *            the client that raised the exception.
+	 * @param Throwable
+	 *            the exception thrown.
+	 */
+	final synchronized protected void processorException(MessagingProcessor client, Throwable exception) {
 		System.err.println(client + " has thrown Exception: " + exception.toString());
 		exception.printStackTrace();
 	}

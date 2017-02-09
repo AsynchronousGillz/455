@@ -46,8 +46,16 @@ public class MessageQueue {
 	 * Gets the size of the queue.
 	 * @return size
 	 */
-	public int get_size() {
-		return (size);
+	public int getSize() {
+		return size;
+	}
+	
+	/**
+	 * Gets the size of the queue.
+	 * @return size
+	 */
+	public int getDifference() {
+		return this.front - this.back;
 	}
 
 	/**
@@ -82,6 +90,6 @@ public class MessageQueue {
 		}
 		this.used++;
 		contents[this.back++ % this.size] = m;
-		notify();
+		notifyAll();
 	}
 }

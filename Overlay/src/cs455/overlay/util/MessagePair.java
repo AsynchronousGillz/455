@@ -42,5 +42,11 @@ public class MessagePair {
 	public MessagingConnection getNode() {
 		return node;
 	}
+
+	@Override
+	public String toString() {
+		return "MessagePair [msg=" + msg + ", node=" + node + "]";
+	}
+	
 	
 }

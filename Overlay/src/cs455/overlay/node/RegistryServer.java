@@ -268,9 +268,8 @@ public class RegistryServer extends AbstractServer {
 	 * @param client
 	 */
 	public void registerNode(RegistationMessage m, MessagingConnection client) {
-		if (true)
+		if (debug)
 			System.out.println(m.getMessageString());
-		System.out.println("ERROR");
 		if (registationCheck == true) {
 			sendRegistrationResponse(false, client);
 			return;
@@ -319,9 +318,9 @@ public class RegistryServer extends AbstractServer {
 	public void taskComplete(RegistationMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m);
-		//synchronized (client) { TODO: Maybe put this back
+		synchronized (client) {
 			client.setComplete();
-		//}
+		}
 		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
 		for (MessagingConnection node : super.getNodeConnections()) {
@@ -329,7 +328,7 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		super.sleep(75000);
+		super.sleep(7500);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
@@ -370,8 +369,6 @@ public class RegistryServer extends AbstractServer {
 
 	@Override
 	protected void MessageFromNode(ProtocolMessage msg, MessagingConnection client) {
-		System.out.println(msg);
-		System.out.println(msg.getStringType());
 		switch(msg.getStringType()) {
 			case "REGISTER_REQUEST":
 				registerNode(msg.convertToRegistation(), client);

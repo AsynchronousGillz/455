@@ -5,7 +5,7 @@ NC='\033[0m' # No Color
 
 mFile="${HOME}/.ssh/randomLab"
 
-if [ $TMUX -z ];then
+if [ "$TMUX" == "" ];then
 	echo must run from tmux. >&2
 	exit 1
 fi

@@ -20,7 +20,7 @@ public class MessagingProcessor extends Thread {
 	/**
 	 * A reference to the Server that created this instance.
 	 */
-	private AbstractServer server;
+	final private AbstractServer server;
 
 	
 	// CONSTRUCTORS *****************************************************
@@ -41,6 +41,7 @@ public class MessagingProcessor extends Thread {
 		super(group, (Runnable) null);
 		setName("MP-"+getId());
 		this.queue = queue;
+		this.server = server;
 	}
 
 	// INSTANCE METHODS *************************************************

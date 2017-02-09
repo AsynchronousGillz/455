@@ -336,7 +336,7 @@ public class MessagingConnection extends Thread {
 			close();
 		} catch (Exception ex) {
 			close();
-			server.nodeException(this, ex);
+			server.connectionException(this, ex);
 		}
 	}
 	
