@@ -135,6 +135,7 @@ public class MessagingConnection extends Thread {
 		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
+			output.flush();
 		}
 	}
 
@@ -146,7 +147,7 @@ public class MessagingConnection extends Thread {
 		try {
 			closeAll();
 		} catch (IOException ex) {
-			System.err.println(ex.toString());
+//			System.err.println(ex.toString());
 		} finally {
 			server.nodeDisconnected(this);
 		}
@@ -330,7 +331,7 @@ public class MessagingConnection extends Thread {
 				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				server.addPair(new MessagePair(new ProtocolMessage(bytes), this));
+				server.addPairToInbox(new MessagePair(new ProtocolMessage(bytes), this));
 			}
 		} catch (EOFException ex) {
 			close();

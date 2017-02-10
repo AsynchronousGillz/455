@@ -66,12 +66,12 @@ public class MessageQueue {
 		while (used == 0) {
 			try {
 				this.wait();
-				// System.out.printf("Queue is empty. %d = this.size\n");
+//				System.out.println("Queue is empty");
 			} catch (InterruptedException e) {
 			}
 		}
-		notify();
 		this.used--;
+		notify();
 		return (contents[this.front++ % this.size]);
 	}
 
@@ -84,7 +84,7 @@ public class MessageQueue {
 		while (used == size) {
 			try {
 				this.wait();
-				// System.out.printf("Queue is full. %d = this.size\n");
+//				System.out.println("Queue is full");
 			} catch (InterruptedException e) {
 			}
 		}

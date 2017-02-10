@@ -96,6 +96,7 @@ public class MessagingClient extends Thread {
 		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
+			output.flush();
 		}
 	}
 

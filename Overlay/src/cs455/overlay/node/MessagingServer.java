@@ -49,11 +49,7 @@ public class MessagingServer extends AbstractServer {
 			MessagingConnection nodeConnection = super.getConnection(host[1]);
 			int cost = super.validateInput(host[2]);
 			nodeConnection.setCost(cost);
-			try {
-				nodeConnection.sendToNode(new EdgeMessage(port, cost));
-			} catch (IOException e) {
-				System.err.println("Error when sending wieght information.");
-			}
+			super.addPairToOutbox(new MessagePair(new EdgeMessage(port, cost), nodeConnection));
 		}
 		dijkstra.addOverlay(nodes);
 	}
@@ -106,13 +102,8 @@ public class MessagingServer extends AbstractServer {
 		Random rand = new Random();
 		for (int count = 0; count < 5; count++) {
 			int random = rand.nextInt();
-			try {
-				node.sendToNode(new TaskMessage(target, random));
-				stats.addSent(random);
-			} catch (IOException e) {
-				System.out.println(e.toString());
-				e.printStackTrace();
-			}
+			super.stats.addSent(random);
+			super.addPairToOutbox(new MessagePair(new TaskMessage(target, random), node));
 		}
 	}
 
@@ -207,13 +198,8 @@ public class MessagingServer extends AbstractServer {
 			return;
 		}
 		String hop = dijkstra.getNextHop(m.getDest());
-//		System.out.println(Thread.currentThread().getName() +" to: "+ hop);
-		try {
-			super.getConnection(hop).sendToNode(m);
-			stats.addRelayed();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		super.addPairToOutbox(new MessagePair(m, super.getConnection(hop)));
+		stats.addRelayed();
 	}
 	
 	@Override

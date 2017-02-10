@@ -89,8 +89,8 @@ public abstract class AbstractServer extends Thread {
 			}
 		};
 		this.port = port;
-		inbox = new MessageQueue(10000);
-		outbox = new MessageQueue(10000);
+		inbox = new MessageQueue(100000);
+		outbox = new MessageQueue(100000);
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -159,9 +159,10 @@ public abstract class AbstractServer extends Thread {
 	 * 
 	 */
 	synchronized final private MessagingConnection createConnection(Socket clientSocket) {
+		new MessagingSender(this.processorGroup, outbox).start();
+		new MessagingProcessor(this.processorGroup, inbox, this).start();
 		try {
-			new MessagingProcessor(this.processorGroup, inbox, this).start();
-			new MessagingProcessor(this.processorGroup, outbox, this).start();
+			clientSocket.setReceiveBufferSize(Integer.MAX_VALUE);
 			return new MessagingConnection(this.connectionGroup, clientSocket, this);
 		} catch (IOException e) {
 			System.err.println("Error: could not create MessagingConnection.");
@@ -206,11 +207,7 @@ public abstract class AbstractServer extends Thread {
 	 */
 	public void sendToAllNodes(ProtocolMessage msg) {
 		for (MessagingConnection node : getNodeConnections()) {
-			try {
-				node.sendToNode(msg);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			this.addPairToOutbox(new MessagePair(msg, node));
 		}
 	}
 
@@ -409,8 +406,16 @@ public abstract class AbstractServer extends Thread {
 	 * Add the {@link MessagePair} to the queue.
 	 * @param pair
 	 */
-	public void addPair(MessagePair pair) {
+	public void addPairToInbox(MessagePair pair) {
 		inbox.put(pair);
+	}
+	
+	/**
+	 * Add the {@link MessagePair} to the queue.
+	 * @param pair
+	 */
+	public void addPairToOutbox(MessagePair pair) {
+		outbox.put(pair);
 	}
 
 	// RUN METHOD -------------------------------------------------------

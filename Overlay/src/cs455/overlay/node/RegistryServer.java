@@ -79,11 +79,7 @@ public class RegistryServer extends AbstractServer {
 		connectionInfo.buildOverlay();
 		for (MessagingConnection node : connectionInfo.getData()) {
 			String[] info = connectionInfo.getRegistration(node);
-			try {
-				node.sendToNode(new OverlayMessage(info, 0));
-			} catch (IOException e) {
-				System.out.println("Error: Could not send overlay to node: "+node);
-			}
+			super.addPairToOutbox(new MessagePair(new OverlayMessage(info, 0), node));
 		}
 		String[] info = null;
 		try {
@@ -252,11 +248,7 @@ public class RegistryServer extends AbstractServer {
 	 */
 	public void sendRegistrationResponse(boolean status, MessagingConnection client) {
 		String message = (status)?"True":"False";
-		try {
-			client.sendToNode(new RegistationMessage(message, 2));
-		} catch (IOException e) {
-			System.err.println(e.toString());
-		}
+		super.addPairToOutbox(new MessagePair(new RegistationMessage(message, 2), client));
 		if (status == false)
 			client.close();
 	}
@@ -328,7 +320,8 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		super.sleep(7500);
+		System.out.println("All nodes have finished sending. Waiting for Summary.");
+		super.sleep(2500*getNumberOfClients());
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	
