@@ -5,15 +5,16 @@ import java.io.*;
 import java.net.*;
 
 import cs455.overlay.msg.*;
+import cs455.overlay.util.MessagePair;
 
 /**
  * 
  * @author G van Andel
  *
- * @see node.NodeServer
+ * @see MessagingServer.NodeServer
  */
 
-public class NodeConnection extends Thread {
+public class MessagingConnection extends Thread {
 	// INSTANCE VARIABLES ***********************************************
 
 	/**
@@ -93,7 +94,7 @@ public class NodeConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error oclcur when creating the connection.
 	 */
-	public NodeConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
+	public MessagingConnection(ThreadGroup group, Socket nodeSocket, AbstractServer server) throws IOException {
 		super(group, (Runnable) null);
 		// Initialize variables
 		this.nodeSocket = nodeSocket;
@@ -134,6 +135,7 @@ public class NodeConnection extends Thread {
 		synchronized (output) {
 			output.writeInt(bytes.length);
 			output.write(bytes, 0, bytes.length);
+			output.flush();
 		}
 	}
 
@@ -145,7 +147,7 @@ public class NodeConnection extends Thread {
 		try {
 			closeAll();
 		} catch (IOException ex) {
-			System.err.println(ex.toString());
+//			System.err.println(ex.toString());
 		} finally {
 			server.nodeDisconnected(this);
 		}
@@ -216,14 +218,14 @@ public class NodeConnection extends Thread {
 	/**
 	 * Sets the job to state to true;
 	 */
-	public void setComplete() {
+	synchronized public void setComplete() {
 		this.complete = true;
 	}
 	
 	/**
 	 * Get the state of the job.
 	 */
-	public boolean getComplete() {
+	synchronized public boolean getComplete() {
 		return this.complete;
 	}
 	
@@ -302,7 +304,7 @@ public class NodeConnection extends Thread {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NodeConnection other = (NodeConnection) obj;
+		MessagingConnection other = (MessagingConnection) obj;
 		if (hostName == null && other.hostName != null)
 			return false;
 		else if (hostName.equals(other.hostName) == false)
@@ -329,13 +331,13 @@ public class NodeConnection extends Thread {
 				int byteSize = input.readInt();
 				byte[] bytes = new byte[byteSize];
 				input.readFully(bytes, 0, byteSize);
-				server.MessageFromNode(new ProtocolMessage(bytes), this);
+				server.addPairToInbox(new MessagePair(new ProtocolMessage(bytes), this));
 			}
 		} catch (EOFException ex) {
 			close();
 		} catch (Exception ex) {
 			close();
-			server.nodeException(this, ex);
+			server.connectionException(this, ex);
 		}
 	}
 	

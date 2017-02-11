@@ -6,7 +6,6 @@ import java.util.*;
 
 public class ProtocolMessage {
 
-
 	protected int type;
 	protected long time;
 	protected byte[] message;
@@ -37,7 +36,6 @@ public class ProtocolMessage {
 	 * Takes the bytes sent on the socket and assigns values.
 	 * 
 	 * @param bytes byte array from socket.
-	 * @throws IOException
 	 */
 	public ProtocolMessage(byte[] bytes) {
 		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
@@ -55,11 +53,11 @@ public class ProtocolMessage {
 			e.printStackTrace();
 		}
 	}
-
+	
 	//******************************************************************************
 
 	public int getType() {
-		return type;
+		return this.type;
 	}
 
 	public String getStringType() {
