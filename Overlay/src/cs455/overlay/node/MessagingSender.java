@@ -43,10 +43,14 @@ public class MessagingSender extends Thread {
 
 	public void run() {
 		while (isInterrupted() == false) {
-			MessagePair msg = queue.get();
 			try {
+				MessagePair msg = queue.get();
 				msg.getNode().sendToNode(msg.getMsg());
-			} catch (IOException e) {}
+			} catch (InterruptedException e) {
+				// Stopped by wait()
+			} catch (IOException e) {
+				// Stopped by send()
+			}
 		}
 	}
 

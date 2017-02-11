@@ -27,8 +27,18 @@ public class RegistryServer extends AbstractServer {
 	 */
 	protected RegistryInfo connectionInfo;
 	
+	/**
+	 * The number of rounds entered.
+	 */
+	private int numberOfRounds;
+	
 	// CONSTRUCTOR ******************************************************
-
+	
+	/**
+	 * 
+	 * @param port
+	 * @throws IOException
+	 */
 	public RegistryServer(int port) throws IOException {
 		super(port);
 		connectionInfo = new RegistryInfo(4);
@@ -219,6 +229,7 @@ public class RegistryServer extends AbstractServer {
 	public void sendStart(int numberOfRounds) {
 		if (numberOfRounds == 0)
 			return;
+		this.numberOfRounds = numberOfRounds;
 		if (connectionInfo.getValidOverlay() == false) {
 			System.err.println("Overlay has not been constructed.");
 			return;
@@ -310,9 +321,7 @@ public class RegistryServer extends AbstractServer {
 	public void taskComplete(RegistationMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m);
-		synchronized (client) {
-			client.setComplete();
-		}
+		client.setComplete();
 		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
 		for (MessagingConnection node : super.getNodeConnections()) {
@@ -320,8 +329,11 @@ public class RegistryServer extends AbstractServer {
 		}
 		if (complete == false)
 			return;
-		System.out.println("All nodes have finished sending. Waiting for Summary.");
-		super.sleep(2500*getNumberOfClients());
+		int time = 7000 * getNumberOfClients() + this.numberOfRounds;
+		int minutes = (time / 1000) / 60;
+		int seconds = (time / 1000) % 60;
+		System.out.println("All nodes have finished sending. Will now wait "+minutes+" minutes "+seconds+" seconds to allow messages to be routed.");
+		super.sleep(time);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}
 	

@@ -48,8 +48,12 @@ public class MessagingProcessor extends Thread {
 	
 	public void run() {
 		while (isInterrupted() == false) {
-			MessagePair msg = queue.get();
-			server.MessageFromNode(msg.getMsg(), msg.getNode());
+			try {
+				MessagePair msg = queue.get();
+				server.MessageFromNode(msg.getMsg(), msg.getNode());
+			} catch(InterruptedException e) {
+				// Stopped by wait()
+			}
 		}
 	}
 	

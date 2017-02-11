@@ -52,6 +52,7 @@ public class MessagingServer extends AbstractServer {
 			super.addPairToOutbox(new MessagePair(new EdgeMessage(port, cost), nodeConnection));
 		}
 		dijkstra.addOverlay(nodes);
+		System.out.println("Dijkstra has successfully been computed.");
 	}
 	
 	/**

@@ -407,7 +407,11 @@ public abstract class AbstractServer extends Thread {
 	 * @param pair
 	 */
 	public void addPairToInbox(MessagePair pair) {
-		inbox.put(pair);
+		try {
+			inbox.put(pair);
+		} catch (InterruptedException e) {
+			// Stopped by wait() 
+		}
 	}
 	
 	/**
@@ -415,7 +419,11 @@ public abstract class AbstractServer extends Thread {
 	 * @param pair
 	 */
 	public void addPairToOutbox(MessagePair pair) {
-		outbox.put(pair);
+		try {
+			outbox.put(pair);
+		} catch (InterruptedException e) {
+			// Stopped by wait()
+		}
 	}
 
 	// RUN METHOD -------------------------------------------------------

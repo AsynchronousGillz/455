@@ -11,3 +11,7 @@ all :
 
 clean :
 	rm bin/cs455/overlay/*/*.class 
+
+package :
+	rm bin/cs455/overlay/*/*.class 
+	tar -cvf van_Andel-Gerhard-HW1-PC.tar --exclude='test.sh' --exclude='.[^/]*' *

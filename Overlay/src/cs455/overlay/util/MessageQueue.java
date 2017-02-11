@@ -62,16 +62,11 @@ public class MessageQueue {
 	 * Get a message from the queue.
 	 * @return a {@link ProtocolMessage}
 	 */
-	public synchronized MessagePair get() {
-		while (used == 0) {
-			try {
+	public synchronized MessagePair get() throws InterruptedException {
+		while (used == 0)
 				this.wait();
-//				System.out.println("Queue is empty");
-			} catch (InterruptedException e) {
-			}
-		}
 		this.used--;
-		notify();
+		notifyAll();
 		return (contents[this.front++ % this.size]);
 	}
 
@@ -80,14 +75,9 @@ public class MessageQueue {
 	 * processed by a {@link MessagingProcessor}.
 	 * @param m
 	 */
-	public synchronized void put(MessagePair m) {
-		while (used == size) {
-			try {
+	public synchronized void put(MessagePair m) throws InterruptedException {
+		while (used == size)
 				this.wait();
-//				System.out.println("Queue is full");
-			} catch (InterruptedException e) {
-			}
-		}
 		this.used++;
 		contents[this.back++ % this.size] = m;
 		notifyAll();

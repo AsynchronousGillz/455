@@ -218,14 +218,14 @@ public class MessagingConnection extends Thread {
 	/**
 	 * Sets the job to state to true;
 	 */
-	public void setComplete() {
+	synchronized public void setComplete() {
 		this.complete = true;
 	}
 	
 	/**
 	 * Get the state of the job.
 	 */
-	public boolean getComplete() {
+	synchronized public boolean getComplete() {
 		return this.complete;
 	}
 	
