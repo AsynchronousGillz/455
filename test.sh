@@ -10,6 +10,12 @@ if [ "$TMUX" == "" ];then
 	exit 1
 fi
 
+read -p "Proceed with changing tmux layout? [yes or no]? " yn
+case $yn in
+	[Yy]* ) break;;
+	* ) echo "Will now exit."; exit 1;;
+esac
+
 if [ $# -ne 1 ];then
 	echo "Usage: $0 <#>" >&2
 	exit 1
