@@ -70,6 +70,7 @@ public class RegistryServer extends AbstractServer {
 	 * connected in the overlay. Then print an acknowledgment.
 	 */
 	private void setRegistration() {
+		connectionInfo.resetOverlaySent();
 		connectionInfo.buildOverlay();
 		for (MessagingConnection node : connectionInfo.getData()) {
 			String[] info = connectionInfo.getRegistration(node);
