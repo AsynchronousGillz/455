@@ -142,7 +142,7 @@ public class RegistryInfo {
 	 * @return (numberOfConnections < data.size())
 	 */
 	final public boolean checkOverlay() {
-		return (numberOfConnections < data.size());
+		return (numberOfConnections < data.size()) && this.validOverlay == false;
 	}
 
 	/**
