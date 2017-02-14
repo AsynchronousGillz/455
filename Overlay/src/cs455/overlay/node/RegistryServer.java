@@ -16,21 +16,11 @@ import cs455.overlay.msg.*;
 import cs455.overlay.util.*;
 
 public class RegistryServer extends AbstractServer {
-
-	/**
-	 * The setup-overlay has begun.
-	 */
-	protected boolean registationCheck;
 	
 	/**
 	 * The connection registration list.
 	 */
 	protected RegistryInfo connectionInfo;
-	
-	/**
-	 * The number of rounds entered.
-	 */
-	private int numberOfRounds;
 	
 	// CONSTRUCTOR ******************************************************
 	
@@ -42,7 +32,6 @@ public class RegistryServer extends AbstractServer {
 	public RegistryServer(int port) throws IOException {
 		super(port);
 		connectionInfo = new RegistryInfo(4);
-		registationCheck = false;
 	}
 	
 	// INSTANCE METHODS *************************************************
@@ -75,17 +64,13 @@ public class RegistryServer extends AbstractServer {
 		System.out.println("serverStopped :: Exitting.");
 	}
 	
-	public boolean getRegistration() {
-		return this.registationCheck;
-	}
-	
 	/**
 	 * Set the flag registationCheck to true, then uses the serverlist to 
 	 * build the overlay. Then a list of connections is sent to each node
 	 * connected in the overlay. Then print an acknowledgment.
 	 */
 	private void setRegistration() {
-		this.registationCheck = true;
+		connectionInfo.resetOverlaySent();
 		connectionInfo.buildOverlay();
 		for (MessagingConnection node : connectionInfo.getData()) {
 			String[] info = connectionInfo.getRegistration(node);
@@ -141,6 +126,8 @@ public class RegistryServer extends AbstractServer {
 			System.err.println("Invalid connections to node ratio.");
 			return;
 		}
+		if (connectionInfo == null)
+			connectionInfo = new RegistryInfo(4);
 		this.setRegistration();
 	}
 	
@@ -153,27 +140,22 @@ public class RegistryServer extends AbstractServer {
 	 * @param number of connections.
 	 */
 	public void makeOverlay(int numberConnections) {
-		try {
-			connectionInfo.setNumberOfConnections(numberConnections);
-		} catch (Exception e) {
-			System.err.println(e.toString());
-			return;
-		}
 		if (connectionInfo.checkOverlay() == false) {
 			System.err.println("Invalid connections to node ratio.");
+			return;
+		}
+		try {
+			if (connectionInfo == null)
+				connectionInfo.setNumberOfConnections(numberConnections);
+			else
+				connectionInfo = new RegistryInfo(numberConnections);
+		} catch (Exception e) {
+			System.err.println(e);
 			return;
 		}
 		this.setRegistration();
 	}
 	
-	/**
-	 * TODO
-	 * @return
-	 */
-	public String testDisplayOverlay() {
-		return connectionInfo.displayOverlay();
-	}
-
 	/**
 	 * When the command 'list-weights' is entered it will call the
 	 * displayOverlay method. This will return a String of the all the
@@ -229,7 +211,6 @@ public class RegistryServer extends AbstractServer {
 	public void sendStart(int numberOfRounds) {
 		if (numberOfRounds == 0)
 			return;
-		this.numberOfRounds = numberOfRounds;
 		if (connectionInfo.getValidOverlay() == false) {
 			System.err.println("Overlay has not been constructed.");
 			return;
@@ -260,8 +241,6 @@ public class RegistryServer extends AbstractServer {
 	public void sendRegistrationResponse(boolean status, MessagingConnection client) {
 		String message = (status)?"True":"False";
 		super.addPairToOutbox(new MessagePair(new RegistationMessage(message, 2), client));
-		if (status == false)
-			client.close();
 	}
 	
 	/**
@@ -273,7 +252,7 @@ public class RegistryServer extends AbstractServer {
 	public void registerNode(RegistationMessage m, MessagingConnection client) {
 		if (debug)
 			System.out.println(m.getMessageString());
-		if (registationCheck == true) {
+		if (connectionInfo.getValidOverlay() == true) {
 			sendRegistrationResponse(false, client);
 			return;
 		}
@@ -302,15 +281,12 @@ public class RegistryServer extends AbstractServer {
 		String[] tokens = m.getMessageString().split(" ");
 		String clientAddress = client.getAddress();
 		if (tokens[0].equals(clientAddress) == false) {
-			sendRegistrationResponse(false, client);
 			return;
 		}
 		if (validateInput(tokens[1]) == client.getPort()) {
-			sendRegistrationResponse(false, client);
 			return;
 		}
 		connectionInfo.removeFromList(client);
-		sendRegistrationResponse(true, client);
 	}
 	
 	/**
@@ -324,15 +300,15 @@ public class RegistryServer extends AbstractServer {
 		client.setComplete();
 		System.out.println("Client: "+client+" has finshed sending.");
 		boolean complete = true;
-		for (MessagingConnection node : super.getNodeConnections()) {
-			complete = (node.getComplete() && complete);
+		synchronized (client) {
+			for (MessagingConnection node : super.getNodeConnections()) {
+				complete = (node.getComplete() && complete);
+			}
 		}
 		if (complete == false)
 			return;
-		int time = 7000 * getNumberOfClients() + this.numberOfRounds;
-		int minutes = (time / 1000) / 60;
-		int seconds = (time / 1000) % 60;
-		System.out.println("All nodes have finished sending. Will now wait "+minutes+" minutes "+seconds+" seconds to allow messages to be routed.");
+		int time = 5000 * getNumberOfClients();
+		System.out.println("All nodes have finished sending. Will now wait "+(time / 1000) / 60+" minutes "+(time / 1000) % 60+" seconds to allow messages to be routed.");
 		super.sleep(time);
 		this.sendToAllNodes(new RegistationMessage("PULL_TRAFFIC_SUMMARY.", 4));
 	}

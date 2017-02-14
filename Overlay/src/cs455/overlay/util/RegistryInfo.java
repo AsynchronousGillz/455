@@ -62,7 +62,7 @@ public class RegistryInfo {
 	}
 
 	/**
-	 * Return the number of connections for each node.
+	 * Return the status of the current overlay.
 	 * 
 	 * @return true if sent.
 	 */
@@ -71,12 +71,19 @@ public class RegistryInfo {
 	}
 
 	/**
-	 * Return the number of connections for each node.
+	 * Sets the current overlay status to sent.
 	 * 
 	 * @return true if sent.
 	 */
 	final public void setOverlaySent() {
 		this.overlaySent = true;
+	}
+	
+	/**
+	 * Resets the current overlay status to un-sent.
+	 */
+	final public void resetOverlaySent() {
+		this.overlaySent = false;		
 	}
 
 	/**
@@ -274,7 +281,6 @@ public class RegistryInfo {
 	public void addToList(MessagingConnection node) {
 		synchronized (data) {
 			data.add(node);
-
 		}
 	}
 
@@ -290,7 +296,6 @@ public class RegistryInfo {
 		}
 		synchronized (data) {
 			data.remove(node);
-
 		}
 	}
 

@@ -1,34 +1,16 @@
 package cs455.overlay.util;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import cs455.overlay.msg.*;
 import cs455.overlay.node.*;
 
 public class MessageQueue {
-	
+
 	/**
 	 * 
 	 */
-	final private int size;
-	
-	/**
-	 * 
-	 */
-	private int used;
-	
-	/**
-	 * 
-	 */
-	private int front;
-	
-	/**
-	 * 
-	 */
-	private int back;
-	
-	/**
-	 * 
-	 */
-	private MessagePair contents[];
+	private LinkedBlockingQueue<MessagePair> queue;
 
 	/**
 	 * MessageQueue Constructor, store messages to be processed 
@@ -36,10 +18,8 @@ public class MessageQueue {
 	 * @param size
 	 * 			size of the queue.
 	 */
-	public MessageQueue(int size) {
-		this.size = size;
-		this.used = this.front = this.back = 0;
-		this.contents = new MessagePair[size];
+	public MessageQueue() {
+		queue = new LinkedBlockingQueue<MessagePair>();
 	}
 	
 	/**
@@ -47,27 +27,15 @@ public class MessageQueue {
 	 * @return size
 	 */
 	public int getSize() {
-		return size;
+		return queue.size();
 	}
 	
-	/**
-	 * Gets the size of the queue.
-	 * @return size
-	 */
-	public int getDifference() {
-		return this.front - this.back;
-	}
-
 	/**
 	 * Get a message from the queue.
 	 * @return a {@link ProtocolMessage}
 	 */
-	public synchronized MessagePair get() throws InterruptedException {
-		while (used == 0)
-				this.wait();
-		this.used--;
-		notifyAll();
-		return (contents[this.front++ % this.size]);
+	public MessagePair get() throws InterruptedException {
+		return queue.take();
 	}
 
 	/**
@@ -75,11 +43,7 @@ public class MessageQueue {
 	 * processed by a {@link MessagingProcessor}.
 	 * @param m
 	 */
-	public synchronized void put(MessagePair m) throws InterruptedException {
-		while (used == size)
-				this.wait();
-		this.used++;
-		contents[this.back++ % this.size] = m;
-		notifyAll();
+	public void put(MessagePair m) throws InterruptedException {
+		queue.put(m);
 	}
 }

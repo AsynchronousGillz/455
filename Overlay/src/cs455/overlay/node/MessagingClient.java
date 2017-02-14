@@ -190,8 +190,8 @@ public class MessagingClient extends Thread {
 				messageFromServer(new ProtocolMessage(bytes));
 			}
 		} catch (Exception exception) {
-			close(1);
 			connectionException(exception);
+			close(1);
 		}
 	}
 
@@ -204,17 +204,15 @@ public class MessagingClient extends Thread {
 	 * @param exception
 	 *            the exception raised.
 	 */
-	protected void connectionException(Exception exception) {
-		if (exception instanceof EOFException)
-			close(1);
-		else
+	public void connectionException(Exception exception) {
+		if (exception instanceof EOFException == false)
 			System.out.println("connectionException :: " + exception.toString());
 	}
 
 	/**
 	 * Hook method called after a connection has been established.
 	 */
-	protected void connectionEstablished() {
+	public void connectionEstablished() {
 		if (nodeSocket == null)
 			return;
 		String info = nodeServer.getHost() + " " + nodeServer.getPort();
@@ -228,7 +226,7 @@ public class MessagingClient extends Thread {
 	/**
 	 * Hook method called after the connection has been closed.
 	 */
-	protected void connectionClosed() {
+	public void connectionClosed() {
 		if (nodeSocket == null)
 			return;
 		String info = nodeServer.getHost() + " " + nodeServer.getPort();
@@ -251,19 +249,18 @@ public class MessagingClient extends Thread {
 	 *                if an error occurs when closing the socket.
 	 */
 	final public void close(int mode) {
+		if (mode == 0)
+			System.out.println("Disconnecting from the server. Exitting.");
+		else
+			System.err.println("An error occured connecting to the server. Exitting.");
+		
 		try {
 			closeAll();
 		} catch (IOException ex) {
 			if (debug)
 				System.err.println(ex.toString());
 		} finally {
-			if (mode == 0) {
-				System.out.println("Disconnecting from the server. Exitting.");
-				System.exit(0);
-			} else {
-				System.err.println("An error occured connecting to the server. Exitting.");
-				System.exit(1);
-			}
+			System.exit(mode);
 		}
 	}
 
@@ -316,9 +313,8 @@ public class MessagingClient extends Thread {
 	private void registerResponse(RegistationMessage m) {
 		if (debug)
 			System.out.println(m.getMessageString());
-		if (m.getMessage().equals("False")) {
+		if (m.getMessage().equals("False"))
 			close(0);
-		}
 	}
 
 	/**

@@ -74,13 +74,6 @@ public class Registry {
 					this.invalid(message);
 				}
 				break;
-			case "show-overlay": case "show":
-				if (tokens.length == 1) {
-					System.out.print(server.testDisplayOverlay());
-				} else {
-					this.invalid(message);
-				}
-				break;
 			case "setup-overlay": case "setup":
 				if (tokens.length == 1) {
 					server.makeOverlay();
@@ -165,6 +158,7 @@ public class Registry {
 			port = Integer.parseInt(args[0]);
 		} catch (NumberFormatException ex) {
 			System.err.println("Port argument must be a number.");
+			System.exit(1);
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			port = 60100;
 		}

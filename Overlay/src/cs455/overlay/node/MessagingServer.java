@@ -18,6 +18,11 @@ import cs455.overlay.util.*;
 public class MessagingServer extends AbstractServer {
 	
 	/**
+	 * 
+	 */
+	private boolean activeConnections;
+	
+	/**
 	 * @see Dijkstra
 	 */
 	Dijkstra dijkstra;
@@ -30,9 +35,10 @@ public class MessagingServer extends AbstractServer {
 	 */
 	public MessagingServer() throws IOException {
 		super(0);
+		activeConnections = false;
 	}
 	// ACCESSING METHODS ------------------------------------------------
-	
+
 	/**
 	 * When the registry sends the costs we also add the costs of the
 	 * connections to the NodeConnections.
@@ -62,10 +68,13 @@ public class MessagingServer extends AbstractServer {
 	 * @param nodes [ 129.82.44.175:38271 ]
 	 */
 	public void setInfo(String[] nodes) {
+		if (activeConnections == true)
+			super.resetConnections();
 		for (String node : nodes) {
 			String[] host = node.split(":");
 			super.addConnection(host[0], host[1]);
 		}
+		activeConnections = true;
 	} 
 	
 	/**

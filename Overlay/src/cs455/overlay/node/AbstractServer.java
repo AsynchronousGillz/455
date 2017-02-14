@@ -38,24 +38,24 @@ public abstract class AbstractServer extends Thread {
 	 * thread group is a <code> MessagingConnection </code>.
 	 */
 	protected ThreadGroup connectionGroup;
-	
+
 	/**
 	 * The thread group associated with client threads. Each member of the
 	 * thread group is a <code> MessagingProcessor </code>.
 	 */
 	protected ThreadGroup processorGroup;
-	
+
 	/**
-	 * The connection master statistics holder. Each message will be placed in 
+	 * The connection master statistics holder. Each message will be placed in
 	 * the queue until the a {@link MessagingProcessor} can process the message.
-	 * The default size is 10000. 
+	 * The default size is 10000.
 	 */
 	protected MessageQueue inbox;
-	
+
 	/**
-	 * The connection master statistics holder. Each message will be placed in 
+	 * The connection master statistics holder. Each message will be placed in
 	 * the queue until the a {@link MessagingProcessor} can process the message.
-	 * The default size is 10000. 
+	 * The default size is 10000.
 	 */
 	protected MessageQueue outbox;
 
@@ -89,8 +89,8 @@ public abstract class AbstractServer extends Thread {
 			}
 		};
 		this.port = port;
-		inbox = new MessageQueue(100000);
-		outbox = new MessageQueue(100000);
+		inbox = new MessageQueue();
+		outbox = new MessageQueue();
 	}
 
 	// INSTANCE METHODS *************************************************
@@ -111,6 +111,16 @@ public abstract class AbstractServer extends Thread {
 		setName();
 		serverSocket.setSoTimeout(timeout);
 	}
+	
+	final public void resetConnections() {
+		System.out.println("Server will reset connections.");
+		this.connectionGroup.interrupt();
+		this.connectionGroup = new ThreadGroup("MessagingConnection threads") {
+			public void uncaughtException(Thread thread, Throwable exception) {
+				connectionException((MessagingConnection) thread, exception);
+			}
+		};
+	}
 
 	/**
 	 * Sets the server name.
@@ -124,15 +134,37 @@ public abstract class AbstractServer extends Thread {
 	 * Causes the server to stop accepting new connections.
 	 */
 	final public void sleep(int time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		int step = 1000;
+		for (int i = 1; i < time; i += step) {
+			double percent = (i * 1.0 / time * 1.0) * 100;
+			printProgBar((int) percent);
+			try {
+				Thread.sleep(step);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		System.out.println();
 	}
-	
+
+	final public void printProgBar(int percent) {
+		StringBuilder bar = new StringBuilder("[");
+		for (int i = 0; i < 50; i++) {
+			if (i < (percent / 2)) {
+				bar.append("=");
+			} else if (i == (percent / 2)) {
+				bar.append(">");
+			} else {
+				bar.append(" ");
+			}
+		}
+		bar.append("]   " + percent + "%     ");
+		System.out.print("\r" + bar.toString());
+	}
+
 	/**
 	 * Add a connection to the server to another server.
+	 * 
 	 * @param host
 	 * @param sPort
 	 */
@@ -145,7 +177,7 @@ public abstract class AbstractServer extends Thread {
 		try {
 			clientSocket = new Socket(host, port);
 		} catch (IOException e) {
-			System.err.println("Could not connect to: "+host+":"+port);
+			System.err.println("Could not connect to: " + host + ":" + port);
 			return;
 		}
 		MessagingConnection node = createConnection(clientSocket);
@@ -153,9 +185,10 @@ public abstract class AbstractServer extends Thread {
 		node.setClientInfo(hostName, host, port);
 		node.start();
 	}
-	
+
 	/**
-	 * Create a new MessagingNode connection. This will also add MessagingProcessors
+	 * Create a new MessagingNode connection. This will also add
+	 * MessagingProcessors
 	 * 
 	 */
 	synchronized final private MessagingConnection createConnection(Socket clientSocket) {
@@ -401,21 +434,23 @@ public abstract class AbstractServer extends Thread {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Add the {@link MessagePair} to the queue.
+	 * 
 	 * @param pair
 	 */
 	public void addPairToInbox(MessagePair pair) {
 		try {
 			inbox.put(pair);
 		} catch (InterruptedException e) {
-			// Stopped by wait() 
+			// Stopped by wait()
 		}
 	}
-	
+
 	/**
 	 * Add the {@link MessagePair} to the queue.
+	 * 
 	 * @param pair
 	 */
 	public void addPairToOutbox(MessagePair pair) {
@@ -440,7 +475,8 @@ public abstract class AbstractServer extends Thread {
 			while (super.isInterrupted() == false) {
 				try {
 					createConnection(serverSocket.accept()).start();
-				} catch (InterruptedIOException exception) {}
+				} catch (InterruptedIOException exception) {
+				}
 			}
 			serverClosed();
 		} catch (IOException exception) {
@@ -487,9 +523,9 @@ public abstract class AbstractServer extends Thread {
 		System.err.println(client + " has thrown Exception: " + exception.toString());
 		exception.printStackTrace();
 	}
-	
+
 	/**
-	 * Called each time an exception is thrown in a  thread.
+	 * Called each time an exception is thrown in a thread.
 	 *
 	 * @param client
 	 *            the client that raised the exception.
@@ -535,6 +571,6 @@ public abstract class AbstractServer extends Thread {
 	 */
 
 	protected abstract void MessageFromNode(ProtocolMessage msg, MessagingConnection client);
-	
+
 }
 // End of AbstractServer Class
