@@ -274,7 +274,6 @@ public class RegistryInfo {
 	public void addToList(MessagingConnection node) {
 		synchronized (data) {
 			data.add(node);
-
 		}
 	}
 
@@ -290,7 +289,6 @@ public class RegistryInfo {
 		}
 		synchronized (data) {
 			data.remove(node);
-
 		}
 	}
 
