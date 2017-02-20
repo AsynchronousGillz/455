@@ -59,7 +59,7 @@ public class NioServer extends Thread {
 	/**
 	 * For debug purposes
 	 */
-	public final boolean debug = false;
+	public final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -72,40 +72,26 @@ public class NioServer extends Thread {
 	 */
 	public NioServer(int port) throws IOException {
 		this.port = port;
-		this.initSelector();
-		this.running = false;
-		serverChannel = ServerSocketChannel.open();
-		serverChannel.socket().bind(new InetSocketAddress(this.getHost(), port));
-		serverChannel.configureBlocking(false);
-		selectionKey = serverChannel.register(selector, SelectionKey.OP_READ);
-		setName();
-	}
-	
-	/**
-	 * Sets up the {@link Selector}.
-	 * 
-	 * @throws IOException
-	 *             if an I/O error occurs when creating the server socket.
-	 */
-	private void initSelector() throws IOException {
-		// Create a new selector
-		Selector socketSelector = SelectorProvider.provider().openSelector();
-
+		
+		// Selector: multiplexor of SelectableChannel objects
+		this.selector = SelectorProvider.provider().openSelector();
+		 
 		// Create a new non-blocking server socket channel
 		this.serverChannel = ServerSocketChannel.open();
-		serverChannel.configureBlocking(false);
-
-		// Bind the server socket to the specified address and port
-		InetSocketAddress isa = new InetSocketAddress(this.getHost(), this.port);
-		serverChannel.socket().bind(isa);
-
-		// Register the server socket channel, indicating an interest in
-		// accepting new connections
-		serverChannel.register(socketSelector, SelectionKey.OP_ACCEPT);
-
-		this.selector = socketSelector;
+		this.serverChannel.configureBlocking(false);
+		 
+		// Binds the channel's socket to a local address and configures the socket to listen for connections
+		this.serverChannel.bind(new InetSocketAddress(this.getHost(), port));
+		 
+		// Adjusts this channel's blocking mode.
+		this.serverChannel.configureBlocking(false);
+		 
+		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
+		
+		this.running = false;
+		this.setName();
 	}
-
+	
 	/**
 	 * Sets the server name.
 	 */
@@ -325,18 +311,16 @@ public class NioServer extends Thread {
 	 * @throws IOException
 	 */
 	private void accept(SelectionKey key) throws IOException {
-
+		if (debug)
+			System.out.println("New node registered.");
+		
 		ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
-
 		// Accept the connection and make it non-blocking
 		SocketChannel socketChannel = serverSocketChannel.accept();
 		socketChannel.configureBlocking(false);
-
 		// Register the new SocketChannel with our Selector, indicating
 		// we'd like to be notified when there's data waiting to be read
 		socketChannel.register(this.selector, SelectionKey.OP_READ);
-		if (debug)
-			System.out.println("New node registered.");
 	}
 
 	/**
@@ -346,13 +330,13 @@ public class NioServer extends Thread {
 	 * @throws IOException
 	 */
 	private void read(SelectionKey key) throws IOException {
+		if (debug)
+			System.out.println("Message received.");
+		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-
 		// Clear out our read buffer so it's ready for new data
 		this.readBuffer.clear();
-
 		// Attempt to read off the channel
-
 		int read = 0;   
 		try {
 			while (this.readBuffer.hasRemaining() && read != -1){

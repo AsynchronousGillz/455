@@ -36,11 +36,16 @@ public class ClientConnection extends Thread {
 	 * The port number.
 	 */
 	private int serverPort;
+	
+	/**
+	 * To stop the run loop.
+	 */
+	private boolean running;
 
 	/**
 	 * For debug purposes
 	 */
-	final private boolean debug = false;
+	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -57,7 +62,7 @@ public class ClientConnection extends Thread {
 		this.serverAddress = serverAddress;
 		this.serverPort = serverPort;
 		try {
-			Addr = new InetSocketAddress("localhost", 1111);
+			Addr = new InetSocketAddress(serverAddress, serverPort);
 			channel = SocketChannel.open(Addr);
 		} catch (IOException ex) {
 			close(1);
@@ -76,10 +81,10 @@ public class ClientConnection extends Thread {
 	final public void sendToServer(Message msg) throws IOException {
 		if (channel == null || Addr == null)
 			throw new SocketException("socket does not exist");
+		if (debug)
+			System.out.println("sending: " + msg);
 		synchronized (channel) {
-			channel.write(msg.getMessage());
-			if (debug)
-				System.out.println("sending: " + msg);
+			channel.write(msg.makeBytes());
 		}
 	}
 
@@ -129,6 +134,38 @@ public class ClientConnection extends Thread {
 	final public void setRegistryHost(String serverAddress) {
 		this.serverAddress = serverAddress;
 	}
+	
+	/**
+	 * Causes the server to stop accepting new connections.
+	 */
+	final public void sleep(int time) {
+		int step = 1000;
+		for (int i = 1; i < time; i += step) {
+			double percent = (i * 1.0 / time * 1.0) * 100;
+			printProgBar((int) percent);
+			try {
+				Thread.sleep(step);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println();
+	}
+
+	final public void printProgBar(int percent) {
+		StringBuilder bar = new StringBuilder("[");
+		for (int i = 0; i < 50; i++) {
+			if (i < (percent / 2)) {
+				bar.append("=");
+			} else if (i == (percent / 2)) {
+				bar.append(">");
+			} else {
+				bar.append(" ");
+			}
+		}
+		bar.append("]   " + percent + "%     ");
+		System.out.print("\r" + bar.toString());
+	}
 
 	// RUN METHOD -------------------------------------------------------
 
@@ -140,8 +177,9 @@ public class ClientConnection extends Thread {
 		// Additional setting up
 		connectionEstablished();
 		try {
-			while (super.isInterrupted() == false) {
-				// TODO: Read from the channel
+			while (this.running == true) {
+				this.sendToServer(new Message());
+				this.sleep(4000);
 			}
 		} catch (Exception exception) {
 			connectionException(exception);
@@ -167,13 +205,7 @@ public class ClientConnection extends Thread {
 	 * Hook method called after a connection has been established.
 	 */
 	public void connectionEstablished() {
-		if (channel == null)
-			return;
-		try {
-			sendToServer(new Message());
-		} catch (IOException e) {
-			System.err.println("Could not send Registration.");
-		}
+		this.running = true;
 	}
 
 	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------

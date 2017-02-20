@@ -123,6 +123,7 @@ public class Server {
 			server.start();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
+			ex.printStackTrace();
 		}
 		
 		Server r = new Server(server);

@@ -70,7 +70,7 @@ public class Message {
 	 * @return byte array.
 	 * @throws IOException
 	 */
-	public final byte[] makeBytes() throws IOException {
+	public final ByteBuffer makeBytes() throws IOException {
 		byte[] bytes = null;
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
@@ -84,7 +84,7 @@ public class Message {
 		bytes = byteOutputStream.toByteArray();
 		byteOutputStream.close();
 		output.close();
-		return bytes;
+		return ByteBuffer.wrap(bytes);
 	}
 	
 }
