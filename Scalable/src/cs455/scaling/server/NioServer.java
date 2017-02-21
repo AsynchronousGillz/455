@@ -70,7 +70,7 @@ public class NioServer extends Thread {
 	 *            the port number on which to listen.
 	 * @throws IOException 
 	 */
-	public NioServer(int port) throws IOException {
+	public NioServer(int port, int poolSize) throws IOException {
 		this.port = port;
 		
 		// Selector: multiplexor of SelectableChannel objects
@@ -85,9 +85,11 @@ public class NioServer extends Thread {
 		 
 		// Adjusts this channel's blocking mode.
 		this.serverChannel.configureBlocking(false);
-		 
-		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
 		
+		// SOmething here
+		serverChannel.register(this.selector, serverChannel.validOps());
+		
+		this.manager = new TaskManager(this, poolSize, 20000);
 		this.running = false;
 		this.setName();
 	}
@@ -95,7 +97,7 @@ public class NioServer extends Thread {
 	/**
 	 * Sets the server name.
 	 */
-	final public void setName() throws IOException {
+	final private void setName() throws IOException {
 		String ipAddress = InetAddress.getLocalHost().getHostAddress();
 		super.setName(ipAddress + ":" + this.port);
 	}
@@ -234,7 +236,8 @@ public class NioServer extends Thread {
 		serverStarted();
 
 		try {
-			while (running) {   
+			while (running == true) { 
+				selector.select();
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
 				while(keyIterator.hasNext()) {
 				    SelectionKey key = keyIterator.next();
@@ -349,7 +352,7 @@ public class NioServer extends Thread {
 		}
 
 		// Hand the data off to our worker thread
-		this.manager.addMessage(socketChannel, new Message(readBuffer.array()));
+		this.manager.addMessage(socketChannel, new Message(readBuffer));
 	}
 
 

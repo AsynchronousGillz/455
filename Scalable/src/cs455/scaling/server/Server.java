@@ -116,10 +116,20 @@ public class Server {
 			port = 60100;
 		}
 		
+		int poolSize = 0;
+		try {
+			poolSize = Integer.parseInt(args[0]);
+		} catch (NumberFormatException ex) {
+			System.err.println("Thread number argument must be a number.");
+			System.exit(1);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			poolSize = 100;
+		}
+		
 		NioServer server = null;
 		
 		try {
-			server = new NioServer(port);
+			server = new NioServer(port, poolSize);
 			server.start();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());

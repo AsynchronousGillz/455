@@ -78,13 +78,13 @@ public class ClientConnection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final public void sendToServer(Message msg) throws IOException {
+	final private void sendToServer(Message msg) throws IOException {
 		if (channel == null || Addr == null)
-			throw new SocketException("socket does not exist");
+			throw new SocketException("Connection error when sending.");
 		if (debug)
 			System.out.println("sending: " + msg);
 		synchronized (channel) {
-			channel.write(msg.makeBytes());
+			channel.write(msg.getMessage());
 		}
 	}
 
@@ -94,7 +94,7 @@ public class ClientConnection extends Thread {
 	 * @return true if the node is connnected.
 	 */
 	final public boolean isConnected() {
-		return this.isAlive();
+		return this.isAlive() && this.running;
 	}
 
 	/**
@@ -139,34 +139,13 @@ public class ClientConnection extends Thread {
 	 * Causes the server to stop accepting new connections.
 	 */
 	final public void sleep(int time) {
-		int step = 1000;
-		for (int i = 1; i < time; i += step) {
-			double percent = (i * 1.0 / time * 1.0) * 100;
-			printProgBar((int) percent);
-			try {
-				Thread.sleep(step);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		System.out.println();
 	}
-
-	final public void printProgBar(int percent) {
-		StringBuilder bar = new StringBuilder("[");
-		for (int i = 0; i < 50; i++) {
-			if (i < (percent / 2)) {
-				bar.append("=");
-			} else if (i == (percent / 2)) {
-				bar.append(">");
-			} else {
-				bar.append(" ");
-			}
-		}
-		bar.append("]   " + percent + "%     ");
-		System.out.print("\r" + bar.toString());
-	}
-
+	
 	// RUN METHOD -------------------------------------------------------
 
 	/**

@@ -1,90 +1,42 @@
 package cs455.scaling.msg;
 
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.text.*;
+import java.math.*;
+import java.nio.*;
+import java.security.*;
 import java.util.*;
 
-public class Message {
+public final class Message {
 
-	private int id;
 	private int size = 8192;
-	private long time;
-	private byte[] message;
+	private ByteBuffer message;
 
 	public Message() {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		dateFormat.format(date);// 2016/11/16 12:08:43
-		time = date.getTime();
 		Random rand = new Random();
-		message = new byte[size];
-		rand.nextBytes(message);
+		byte[] bytes = new byte[size];
+		rand.nextBytes(bytes);
+		this.message = ByteBuffer.wrap(bytes);
 	}
-	
-	/**
-	 * Takes the bytes sent on the socket and assigns values.
-	 * 
-	 * @param bytes byte array from socket.
-	 */
-	public Message(byte[] bytes) {
-		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
-		DataInputStream input = new DataInputStream(new BufferedInputStream(byteInputStream));
-		try {
-			this.id = input.readInt();
-			this.time = input.readLong();
-			int identifierLength = input.readInt();
-			byte[] messageBytes = new byte[identifierLength];
-			input.readFully(messageBytes);
-			this.message = messageBytes;
-			byteInputStream.close();
-			input.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//******************************************************************************
 
-	public int getID() {
-		return this.id;
+	public Message(ByteBuffer bytes) {
+		this.message = bytes;
 	}
 
 	public ByteBuffer getMessage() {
-		return ByteBuffer.wrap(message);
+		return message;
 	}
 
-	public long getTime() {
-		return time;
+	public byte[] getBytes() {
+		return message.array();
 	}
 
 	public String toString() {
-		return "id: "+id;
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA1");
+		} catch (NoSuchAlgorithmException e) {}
+		byte[] hash = digest.digest(message.array());
+		BigInteger hashInt = new BigInteger(1, hash);
+		return hashInt.toString(16);
 	}
 
-	//******************************************************************************
-
-	/**
-	 * Converts Protocol to byte array to be sent across the socket.
-	 * 
-	 * @return byte array.
-	 * @throws IOException
-	 */
-	public final ByteBuffer makeBytes() throws IOException {
-		byte[] bytes = null;
-		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(byteOutputStream));
-		output.writeInt(id);
-		output.writeLong(time);
-		byte[] messageBytes = message;
-		int elementLength = messageBytes.length;
-		output.writeInt(elementLength);
-		output.write(messageBytes);
-		output.flush();
-		bytes = byteOutputStream.toByteArray();
-		byteOutputStream.close();
-		output.close();
-		return ByteBuffer.wrap(bytes);
-	}
-	
 }

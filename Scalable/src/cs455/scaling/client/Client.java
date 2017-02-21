@@ -101,7 +101,7 @@ public class Client {
 		try {
 			registryIP = args[0];
 		} catch (IndexOutOfBoundsException ex) {
-			registryIP = "earth";
+			registryIP = "breckenridge";
 		}
 		
 		try {
@@ -112,7 +112,7 @@ public class Client {
 		
 		ClientConnection nodeClient = new ClientConnection(registryIP, registryPort);
 		nodeClient.start();
-		
+		System.out.println("Client started.");
 		Client node = new Client(nodeClient);
 		node.runConsole();
 		

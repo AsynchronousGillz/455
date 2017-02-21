@@ -1,7 +1,6 @@
 package cs455.scaling.util;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -16,7 +15,12 @@ public final class Processor extends Thread {
 	/**
 	 * TODO
 	 */
-	private Pair msg;
+	private Queue queue;
+	
+	/**
+	 * 
+	 */
+	private boolean debug = false;
 	
 	// CONSTRUCTORS *****************************************************
 
@@ -35,38 +39,27 @@ public final class Processor extends Thread {
 	public Processor(ThreadGroup group) {
 		super(group, (Runnable) null);
 		setName("Processor-"+getId());
-		this.msg = null;
+		this.queue = new Queue(10);
 	}
 
 	// INSTANCE METHODS *************************************************
 	
 	public void processMessage(Pair msg) {
-		System.out.println(msg);
-		ByteBuffer buf = msg.getMsg().getMessage();
+		if (debug)
+			System.out.println(msg);
 		try {
 			SocketChannel chan = msg.getChannel();
 			synchronized (chan) {
-				chan.write(buf);	
+				chan.write(msg.getMsg().getMessage());	
 			}
 		} catch (IOException e) {
 			System.err.println("An error occured while sending.");
 			e.printStackTrace();
 		}
-		this.msg = null;
 	}
 	
-	public void addMessage(Pair msg) throws Exception {
-		if (this.msg != null)
-			throw new Exception("Error: Tried to over write Message.");
-		this.msg = msg;
-		notifyAll();
-	}
-	
-	public boolean checkMessage() {
-		if (this.msg != null)
-			return true;
-		else
-			return false;
+	public void addMessage(Pair msg) throws InterruptedException {
+		this.queue.enqueue(msg);
 	}
 	
 	// RUN METHODS ******************************************************
@@ -74,10 +67,7 @@ public final class Processor extends Thread {
 	public void run() {
 		while (isInterrupted() == false) {
 			try {
-				while (this.msg == null) {
-					wait();
-				}
-				this.processMessage(this.msg);
+				this.processMessage(this.queue.dequeue());
 			} catch(InterruptedException e) {
 				// Stopped by wait()
 			}

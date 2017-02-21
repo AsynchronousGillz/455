@@ -50,4 +50,5 @@ public class Queue {
 
 		return this.queue.remove(0);
 	}
+	
 }
