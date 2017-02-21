@@ -118,9 +118,9 @@ public class Server {
 		
 		int poolSize = 0;
 		try {
-			poolSize = Integer.parseInt(args[0]);
+			poolSize = Integer.parseInt(args[1]);
 		} catch (NumberFormatException ex) {
-			System.err.println("Thread number argument must be a number.");
+			System.err.println("Thread pool size argument must be a number.");
 			System.exit(1);
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			poolSize = 100;

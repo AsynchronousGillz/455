@@ -10,7 +10,7 @@ public final class TaskManager extends Thread {
 	 * the queue until the a {@link Processor} can process the message.
 	 * The default size is 10000.
 	 */
-	private Queue queue;
+	private Queue<Task> queue;
 
 	/**
 	 * The connection master statistics holder. All Processor treads will be placed
@@ -29,64 +29,8 @@ public final class TaskManager extends Thread {
 	 * @param queueSize
 	 */
 	public TaskManager(NioServer server, int poolSize, int queueSize) {
-		this.queue = new Queue(queueSize);
+		this.queue = new Queue<Task>(queueSize);
 		this.threadpool = new ThreadPool(this, server, poolSize);
-	}
-
-	/**
-	 * 
-	 * @param task
-	 */
-	public void acceptTask(AcceptTask task) {
-		if (debug)
-			System.out.println("receiving: " + task);
-		try {
-			queue.enqueue(task);
-		} catch (InterruptedException e) {
-			System.err.println("TaskManager:: addMessage() interrupted.");
-		}
-	}
-	
-	/**
-	 * 
-	 * @param task
-	 */
-	public void readTask(ReadTask task) {
-		if (debug)
-			System.out.println("receiving: " + task);
-		try {
-			queue.enqueue(task);
-		} catch (InterruptedException e) {
-			System.err.println("TaskManager:: addMessage() interrupted.");
-		}
-	}
-	
-	/**
-	 * 
-	 * @param task
-	 */
-	public void hashTask(HashTask task) {
-		if (debug)
-			System.out.println("receiving: " + task);
-		try {
-			queue.enqueue(task);
-		} catch (InterruptedException e) {
-			System.err.println("TaskManager:: addMessage() interrupted.");
-		}
-	}
-	
-	/**
-	 * 
-	 * @param task
-	 */
-	public void writeTask(WriteTask task) {
-		if (debug)
-			System.out.println("receiving: " + task);
-		try {
-			queue.enqueue(task);
-		} catch (InterruptedException e) {
-			System.err.println("TaskManager:: addMessage() interrupted.");
-		}
 	}
 	
 	/**

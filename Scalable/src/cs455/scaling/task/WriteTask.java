@@ -6,8 +6,6 @@ import java.nio.channels.SocketChannel;
 
 import cs455.scaling.msg.Message;
 import cs455.scaling.server.TaskManager;
-import cs455.scaling.util.Pair;
-import cs455.scaling.util.Processor;
 
 public class WriteTask extends Task {
 
@@ -17,16 +15,18 @@ public class WriteTask extends Task {
 	}
 
 	public void exec(TaskManager manager) {
-/*		Pair p = thread.getMessage();
+		if (debug)
+			System.out.println("Message to be sent back.");
+		
+		SocketChannel socketChannel = (SocketChannel) key.channel();
 		try {
-			SocketChannel chan = p.getChannel();
-			synchronized (chan) {
-				chan.write(p.getMsg().getMessage());	
+			synchronized (socketChannel) {
+				socketChannel.write(msg.getMessage());	
 			}
 		} catch (IOException e) {
 			System.err.println("An error occured while sending.");
 			e.printStackTrace();
-		}*/
+		}
 		
 	}
 

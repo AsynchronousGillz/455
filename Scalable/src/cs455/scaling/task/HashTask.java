@@ -1,5 +1,6 @@
 package cs455.scaling.task;
 
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
 import cs455.scaling.msg.Message;
@@ -12,7 +13,12 @@ public class HashTask extends Task {
 	}
 
 	public void exec(TaskManager manager) {
-		// TODO Auto-generated method stub
+		if (debug)
+			System.out.println("Message to be hashed.");
+		
+		ByteBuffer bytes = ByteBuffer.wrap(msg.toString().getBytes());
+		// Hand the data off to our worker thread
+		manager.taskComplete(new WriteTask(key, new Message(bytes)));
 		
 	}
 

@@ -165,11 +165,9 @@ public class NioServer extends Thread {
 				    if (key.isValid() == false) {
 				    	continue;
 				    } else if(key.isAcceptable()) {
-				        manager.acceptTask(new AcceptTask(key));
-				    } else if (key.isConnectable()) {
-				    	// a channel is ready for Something
+				        manager.taskComplete(new AcceptTask(key));
 				    } else if (key.isReadable()) {
-				    	manager.readTask(new ReadTask(key));
+				    	manager.taskComplete(new ReadTask(key));
 				    } else if (key.isWritable()) {
 				        // a channel is ready for writing
 				    }

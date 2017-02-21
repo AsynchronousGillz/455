@@ -2,8 +2,6 @@ package cs455.scaling.util;
 
 import java.util.LinkedList;
 
-import cs455.scaling.task.Task;
-
 /**
  * A thread safe message queue
  * 
@@ -11,12 +9,12 @@ import cs455.scaling.task.Task;
  *
  */
 
-public class Queue {
+public class Queue<T> {
 
 	/**
 	 * 
 	 */
-	private LinkedList<Task> queue;
+	private LinkedList<T> queue;
 	
 	/**
 	 * 
@@ -29,10 +27,10 @@ public class Queue {
 	 */
 	public Queue(int size) {
 		this.size = size;
-		queue = new LinkedList<>();
+		queue = new LinkedList<T>();
 	}
 
-	synchronized public void enqueue(Task item) throws InterruptedException {
+	synchronized public void enqueue(T item) throws InterruptedException {
 		while (this.queue.size() == this.size) {
 			wait();
 		}
@@ -42,7 +40,7 @@ public class Queue {
 		this.queue.add(item);
 	}
 
-	synchronized public Task dequeue() throws InterruptedException {
+	synchronized public T dequeue() throws InterruptedException {
 		while (this.queue.size() == 0) {
 			wait();
 		}
