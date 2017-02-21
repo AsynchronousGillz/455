@@ -42,7 +42,7 @@ public final class ThreadPool {
 			this.wait();
 		notifyAll();
 		this.used--;
-		return (pool[this.front++ % this.size]);
+		return pool[this.front++ % this.size];
 	}
 	
 }

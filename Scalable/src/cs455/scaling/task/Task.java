@@ -33,7 +33,7 @@ public abstract class Task {
 	}
 	
 	final public String toString() {
-		return "Task [ "+"type: "+type.toString()+" msg: "+msg.toString()+"]";
+		return "Task [ "+"type: "+type+"]";
 	}
 	
 	abstract public void exec(TaskManager manager);

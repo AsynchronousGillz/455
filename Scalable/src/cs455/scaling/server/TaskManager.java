@@ -21,7 +21,7 @@ public final class TaskManager extends Thread {
 	/**
 	 * 
 	 */
-	private boolean debug = false;
+	private boolean debug = true;
 	
 	/**
 	 * 
@@ -39,7 +39,7 @@ public final class TaskManager extends Thread {
 	 */
 	public void acceptTask(AcceptTask task) {
 		if (debug)
-			System.out.println("sending: " + task);
+			System.out.println("receiving: " + task);
 		try {
 			queue.enqueue(task);
 		} catch (InterruptedException e) {
@@ -53,7 +53,7 @@ public final class TaskManager extends Thread {
 	 */
 	public void readTask(ReadTask task) {
 		if (debug)
-			System.out.println("sending: " + task);
+			System.out.println("receiving: " + task);
 		try {
 			queue.enqueue(task);
 		} catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public final class TaskManager extends Thread {
 	 */
 	public void hashTask(HashTask task) {
 		if (debug)
-			System.out.println("sending: " + task);
+			System.out.println("receiving: " + task);
 		try {
 			queue.enqueue(task);
 		} catch (InterruptedException e) {
@@ -81,7 +81,7 @@ public final class TaskManager extends Thread {
 	 */
 	public void writeTask(WriteTask task) {
 		if (debug)
-			System.out.println("sending: " + task);
+			System.out.println("receiving: " + task);
 		try {
 			queue.enqueue(task);
 		} catch (InterruptedException e) {
@@ -95,7 +95,7 @@ public final class TaskManager extends Thread {
 	 */
 	public void taskComplete(Task t) {
 		if (debug)
-			System.out.println("sending: " + t);
+			System.out.println("receiving: " + t);
 		try {
 			queue.enqueue(t);
 		} catch (InterruptedException e) {
