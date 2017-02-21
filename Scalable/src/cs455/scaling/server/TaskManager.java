@@ -1,12 +1,7 @@
 package cs455.scaling.server;
 
-import java.nio.channels.SocketChannel;
-
-import cs455.scaling.msg.Message;
-import cs455.scaling.util.Pair;
-import cs455.scaling.util.Processor;
-import cs455.scaling.util.Queue;
-import cs455.scaling.util.ThreadPool;
+import cs455.scaling.task.*;
+import cs455.scaling.util.*;
 
 public final class TaskManager extends Thread {
 
@@ -26,11 +21,6 @@ public final class TaskManager extends Thread {
 	/**
 	 * 
 	 */
-	private boolean running;
-	
-	/**
-	 * 
-	 */
 	private boolean debug = false;
 	
 	/**
@@ -40,22 +30,92 @@ public final class TaskManager extends Thread {
 	 */
 	public TaskManager(NioServer server, int poolSize, int queueSize) {
 		this.queue = new Queue(queueSize);
-		this.threadpool = new ThreadPool(server, poolSize);
-		this.running = false;
+		this.threadpool = new ThreadPool(this, server, poolSize);
 	}
 
 	/**
 	 * 
-	 * @param socketChannel
-	 * @param message
+	 * @param task
 	 */
-	public void addMessage(SocketChannel socketChannel, Message msg) {
+	public void acceptTask(AcceptTask task) {
 		if (debug)
-			System.out.println("sending: " + msg);
+			System.out.println("sending: " + task);
 		try {
-			queue.enqueue(new Pair(msg, socketChannel));
+			queue.enqueue(task);
 		} catch (InterruptedException e) {
 			System.err.println("TaskManager:: addMessage() interrupted.");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param task
+	 */
+	public void readTask(ReadTask task) {
+		if (debug)
+			System.out.println("sending: " + task);
+		try {
+			queue.enqueue(task);
+		} catch (InterruptedException e) {
+			System.err.println("TaskManager:: addMessage() interrupted.");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param task
+	 */
+	public void hashTask(HashTask task) {
+		if (debug)
+			System.out.println("sending: " + task);
+		try {
+			queue.enqueue(task);
+		} catch (InterruptedException e) {
+			System.err.println("TaskManager:: addMessage() interrupted.");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param task
+	 */
+	public void writeTask(WriteTask task) {
+		if (debug)
+			System.out.println("sending: " + task);
+		try {
+			queue.enqueue(task);
+		} catch (InterruptedException e) {
+			System.err.println("TaskManager:: addMessage() interrupted.");
+		}
+	}
+	
+	/**
+	 * TODO write comment
+	 * @param hashTask
+	 */
+	public void taskComplete(Task t) {
+		if (debug)
+			System.out.println("sending: " + t);
+		try {
+			queue.enqueue(t);
+		} catch (InterruptedException e) {
+			System.err.println("TaskManager:: taskComplete() interrupted.");
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void run() {
+		try {
+			while(Boolean.toString(true).equals("true")) {
+				Task task = queue.dequeue();
+				Processor processor = threadpool.dequeue();
+				processor.addTask(task);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			this.close();
 		}
 	}
 	
@@ -64,13 +124,6 @@ public final class TaskManager extends Thread {
 	 */
 	public void close() {
 		// TODO :: Add close to TaskManager
-	}
-	
-	public void run() {
-		this.running = true;
-		while (running == true) {
-			this.threadpool.getSize(); // TODO pair message with processor
-		}
 	}
 	
 }

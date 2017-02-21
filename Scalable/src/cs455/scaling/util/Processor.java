@@ -1,7 +1,7 @@
 package cs455.scaling.util;
 
-import java.io.IOException;
-import java.nio.channels.SocketChannel;
+import cs455.scaling.server.TaskManager;
+import cs455.scaling.task.Task;
 
 /**
  * 
@@ -13,14 +13,19 @@ public final class Processor extends Thread {
 	// INSTANCE VARIABLES ***********************************************
 
 	/**
-	 * TODO
+	 * TODO write comment
 	 */
-	private Queue queue;
+	private Task currentTask;
 	
 	/**
-	 * 
+	 * TODO comment
 	 */
-	private boolean debug = false;
+	private Object lock;
+	
+	/**
+	 * TODO write more comments
+	 */
+	final private TaskManager manager;
 	
 	// CONSTRUCTORS *****************************************************
 
@@ -36,42 +41,42 @@ public final class Processor extends Thread {
 	 * @param server
 	 *            a reference to the server that created this instance
 	 */
-	public Processor(ThreadGroup group) {
+	public Processor(ThreadGroup group, TaskManager manager) {
 		super(group, (Runnable) null);
 		setName("Processor-"+getId());
-		this.queue = new Queue(10);
+		this.manager = manager;
+		this.lock = new Object();
+		this.currentTask = null;
 	}
 
 	// INSTANCE METHODS *************************************************
 	
-	public void processMessage(Pair msg) {
-		if (debug)
-			System.out.println(msg);
-		try {
-			SocketChannel chan = msg.getChannel();
-			synchronized (chan) {
-				chan.write(msg.getMsg().getMessage());	
-			}
-		} catch (IOException e) {
-			System.err.println("An error occured while sending.");
-			e.printStackTrace();
-		}
+	public Task getMessage() {
+		return null;
 	}
 	
-	public void addMessage(Pair msg) throws InterruptedException {
-		this.queue.enqueue(msg);
+	public void addTask(Task task) throws InterruptedException {
+		synchronized (this.lock) {
+			this.currentTask = task;
+			this.lock.notify();
+		}
 	}
 	
 	// RUN METHODS ******************************************************
 
 	public void run() {
-		while (isInterrupted() == false) {
-			try {
-				this.processMessage(this.queue.dequeue());
-			} catch(InterruptedException e) {
-				// Stopped by wait()
+		try {
+			while(Boolean.toString(true).equals("true")) {
+				synchronized (this.lock) {
+					while (this.currentTask == null)
+						lock.wait();
+					this.currentTask.exec(manager);
+					this.currentTask = null;
+				}
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 }

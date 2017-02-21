@@ -1,6 +1,7 @@
 package cs455.scaling.util;
 
 import cs455.scaling.server.NioServer;
+import cs455.scaling.server.TaskManager;
 
 public final class ThreadPool {
 
@@ -14,12 +15,12 @@ public final class ThreadPool {
 	
 	private int back;
 
-	public ThreadPool(NioServer server, int size) {
+	public ThreadPool(TaskManager manager, NioServer server, int size) {
 		this.pool = new Processor[size];
 		this.size = size;
 		this.used = this.front = this.back = 0;
 		for (int i = 0; i < size; i++) {
-			this.pool[i] = new Processor(server.getThreadGroup());
+			this.pool[i] = new Processor(server.getThreadGroup(), manager);
 			this.pool[i].start();
 		}
 	}

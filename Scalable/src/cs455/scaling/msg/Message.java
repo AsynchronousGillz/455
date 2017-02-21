@@ -20,6 +20,10 @@ public final class Message {
 	public Message(ByteBuffer bytes) {
 		this.message = bytes;
 	}
+	
+	public Message(String hash) {
+		this.message = ByteBuffer.wrap(hash.getBytes());
+	}
 
 	public ByteBuffer getMessage() {
 		return message;

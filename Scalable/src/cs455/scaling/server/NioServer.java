@@ -2,14 +2,12 @@ package cs455.scaling.server;
 
 import java.io.*;
 import java.net.*;
-import java.nio.*;
 import java.nio.channels.*;
 import java.nio.channels.spi.*;
-import java.text.*;
 import java.util.*;
 
+import cs455.scaling.task.*;
 import cs455.scaling.util.*;
-import cs455.scaling.msg.*;
 
 public class NioServer extends Thread {
 	// INSTANCE VARIABLES *********************************************
@@ -47,11 +45,6 @@ public class NioServer extends Thread {
 	private SelectionKey selectionKey;
 
 	/**
-	 * The buffer to read data when it's available. Approximately 8K 
-	 */
-	private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
-
-	/**
 	 * To stop the run loop.
 	 */
 	private boolean running;
@@ -81,7 +74,8 @@ public class NioServer extends Thread {
 		this.serverChannel.configureBlocking(false);
 		 
 		// Binds the channel's socket to a local address and configures the socket to listen for connections
-		this.serverChannel.bind(new InetSocketAddress(this.getHost(), port));
+		String ipAddress = InetAddress.getLocalHost().getHostAddress();
+		this.serverChannel.bind(new InetSocketAddress(ipAddress, port));
 		 
 		// Adjusts this channel's blocking mode.
 		this.serverChannel.configureBlocking(false);
@@ -91,14 +85,7 @@ public class NioServer extends Thread {
 		
 		this.manager = new TaskManager(this, poolSize, 20000);
 		this.running = false;
-		this.setName();
-	}
-	
-	/**
-	 * Sets the server name.
-	 */
-	final private void setName() throws IOException {
-		String ipAddress = InetAddress.getLocalHost().getHostAddress();
+		
 		super.setName(ipAddress + ":" + this.port);
 	}
 	
@@ -110,7 +97,7 @@ public class NioServer extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occurs while closing the server socket.
 	 */
-	synchronized final public void close() {
+	final public void close() {
 		if (serverChannel == null)
 			return;
 		try {
@@ -150,52 +137,6 @@ public class NioServer extends Thread {
 	}
 
 	/**
-	 * Returns the raw IP address.
-	 *
-	 * @return the ip address in a String format.
-	 */
-	final public String getHost() {
-		String ret = null;
-		try {
-			ret = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-		}
-		return ret;
-	}
-
-	/**
-	 * Returns the host name for this IP address.
-	 *
-	 * @return the host name in String format.
-	 */
-	final public String getHostName() {
-		String ret = null;
-		try {
-			ret = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
-		}
-		return ret;
-	}
-
-	/**
-	 * Returns a string host name.
-	 *
-	 * @param ip
-	 *            of target machine.
-	 * @return machine host name.
-	 */
-	final public String getTargetHostName(String targetIP) {
-		String ret = null;
-		try {
-			InetAddress host = InetAddress.getByName(targetIP);
-			ret = host.getHostName();
-		} catch (UnknownHostException ex) {
-			ex.printStackTrace();
-		}
-		return ret;
-	}
-
-	/**
 	 * Returns the port number.
 	 *
 	 * @return the port number.
@@ -204,26 +145,6 @@ public class NioServer extends Thread {
 		return port;
 	}
 
-	/**
-	 * Validate input is a valid number. If number is zero then parse int failed
-	 * and an error will be printed and return zero.
-	 * 
-	 * @param input
-	 *            The string to be validated.
-	 */
-	final public int validateInput(String input) throws Exception {
-		int num = 0;
-		try {
-			num = Integer.parseInt(input);
-			if (num < 0)
-				throw new Exception();
-		} catch (NumberFormatException e) {
-			throw new Exception("Error: Invalid input must input a number.");
-		} catch (Exception e) {
-			throw new Exception("Error: number must be greater then zero.");
-		}
-		return num;
-	}
 
 	// RUN METHOD -------------------------------------------------------
 
@@ -244,11 +165,11 @@ public class NioServer extends Thread {
 				    if (key.isValid() == false) {
 				    	continue;
 				    } else if(key.isAcceptable()) {
-				        this.accept(key);
+				        manager.acceptTask(new AcceptTask(key));
 				    } else if (key.isConnectable()) {
-				        this.read(key);
+				    	// a channel is ready for Something
 				    } else if (key.isReadable()) {
-				        this.read(key);
+				    	manager.readTask(new ReadTask(key));
 				    } else if (key.isWritable()) {
 				        // a channel is ready for writing
 				    }
@@ -280,18 +201,6 @@ public class NioServer extends Thread {
 		exception.printStackTrace();
 	}
 
-	public void nodeConnected(Processor nodeConnection) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		System.out.println(nodeConnection+" connected at "+dateFormat.format(date));
-	}
-
-	synchronized public void nodeDisconnected(Processor nodeConnection) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-		System.out.println(nodeConnection+" disconnected at "+dateFormat.format(date));
-	}
-
 	public void listeningException(Throwable exception) {
 		System.out.println("listeningException :: "+exception.toString());
 		System.out.println("listeningException :: "+exception.getStackTrace());
@@ -305,54 +214,6 @@ public class NioServer extends Thread {
 
 	public void serverClosed() {
 		System.out.println("serverStopped :: Exitting.");
-	}
-	
-	/**
-	 * For an accept to be pending the channel must be a server socket channel.
-	 * 
-	 * @param key
-	 * @throws IOException
-	 */
-	private void accept(SelectionKey key) throws IOException {
-		if (debug)
-			System.out.println("New node registered.");
-		
-		ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
-		// Accept the connection and make it non-blocking
-		SocketChannel socketChannel = serverSocketChannel.accept();
-		socketChannel.configureBlocking(false);
-		// Register the new SocketChannel with our Selector, indicating
-		// we'd like to be notified when there's data waiting to be read
-		socketChannel.register(this.selector, SelectionKey.OP_READ);
-	}
-
-	/**
-	 * For a read to be
-	 * 
-	 * @param key
-	 * @throws IOException
-	 */
-	private void read(SelectionKey key) throws IOException {
-		if (debug)
-			System.out.println("Message received.");
-		
-		SocketChannel socketChannel = (SocketChannel) key.channel();
-		// Clear out our read buffer so it's ready for new data
-		this.readBuffer.clear();
-		// Attempt to read off the channel
-		int read = 0;   
-		try {
-			while (this.readBuffer.hasRemaining() && read != -1){
-				read = socketChannel.read(readBuffer);
-			}
-		} catch (IOException e) {
-			key.cancel();
-			socketChannel.close();
-			return;
-		}
-
-		// Hand the data off to our worker thread
-		this.manager.addMessage(socketChannel, new Message(readBuffer));
 	}
 
 

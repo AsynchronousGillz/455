@@ -74,7 +74,7 @@ public class Server {
 				break;
 			case "get-host":
 				if (tokens.length == 1) {
-					System.out.println(server.getHost());
+					System.out.println(server.getName());
 				} else {
 					this.invalid(message);
 				}
