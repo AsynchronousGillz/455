@@ -1,48 +1,64 @@
 package cs455.scaling.util;
 
-import cs455.scaling.server.NioServer;
+import java.util.LinkedList;
+
 import cs455.scaling.server.TaskManager;
+
+/**
+ * A thread safe thread pool
+ * 
+ * @author G van Andel
+ *
+ */
 
 public final class ThreadPool {
 
-	private Processor[] pool;
+	/**
+	 * 
+	 */
+	final private LinkedList<Processor> queue;
 	
-	private int size;
-	
-	private int used;
-	
-	private int front;
-	
-	private int back;
+	/**
+	 * 
+	 */
+	final private int size;
 
-	public ThreadPool(TaskManager manager, NioServer server, int size) {
-		this.pool = new Processor[size];
+	/**
+	 * 
+	 * @param size
+	 */
+	public ThreadPool(TaskManager manager, int size) {
 		this.size = size;
-		this.used = this.front = this.back = 0;
+		queue = new LinkedList<Processor>();
 		for (int i = 0; i < size; i++) {
-			this.pool[i] = new Processor(server.getThreadGroup(), manager);
-			this.pool[i].start();
+			Processor p = new Processor(manager);
+			queue.add(p);
+			p.start();
 		}
 	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public synchronized void enqueue(Processor value) throws InterruptedException {
-		while (used == size)
-			this.wait();
-		this.used++;
-		pool[this.back++ % this.size] = value;
-		notifyAll();
-	}
 	
-	public synchronized Processor dequeue() throws InterruptedException {
-		while (used == 0)
+	synchronized public int getCount() {
+		return queue.size();
+	}
+
+	synchronized public void enqueue(Processor item) throws InterruptedException {
+		while (this.queue.size() == this.size) {
 			this.wait();
-		notifyAll();
-		this.used--;
-		return pool[this.front++ % this.size];
+		}
+		if (this.queue.size() == 0) {
+			this.notifyAll();
+		}
+		this.queue.add(item);
+	}
+
+	synchronized public Processor dequeue() throws InterruptedException {
+		while (this.queue.size() == 0) {
+			this.wait();
+		}
+		if (this.queue.size() == this.size) {
+			this.notifyAll();
+		}
+		return this.queue.remove(0);
 	}
 	
 }

@@ -11,13 +11,10 @@ import cs455.scaling.server.TaskManager;
 public class ReadTask extends Task {
 
 	public ReadTask(SelectionKey key) {
-		super(TaskType.READ, key, null);
+		super(TaskType.READ, key);
 	}
 
 	public void exec(TaskManager manager) {
-		if (debug)
-			System.out.println("Message received.");
-		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		// Clear out our read buffer so it's ready for new data
 		ByteBuffer bytes = ByteBuffer.allocate(8192);
@@ -27,22 +24,18 @@ public class ReadTask extends Task {
 			while (bytes.hasRemaining() && read != -1){
 				read = socketChannel.read(bytes);
 			}
+			if (read == -1)
+				throw new IOException();
 		} catch (IOException e) {
-			read = -1;
-		}
-		
-		try {
-			if (read == -1) {
-				key.cancel();
-				socketChannel.close();
-				return;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("An error occured when reading.");
+			super.closeKey(key);
+			return;
+		} finally {
+			bytes.clear();
 		}
 
 		// Hand the data off to our worker thread
-		manager.taskComplete(new HashTask(key, new Message(bytes)));
+		manager.enqueueTask(new HashTask(key, new Message(bytes)));
 	}
 
 }

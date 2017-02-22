@@ -65,6 +65,13 @@ public class Server {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
+			case "info":
+				if (tokens.length == 1) {
+					System.out.println(server.getQueueStatus());
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "get-port":
 				if (tokens.length == 1) {
 					System.out.println(server.getPort());
@@ -92,8 +99,8 @@ public class Server {
 	 */
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try:\n";
-		info += "\t[ setup-overlay | send-overlay-link-weights | start # ]\n";
-		info += "\t[ list-messaging | list-weights | print-stats | get-port | get-host ]";
+		info += "\t[ info ]\n";
+		info += "\t[ get-port | get-host ]";
 		System.err.println(info);
 	}
 

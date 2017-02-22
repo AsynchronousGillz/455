@@ -9,7 +9,7 @@ import java.util.LinkedList;
  *
  */
 
-public class Queue<T> {
+public final class Queue<T> {
 
 	/**
 	 * 
@@ -29,25 +29,28 @@ public class Queue<T> {
 		this.size = size;
 		queue = new LinkedList<T>();
 	}
+	
+	synchronized public int getCount() {
+		return queue.size();
+	}
 
 	synchronized public void enqueue(T item) throws InterruptedException {
 		while (this.queue.size() == this.size) {
-			wait();
+			this.wait();
 		}
 		if (this.queue.size() == 0) {
-			notifyAll();
+			this.notifyAll();
 		}
 		this.queue.add(item);
 	}
 
 	synchronized public T dequeue() throws InterruptedException {
 		while (this.queue.size() == 0) {
-			wait();
+			this.wait();
 		}
 		if (this.queue.size() == this.size) {
-			notifyAll();
+			this.notifyAll();
 		}
-
 		return this.queue.remove(0);
 	}
 	

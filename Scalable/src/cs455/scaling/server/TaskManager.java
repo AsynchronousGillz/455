@@ -20,28 +20,38 @@ public final class TaskManager extends Thread {
 	
 	/**
 	 * 
-	 */
-	private boolean debug = true;
-	
-	/**
-	 * 
 	 * @param poolSize
 	 * @param queueSize
 	 */
-	public TaskManager(NioServer server, int poolSize, int queueSize) {
+	public TaskManager(int poolSize, int queueSize) {
 		this.queue = new Queue<Task>(queueSize);
-		this.threadpool = new ThreadPool(this, server, poolSize);
+		this.threadpool = new ThreadPool(this, poolSize);
+	}
+	
+	public String getInfo() {
+		return "[ queue count: "+this.queue.getCount()+" threadpool count: "+this.threadpool.getCount()+" ]";
 	}
 	
 	/**
 	 * TODO write comment
-	 * @param hashTask
+	 * @param t
 	 */
-	public void taskComplete(Task t) {
-		if (debug)
-			System.out.println("receiving: " + t);
+	public void enqueueTask(Task t) {
+		System.out.println("task: "+t); // DEBUG
 		try {
 			queue.enqueue(t);
+		} catch (InterruptedException e) {
+			System.err.println("TaskManager:: enqueueTask() interrupted.");
+		}
+	}
+	
+	/**
+	 * TODO write comment
+	 * @param p
+	 */
+	public void taskComplete(Processor p) {
+		try {
+			threadpool.enqueue(p);
 		} catch (InterruptedException e) {
 			System.err.println("TaskManager:: taskComplete() interrupted.");
 		}

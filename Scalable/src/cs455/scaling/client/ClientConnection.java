@@ -2,7 +2,12 @@ package cs455.scaling.client;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.Iterator;
 
 import cs455.scaling.msg.Message;
 
@@ -26,6 +31,16 @@ public class ClientConnection extends Thread {
 	 * 
 	 */
 	private SocketChannel channel;
+	
+	/**
+	 * 
+	 */
+	private Selector selector;
+	
+	/**
+	 * 
+	 */
+	private ByteBuffer bytes = ByteBuffer.allocate(8192);
 
 	/**
 	 * The server's host name.
@@ -57,16 +72,21 @@ public class ClientConnection extends Thread {
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public ClientConnection(String serverAddress, int serverPort) {
+	public ClientConnection(String serverAddress, int serverPort) throws IOException {
 		// Initialize variables
 		this.serverAddress = serverAddress;
 		this.serverPort = serverPort;
-		try {
-			Addr = new InetSocketAddress(serverAddress, serverPort);
-			channel = SocketChannel.open(Addr);
-		} catch (IOException ex) {
-			close(1);
-		}
+		
+		// Selector: multiplexor of SelectableChannel objects
+		this.selector = SelectorProvider.provider().openSelector();
+		
+		// Create a new non-blocking socket channel
+		this.Addr = new InetSocketAddress(serverAddress, serverPort);
+		this.channel = SocketChannel.open(Addr);
+		this.channel.configureBlocking(false);
+		 
+		// Adjusts this channel's ops
+		channel.register(this.selector, channel.validOps());
 	}
 
 	/**
@@ -86,6 +106,32 @@ public class ClientConnection extends Thread {
 		synchronized (channel) {
 			channel.write(msg.getMessage());
 		}
+	}
+	
+	/**
+	 * Read bytes from the server. This is the only way that methods should
+	 * communicate with the server.
+	 * 
+	 * @exception IOException
+	 *                if an I/O error occurs when sending
+	 */
+	final private Message readFromServer() throws IOException {
+		if (channel == null || Addr == null)
+			throw new SocketException("Connection error when sending.");
+		int read = 0; 
+		try {
+			while (bytes.hasRemaining() && read != -1){
+				read = channel.read(bytes);
+			}
+			if (read == -1)
+				throw new IOException();
+			return new Message(bytes);
+		} catch (IOException e) {
+			System.err.println("An error occured when reading.");
+		} finally {
+			bytes.clear();
+		}
+		return null;
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -155,10 +201,31 @@ public class ClientConnection extends Thread {
 	final public void run() {
 		// Additional setting up
 		connectionEstablished();
+		boolean info = true;
 		try {
 			while (this.running == true) {
-				this.sendToServer(new Message());
-				this.sleep(4000);
+				this.selector.select();
+				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
+				while(keyIterator.hasNext()) {
+				    SelectionKey key = keyIterator.next();
+				    if (key.isValid() == false) {
+				    	continue;
+				    } else if (key.isConnectable()) {
+				    	// a channel is ready to connect
+				    	this.channel.finishConnect();
+				    	this.channel.register(this.selector, (SelectionKey.OP_READ | SelectionKey.OP_WRITE));
+				    } else if (key.isReadable()) {
+				    	Message msg = this.readFromServer();
+				    	System.out.println("Received message: "+msg);
+				    } else if (key.isWritable()) {
+				        // a channel is ready for writing
+				    	if (info)
+				    		this.sendToServer(new Message());
+				    	info = false;
+//						this.sleep(4000);
+				    }
+				    keyIterator.remove();
+				}
 			}
 		} catch (Exception exception) {
 			connectionException(exception);
@@ -185,6 +252,13 @@ public class ClientConnection extends Thread {
 	 */
 	public void connectionEstablished() {
 		this.running = true;
+	}
+	
+	/**
+	 * Hook method to stop the client.
+	 */
+	public void closeConnection() {
+		this.running = false;
 	}
 
 	// METHODS TO BE USED FROM WITHIN THE FRAMEWORK ONLY ----------------

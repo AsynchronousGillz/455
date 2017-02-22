@@ -1,6 +1,7 @@
 package cs455.scaling.client;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -42,7 +43,7 @@ public class Client {
 				message = fromConsole.readLine();
 				if (message.trim().equals(""))
 					continue;
-				getAction(message);
+				this.getAction(message);
 			}
 		} catch(Exception e) {
 			System.out.println("Unexpected error while reading from console!");
@@ -68,6 +69,13 @@ public class Client {
 					this.invalid(message);
 				}
 				break;
+			case "exit":
+				if (tokens.length == 1) {
+					this.exit();
+				} else {
+					this.invalid(message);
+				}
+				break;
 			default:
 				this.invalid(message);
 		}
@@ -77,6 +85,7 @@ public class Client {
 	 * It closes the program.
 	 */
 	public void exit() {
+		this.client.closeConnection();
 		System.exit(0);
 	}
 	
@@ -88,8 +97,8 @@ public class Client {
 	 */
 	public void invalid(String message) {
 		String info = "invalid command \"" + message + "\" try:\n";
-		info += "\t[ print-shortest-path | get-port | get-host ]\n";
-		info += "\t[ print-cost | get-paths | exit-overlay ]";
+		info += "\t[ get-name ]\n";
+		info += "\t[ exit ]";
 		System.err.println(info);
 	}
 	
@@ -110,9 +119,15 @@ public class Client {
 			registryPort = 60100;
 		}
 		
-		ClientConnection nodeClient = new ClientConnection(registryIP, registryPort);
+		ClientConnection nodeClient = null;
+		try {
+			nodeClient = new ClientConnection(registryIP, registryPort);
+		} catch (IOException e) {
+			System.err.println("An error occured while connecting to server.");
+			System.exit(1);
+		}
+		System.out.println("Client has succsesfully connected to server and will now send messages.");
 		nodeClient.start();
-		System.out.println("Client started.");
 		Client node = new Client(nodeClient);
 		node.runConsole();
 		

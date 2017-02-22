@@ -32,17 +32,10 @@ public final class Processor extends Thread {
 	/**
 	 * Constructs a new connection to a node.
 	 * 
-	 * @param group
-	 *            the thread groupSystem.out.println("node at "+ node +
-	 *            "connected"); that contains the connections.
-	 * @param queue
-	 *            a reference to the queue that the {@link Processor} will 
-	 *            read messages from.
-	 * @param server
-	 *            a reference to the server that created this instance
+	 * @param manager
+	 *            a reference to the {@link TaskManager}
 	 */
-	public Processor(ThreadGroup group, TaskManager manager) {
-		super(group, (Runnable) null);
+	public Processor(TaskManager manager) {
 		setName("Processor-"+getId());
 		this.manager = manager;
 		this.lock = new Object();
@@ -56,6 +49,8 @@ public final class Processor extends Thread {
 	}
 	
 	public void addTask(Task task) throws InterruptedException {
+		while (this.currentTask != null)
+			this.lock.wait();
 		synchronized (this.lock) {
 			this.currentTask = task;
 			this.lock.notify();
@@ -69,9 +64,11 @@ public final class Processor extends Thread {
 			while(Boolean.toString(true).equals("true")) {
 				synchronized (this.lock) {
 					while (this.currentTask == null)
-						lock.wait();
-					this.currentTask.exec(manager);
+						this.lock.wait();
+					this.currentTask.exec(this.manager);
 					this.currentTask = null;
+					this.lock.notify();
+					this.manager.taskComplete(this);
 				}
 			}
 		} catch (InterruptedException e) {

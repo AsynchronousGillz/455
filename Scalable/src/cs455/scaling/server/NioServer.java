@@ -21,12 +21,6 @@ public class NioServer extends Thread {
 	 * The port number
 	 */
 	private int port;
-
-	/**
-	 * The thread group associated with client threads. Each member of the
-	 * thread group is a <code> Connection </code>.
-	 */
-	private ThreadGroup connectionGroup;
 	
 	/**
 	 * The manager contains both the {@link Queue} and the 
@@ -39,11 +33,6 @@ public class NioServer extends Thread {
 	 */
 	private Selector selector;
 	
-	/**
-	 * TODO
-	 */
-	private SelectionKey selectionKey;
-
 	/**
 	 * To stop the run loop.
 	 */
@@ -79,13 +68,12 @@ public class NioServer extends Thread {
 		 
 		// Adjusts this channel's blocking mode.
 		this.serverChannel.configureBlocking(false);
-		
-		// SOmething here
 		serverChannel.register(this.selector, serverChannel.validOps());
 		
-		this.manager = new TaskManager(this, poolSize, 20000);
-		this.running = false;
+		this.manager = new TaskManager(poolSize, 20000);
+		this.manager.start();
 		
+		this.running = false;
 		super.setName(ipAddress + ":" + this.port);
 	}
 	
@@ -98,43 +86,20 @@ public class NioServer extends Thread {
 	 *                if an I/O error occurs while closing the server socket.
 	 */
 	final public void close() {
-		if (serverChannel == null)
+		if (this.serverChannel == null)
 			return;
 		try {
-			serverChannel.close();
-			selector.close();
-			selectionKey.cancel();
-			selectionKey = null;
+			this.serverChannel.close();
+			this.selector.close();
 		} catch (IOException ex) {
 			System.err.println(ex.toString());
 		} finally {
-			manager.close();
-			serverClosed();
+			this.manager.close();
+			this.serverClosed();
 		}
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
-
-	/**
-	 * Returns an array containing the existing node connections. New node can
-	 * also connect. This is only for that time.
-	 *
-	 * @return an array of NodeConnection containing NodeConnection instances.
-	 */
-	final public Processor[] getNodeConnections() {
-		Processor[] nodeThreadList = new Processor[connectionGroup.activeCount()];
-		connectionGroup.enumerate(nodeThreadList);
-		return nodeThreadList;
-	}
-
-	/**
-	 * Counts the number of clients currently connected.
-	 *
-	 * @return the number of clients currently connected.
-	 */
-	final public int getNumberOfClients() {
-		return connectionGroup.activeCount();
-	}
 
 	/**
 	 * Returns the port number.
@@ -145,6 +110,10 @@ public class NioServer extends Thread {
 		return port;
 	}
 
+
+	final public String getQueueStatus() {
+		return manager.getInfo();
+	}
 
 	// RUN METHOD -------------------------------------------------------
 
@@ -158,52 +127,46 @@ public class NioServer extends Thread {
 
 		try {
 			while (running == true) { 
-				selector.select();
+				this.selector.select();
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
 				while(keyIterator.hasNext()) {
 				    SelectionKey key = keyIterator.next();
 				    if (key.isValid() == false) {
 				    	continue;
 				    } else if(key.isAcceptable()) {
-				        manager.taskComplete(new AcceptTask(key));
+				        this.accept(key);
 				    } else if (key.isReadable()) {
-				    	manager.taskComplete(new ReadTask(key));
-				    } else if (key.isWritable()) {
-				        // a channel is ready for writing
+				    	manager.enqueueTask(new ReadTask(key));
 				    }
 				    keyIterator.remove();
 				}
 			}
 		} catch (Exception exception) {
-			if (running == true) {
+			if (running == true)
 				exception.printStackTrace();
-			}
 		} finally {
-			serverClosed();
+			this.close();
 		} 
 		
 	}
-
-	// METHODS DESIGNED TO BE OVERRIDDEN BY CONCRETE SUBCLASSES ---------
-
-	/**
-	 * Called each time an exception is thrown in a Connection thread.
-	 *
-	 * @param client
-	 *            the client that raised the exception.
-	 * @param Throwable
-	 *            the exception thrown.
-	 */
-	final synchronized public void connectionException(Processor client, Throwable exception) {
-		System.err.println(client + " has thrown Exception: " + exception.toString());
-		exception.printStackTrace();
+	
+	// PRIVATE METHODS -----------------------------------
+	
+	private void accept(SelectionKey key) {
+		serverChannel = (ServerSocketChannel) key.channel();
+		// Accept the connection and make it non-blocking
+		SocketChannel socketChannel;
+		try {
+			socketChannel = serverChannel.accept();
+			socketChannel.configureBlocking(false);
+			socketChannel.register(key.selector(), SelectionKey.OP_READ);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("A new client has connected.");
 	}
 
-	public void listeningException(Throwable exception) {
-		System.out.println("listeningException :: "+exception.toString());
-		System.out.println("listeningException :: "+exception.getStackTrace());
-		System.exit(1);
-	}
+	// METHODS DESIGNED TO BE CONCRETE SUBCLASSES ---------
 
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
@@ -211,9 +174,9 @@ public class NioServer extends Thread {
 	}
 
 	public void serverClosed() {
-		System.out.println("serverStopped :: Exitting.");
+		this.running = false;
+		System.out.println("Exitting.");
 	}
-
-
+	
 }
 // EOF

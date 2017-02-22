@@ -9,17 +9,16 @@ import cs455.scaling.server.TaskManager;
 public class HashTask extends Task {
 
 	public HashTask(SelectionKey key, Message msg) {
-		super(TaskType.HASH, key, msg);
+		super(TaskType.HASH, key);
+		super.setMessage(msg);
 	}
 
 	public void exec(TaskManager manager) {
-		if (debug)
-			System.out.println("Message to be hashed.");
-		
-		ByteBuffer bytes = ByteBuffer.wrap(msg.toString().getBytes());
+		String hash = msg.toString();
+		System.out.println("Message hash: "+hash);
+		ByteBuffer bytes = ByteBuffer.wrap(hash.getBytes());
 		// Hand the data off to our worker thread
-		manager.taskComplete(new WriteTask(key, new Message(bytes)));
-		
+		manager.enqueueTask(new SendTask(key, new Message(bytes)));
 	}
 
 }
