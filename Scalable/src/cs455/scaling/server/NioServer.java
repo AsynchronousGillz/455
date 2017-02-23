@@ -127,7 +127,7 @@ public class NioServer extends Thread {
 
 		try {
 			while (running == true) { 
-				this.selector.select();
+				this.selector.select();				
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
 				while(keyIterator.hasNext()) {
 				    SelectionKey key = keyIterator.next();
@@ -135,7 +135,8 @@ public class NioServer extends Thread {
 				    	continue;
 				    } else if(key.isAcceptable()) {
 				        this.accept(key);
-				    } else if (key.isReadable()) {
+				    } else if (key.isReadable() && key.attachment() == null) {
+				    	key.attach(manager);
 				    	manager.enqueueTask(new ReadTask(key));
 				    }
 				    keyIterator.remove();

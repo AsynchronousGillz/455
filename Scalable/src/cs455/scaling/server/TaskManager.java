@@ -28,6 +28,10 @@ public final class TaskManager extends Thread {
 		this.threadpool = new ThreadPool(this, poolSize);
 	}
 	
+	/**
+	 * Get the current information of the Manager.
+	 * @return
+	 */
 	public String getInfo() {
 		return "[ queue count: "+this.queue.getCount()+" threadpool count: "+this.threadpool.getCount()+" ]";
 	}
@@ -37,7 +41,7 @@ public final class TaskManager extends Thread {
 	 * @param t
 	 */
 	public void enqueueTask(Task t) {
-		System.out.println("task: "+t); // DEBUG
+		System.out.println("enqueueTask: "+t); // DEBUG
 		try {
 			queue.enqueue(t);
 		} catch (InterruptedException e) {

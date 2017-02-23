@@ -16,7 +16,26 @@ public class Client {
 
 	// Instance variables **********************************************
 
-	private final ClientConnection client;
+	/**
+	 * The server's host name.
+	 */
+	final private String serverAddress;
+
+	/**
+	 * The port number.
+	 */
+	final private int serverPort;
+	
+	/**
+	 * 
+	 */
+	private final Receiver receiver;
+	
+	/**
+	 * 
+	 */
+	private final Sender sender;
+
 
 	// Constructors ****************************************************
 
@@ -29,8 +48,12 @@ public class Client {
 	 * 		The server for the messaging nodes to connect to.
 	 */
 
-	public Client(ClientConnection client) {
-		this.client = client;
+	public Client(Receiver receiver, String serverAddress, int serverPort) {
+		this.serverAddress = serverAddress;
+		this.serverPort = serverPort;
+		this.receiver = receiver;
+		this.sender = receiver.makeSender();
+		this.sender.start();
 	}
 
 	// Instance methods ************************************************
@@ -62,9 +85,23 @@ public class Client {
 	private void getAction(String message){
 		String[] tokens = message.split(" ");
 		switch(tokens[0]){
+			case "get-count":
+				if (tokens.length == 1) {
+					System.out.println(sender.getCount());
+				} else {
+					this.invalid(message);
+				}
+				break;
+			case "get-server":
+				if (tokens.length == 1) {
+					System.out.println(serverAddress+":"+serverPort);
+				} else {
+					this.invalid(message);
+				}
+				break;
 			case "get-name":
 				if (tokens.length == 1) {
-					System.out.println(client.getName());
+					System.out.println(receiver.getName());
 				} else {
 					this.invalid(message);
 				}
@@ -85,7 +122,7 @@ public class Client {
 	 * It closes the program.
 	 */
 	public void exit() {
-		this.client.closeConnection();
+		this.receiver.closeConnection();
 		System.exit(0);
 	}
 	
@@ -119,16 +156,17 @@ public class Client {
 			registryPort = 60100;
 		}
 		
-		ClientConnection nodeClient = null;
+		Receiver nodeClient = null;
 		try {
-			nodeClient = new ClientConnection(registryIP, registryPort);
+			nodeClient = new Receiver(registryIP, registryPort);
 		} catch (IOException e) {
 			System.err.println("An error occured while connecting to server.");
 			System.exit(1);
 		}
 		System.out.println("Client has succsesfully connected to server and will now send messages.");
 		nodeClient.start();
-		Client node = new Client(nodeClient);
+		
+		Client node = new Client(nodeClient, registryIP, registryPort);
 		node.runConsole();
 		
 	}

@@ -7,7 +7,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.Iterator;
 
 import cs455.scaling.msg.Message;
 
@@ -18,7 +17,7 @@ import cs455.scaling.msg.Message;
  * @see Client.NodeMain
  */
 
-public class ClientConnection extends Thread {
+public class Receiver extends Thread {
 
 	// INSTANCE VARIABLES ***********************************************
 
@@ -36,21 +35,6 @@ public class ClientConnection extends Thread {
 	 * 
 	 */
 	private Selector selector;
-	
-	/**
-	 * 
-	 */
-	private ByteBuffer bytes = ByteBuffer.allocate(8192);
-
-	/**
-	 * The server's host name.
-	 */
-	private String serverAddress;
-
-	/**
-	 * The port number.
-	 */
-	private int serverPort;
 	
 	/**
 	 * To stop the run loop.
@@ -72,10 +56,7 @@ public class ClientConnection extends Thread {
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public ClientConnection(String serverAddress, int serverPort) throws IOException {
-		// Initialize variables
-		this.serverAddress = serverAddress;
-		this.serverPort = serverPort;
+	public Receiver(String serverAddress, int serverPort) throws IOException {
 		
 		// Selector: multiplexor of SelectableChannel objects
 		this.selector = SelectorProvider.provider().openSelector();
@@ -88,25 +69,6 @@ public class ClientConnection extends Thread {
 		// Adjusts this channel's ops
 		channel.register(this.selector, channel.validOps());
 	}
-
-	/**
-	 * Sends an object to the server. This is the only way that methods should
-	 * communicate with the server.
-	 * 
-	 * @param msg
-	 *            The message to be sent.
-	 * @exception IOException
-	 *                if an I/O error occurs when sending
-	 */
-	final private void sendToServer(Message msg) throws IOException {
-		if (channel == null || Addr == null)
-			throw new SocketException("Connection error when sending.");
-		if (debug)
-			System.out.println("sending: " + msg);
-		synchronized (channel) {
-			channel.write(msg.getMessage());
-		}
-	}
 	
 	/**
 	 * Read bytes from the server. This is the only way that methods should
@@ -118,20 +80,22 @@ public class ClientConnection extends Thread {
 	final private Message readFromServer() throws IOException {
 		if (channel == null || Addr == null)
 			throw new SocketException("Connection error when sending.");
-		int read = 0; 
+		int read = 0;
+		Message msg = new Message();
+		ByteBuffer bytes = msg.getMessage();
+		bytes.clear();
 		try {
 			while (bytes.hasRemaining() && read != -1){
 				read = channel.read(bytes);
 			}
 			if (read == -1)
 				throw new IOException();
-			return new Message(bytes);
 		} catch (IOException e) {
 			System.err.println("An error occured when reading.");
 		} finally {
 			bytes.clear();
 		}
-		return null;
+		return msg;
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -142,55 +106,15 @@ public class ClientConnection extends Thread {
 	final public boolean isConnected() {
 		return this.isAlive() && this.running;
 	}
-
-	/**
-	 * @return the port number.
-	 */
-	final public int getRegistryPort() {
-		return serverPort;
-	}
-
-	/**
-	 * Sets the server port number for the next connection. The change in port
-	 * only takes effect at the time of the next call to openConnection().
-	 * 
-	 * @param port
-	 *            the port number.
-	 */
-	final public void setRegistryPort(int port) throws IllegalArgumentException {
-		if ((port < 0) || (port > 65535))
-			throw new IllegalArgumentException("Invalid port. Must be with in 0 to 65535.");
-		this.serverPort = port;
-	}
-
-	/**
-	 * @return the host name.
-	 */
-	final public String getRegistryHost() {
-		return serverAddress;
-	}
-
-	/**
-	 * Sets the server host for the next connection. The change in host only
-	 * takes effect at the time of the next call to openConnection().
-	 * 
-	 * @param host
-	 *            the host name.
-	 */
-	final public void setRegistryHost(String serverAddress) {
-		this.serverAddress = serverAddress;
-	}
 	
 	/**
-	 * Causes the server to stop accepting new connections.
+	 * 
+	 * @return
 	 */
-	final public void sleep(int time) {
-		try {
-			Thread.sleep(time);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	final public Sender makeSender() {
+		return new Sender(this.selector, this.channel);
 	}
+
 	
 	// RUN METHOD -------------------------------------------------------
 
@@ -199,33 +123,19 @@ public class ClientConnection extends Thread {
 	 * <code>messageFromServer()</code>. Not to be explicitly called.
 	 */
 	final public void run() {
-		// Additional setting up
 		connectionEstablished();
-		boolean info = true;
 		try {
 			while (this.running == true) {
 				this.selector.select();
-				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
-				while(keyIterator.hasNext()) {
-				    SelectionKey key = keyIterator.next();
-				    if (key.isValid() == false) {
-				    	continue;
-				    } else if (key.isConnectable()) {
-				    	// a channel is ready to connect
-				    	this.channel.finishConnect();
-				    	this.channel.register(this.selector, (SelectionKey.OP_READ | SelectionKey.OP_WRITE));
-				    } else if (key.isReadable()) {
-				    	Message msg = this.readFromServer();
-				    	System.out.println("Received message: "+msg);
-				    } else if (key.isWritable()) {
-				        // a channel is ready for writing
-				    	if (info)
-				    		this.sendToServer(new Message());
-				    	info = false;
-//						this.sleep(4000);
-				    }
-				    keyIterator.remove();
-				}
+				SelectionKey key = selector.selectedKeys().iterator().next();
+			    if (key.isValid() == false) {
+			    	continue;
+			    } else if (key.isConnectable()) {
+			    	this.channel.finishConnect();
+			    	this.channel.register(this.selector, (SelectionKey.OP_READ | SelectionKey.OP_WRITE));
+			    } else if (key.isReadable()) {
+			    	System.out.println("Received message: "+this.readFromServer().toHash());
+			    }
 			}
 		} catch (Exception exception) {
 			connectionException(exception);
@@ -245,12 +155,13 @@ public class ClientConnection extends Thread {
 	public void connectionException(Exception exception) {
 		if (exception instanceof EOFException == false)
 			System.out.println("connectionException :: " + exception.toString());
+		exception.printStackTrace();
 	}
 
 	/**
 	 * Hook method called after a connection has been established.
 	 */
-	public void connectionEstablished() {
+	private void connectionEstablished() {
 		this.running = true;
 	}
 	

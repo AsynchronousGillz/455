@@ -1,6 +1,5 @@
 package cs455.scaling.task;
 
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 
 import cs455.scaling.msg.Message;
@@ -14,11 +13,8 @@ public class HashTask extends Task {
 	}
 
 	public void exec(TaskManager manager) {
-		String hash = msg.toString();
-		System.out.println("Message hash: "+hash);
-		ByteBuffer bytes = ByteBuffer.wrap(hash.getBytes());
-		// Hand the data off to our worker thread
-		manager.enqueueTask(new SendTask(key, new Message(bytes)));
+		System.out.println("Message hash: "+msg.toHash());
+		manager.enqueueTask(new SendTask(key, msg));
 	}
 
 }

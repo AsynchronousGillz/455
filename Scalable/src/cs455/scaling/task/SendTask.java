@@ -15,6 +15,7 @@ public class SendTask extends Task {
 	}
 
 	public void exec(TaskManager manager) {
+		System.out.println("sending msg: "+msg);
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		try {
 			synchronized (socketChannel) {

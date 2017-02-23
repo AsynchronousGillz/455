@@ -39,7 +39,7 @@ public final class Queue<T> {
 			this.wait();
 		}
 		if (this.queue.size() == 0) {
-			this.notifyAll();
+			this.notify();
 		}
 		this.queue.add(item);
 	}
@@ -49,7 +49,7 @@ public final class Queue<T> {
 			this.wait();
 		}
 		if (this.queue.size() == this.size) {
-			this.notifyAll();
+			this.notify();
 		}
 		return this.queue.remove(0);
 	}

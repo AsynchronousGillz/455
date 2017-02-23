@@ -7,7 +7,7 @@ import java.util.*;
 
 public final class Message {
 
-	private int size = 8192;
+	final public int size = 8192;
 	private ByteBuffer message;
 
 	public Message() {
@@ -32,8 +32,8 @@ public final class Message {
 	public byte[] getBytes() {
 		return message.array();
 	}
-
-	public String toString() {
+	
+	public String toHash() {
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA1");
@@ -41,6 +41,14 @@ public final class Message {
 		byte[] hash = digest.digest(message.array());
 		BigInteger hashInt = new BigInteger(1, hash);
 		return hashInt.toString(16);
+	}
+
+	public String toString() {
+		String ret = "";
+		byte[] bytes = message.array();
+		for (int i = 0; i < 20; i++)
+			ret += bytes[i];
+		return ret;
 	}
 
 }
