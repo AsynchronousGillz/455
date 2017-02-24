@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.channels.*;
 import java.nio.channels.spi.*;
+import java.text.*;
 import java.util.*;
 
 import cs455.scaling.task.*;
@@ -32,6 +33,16 @@ public class NioServer extends Thread {
 	 * TODO
 	 */
 	private Selector selector;
+	
+	/**
+	 * 
+	 */
+	private Integer clientCount;
+	
+	/**
+	 * 
+	 */
+	private Date date;
 	
 	/**
 	 * To stop the run loop.
@@ -70,11 +81,12 @@ public class NioServer extends Thread {
 		this.serverChannel.configureBlocking(false);
 		serverChannel.register(this.selector, serverChannel.validOps());
 		
-		this.manager = new TaskManager(poolSize, 20000);
+		this.manager = new TaskManager(poolSize, 10000);
 		this.manager.start();
 		
 		this.running = false;
 		super.setName(ipAddress + ":" + this.port);
+		this.clientCount = 0;
 	}
 	
 	/**
@@ -97,6 +109,7 @@ public class NioServer extends Thread {
 			this.manager.close();
 			this.serverClosed();
 		}
+		System.exit(0);
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -136,11 +149,14 @@ public class NioServer extends Thread {
 				    } else if(key.isAcceptable()) {
 				        this.accept(key);
 				    } else if (key.isReadable() && key.attachment() == null) {
-				    	key.attach(manager);
+				    	key.attach(new Object());
 				    	manager.enqueueTask(new ReadTask(key));
 				    }
 				    keyIterator.remove();
 				}
+				Date current = new Date();
+				if ((current.getTime() - this.date.getTime()) > 5000)
+					this.getInfo(current);
 			}
 		} catch (Exception exception) {
 			if (running == true)
@@ -164,10 +180,23 @@ public class NioServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		synchronized (clientCount) {
+			clientCount++;	
+		}
 		System.out.println("A new client has connected.");
 	}
+	
+	private void getInfo(Date time) {
+		this.date = time;
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		String info = "Current Server Throughput: "+manager.getSent()+" messages/s";
+		synchronized (clientCount) {
+			info +=  ", Active Client Connections: "+clientCount;
+		}
+		System.out.println("[ "+dateFormat.format(time)+" ] "+info);	
+	}
 
-	// METHODS DESIGNED TO BE CONCRETE SUBCLASSES ---------
+	// METHODS --------------------------------------------
 
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());

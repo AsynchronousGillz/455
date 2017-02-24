@@ -15,7 +15,6 @@ public class SendTask extends Task {
 	}
 
 	public void exec(TaskManager manager) {
-		System.out.println("sending msg: "+msg);
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		try {
 			synchronized (socketChannel) {
@@ -25,7 +24,7 @@ public class SendTask extends Task {
 			System.err.println("An error occured while sending.");
 			e.printStackTrace();
 		}
-		key.interestOps(SelectionKey.OP_READ);
+		manager.incrementSent();
 	}
 
 }

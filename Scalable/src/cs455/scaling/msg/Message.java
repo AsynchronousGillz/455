@@ -8,7 +8,7 @@ import java.util.*;
 public final class Message {
 
 	final public int size = 8192;
-	private ByteBuffer message;
+	final private ByteBuffer message;
 
 	public Message() {
 		Random rand = new Random();
@@ -19,10 +19,6 @@ public final class Message {
 
 	public Message(ByteBuffer bytes) {
 		this.message = bytes;
-	}
-	
-	public Message(String hash) {
-		this.message = ByteBuffer.wrap(hash.getBytes());
 	}
 
 	public ByteBuffer getMessage() {
@@ -38,7 +34,7 @@ public final class Message {
 		try {
 			digest = MessageDigest.getInstance("SHA1");
 		} catch (NoSuchAlgorithmException e) {}
-		byte[] hash = digest.digest(message.array());
+		byte[] hash = digest.digest(this.message.array());
 		BigInteger hashInt = new BigInteger(1, hash);
 		return hashInt.toString(16);
 	}
@@ -46,8 +42,8 @@ public final class Message {
 	public String toString() {
 		String ret = "";
 		byte[] bytes = message.array();
-		for (int i = 0; i < 20; i++)
-			ret += bytes[i];
+		for (int i = 0; i < 10; i++)
+			ret += bytes[i] + " ";
 		return ret;
 	}
 

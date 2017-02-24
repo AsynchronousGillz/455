@@ -7,6 +7,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.Iterator;
 
 import cs455.scaling.msg.Message;
 
@@ -17,14 +18,9 @@ import cs455.scaling.msg.Message;
  * @see Client.NodeMain
  */
 
-public class Receiver extends Thread {
+public class Connection extends Thread {
 
 	// INSTANCE VARIABLES ***********************************************
-
-	/**
-	 * 
-	 */
-	private InetSocketAddress Addr;
 
 	/**
 	 * 
@@ -37,14 +33,24 @@ public class Receiver extends Thread {
 	private Selector selector;
 	
 	/**
+	 * 
+	 */
+	private Integer sentCount;
+	
+	/**
+	 * 
+	 */
+	private Integer receivedCount;
+	
+	/**
+	 * 
+	 */
+	final private int messageRate;
+	
+	/**
 	 * To stop the run loop.
 	 */
 	private boolean running;
-
-	/**
-	 * For debug purposes
-	 */
-	final private boolean debug = true;
 
 	// CONSTRUCTORS *****************************************************
 
@@ -56,18 +62,19 @@ public class Receiver extends Thread {
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public Receiver(String serverAddress, int serverPort) throws IOException {
-		
+	public Connection(String serverAddress, int serverPort, int messageRate) throws IOException {
+		this.messageRate = messageRate;
 		// Selector: multiplexor of SelectableChannel objects
 		this.selector = SelectorProvider.provider().openSelector();
 		
 		// Create a new non-blocking socket channel
-		this.Addr = new InetSocketAddress(serverAddress, serverPort);
-		this.channel = SocketChannel.open(Addr);
+		this.channel = SocketChannel.open(new InetSocketAddress(serverAddress, serverPort));
 		this.channel.configureBlocking(false);
 		 
 		// Adjusts this channel's ops
 		channel.register(this.selector, channel.validOps());
+		this.channel.finishConnect();
+		this.sentCount = this.receivedCount = 0;
 	}
 	
 	/**
@@ -77,25 +84,40 @@ public class Receiver extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final private Message readFromServer() throws IOException {
-		if (channel == null || Addr == null)
+	final private void readFromServer() throws IOException {
+		if (channel == null)
 			throw new SocketException("Connection error when sending.");
 		int read = 0;
-		Message msg = new Message();
-		ByteBuffer bytes = msg.getMessage();
-		bytes.clear();
+		ByteBuffer bytes = ByteBuffer.allocate(8192);
 		try {
 			while (bytes.hasRemaining() && read != -1){
 				read = channel.read(bytes);
+				System.out.println("TEST-read: "+read);
 			}
 			if (read == -1)
 				throw new IOException();
 		} catch (IOException e) {
 			System.err.println("An error occured when reading.");
-		} finally {
-			bytes.clear();
 		}
-		return msg;
+		this.incrementReceived();
+	}
+	
+	/**
+	 * Sends an object to the server. This is the only way that methods should
+	 * communicate with the server.
+	 * 
+	 * @param msg
+	 *            The message to be sent.
+	 * @exception IOException
+	 *                if an I/O error occurs when sending
+	 */
+	final private void sendToServer(Message msg) throws IOException {
+		if (channel == null)
+			throw new SocketException("Connection error when sending.");
+		synchronized (channel) {
+			channel.write(msg.getMessage());
+		}
+		this.incrementSent();
 	}
 
 	// ACCESSING METHODS ------------------------------------------------
@@ -108,34 +130,74 @@ public class Receiver extends Thread {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * TODO Comment incrementSent
 	 */
-	final public Sender makeSender() {
-		return new Sender(this.selector, this.channel);
+	final public void incrementSent() {
+		synchronized (sentCount) {
+			this.sentCount++;	
+		}
+	}
+	
+	/**
+	 * TODO Comment incrementReceived
+	 */
+	final public void incrementReceived() {
+		synchronized (receivedCount) {
+			this.receivedCount++;	
+		}
+	}
+	
+	/**
+	 * TODO Comment getInfo
+	 */
+	final public String getInfo() {
+		String ret = "Total Sent Count: ";
+		synchronized (this.sentCount) {
+			ret += this.sentCount + ", Total Received Count:";
+		}
+		synchronized (this.receivedCount) {
+			ret += this.receivedCount;	
+		}
+		// Total Sent Count: x, Total Received Count: y 
+		return ret;
+	}
+	
+	/**
+	 * Causes the server to stop accepting new connections.
+	 */
+	final private void sleep(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	
 	// RUN METHOD -------------------------------------------------------
 
 	/**
-	 * Waits for messages from the server. When each arrives, a call is made to
-	 * <code>messageFromServer()</code>. Not to be explicitly called.
+	 * Waits for messages from the server. When each arrives!
 	 */
-	final public void run() {
+	public void run() {
 		connectionEstablished();
 		try {
 			while (this.running == true) {
-				this.selector.select();
-				SelectionKey key = selector.selectedKeys().iterator().next();
-			    if (key.isValid() == false) {
-			    	continue;
-			    } else if (key.isConnectable()) {
-			    	this.channel.finishConnect();
-			    	this.channel.register(this.selector, (SelectionKey.OP_READ | SelectionKey.OP_WRITE));
-			    } else if (key.isReadable()) {
-			    	System.out.println("Received message: "+this.readFromServer().toHash());
-			    }
+				this.selector.select();				
+				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
+				while(keyIterator.hasNext()) {
+				    SelectionKey key = keyIterator.next();
+				    if (key.isValid() == false) {
+				    	continue;
+				    } else if (key.isReadable()) {
+				    	this.readFromServer();
+				    } else if (key.isWritable()) {
+			    		this.sendToServer(new Message());
+				    }
+					this.sleep(1000 / messageRate);
+					// generate packets is messageRate per-second;
+					keyIterator.remove();
+				}
 			}
 		} catch (Exception exception) {
 			connectionException(exception);
@@ -192,8 +254,7 @@ public class Receiver extends Thread {
 		try {
 			channel.close();
 		} catch (IOException ex) {
-			if (debug)
-				System.err.println(ex.toString());
+			ex.printStackTrace();
 		} finally {
 			System.exit(mode);
 		}

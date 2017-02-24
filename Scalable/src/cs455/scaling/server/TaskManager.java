@@ -20,12 +20,18 @@ public final class TaskManager extends Thread {
 	
 	/**
 	 * 
+	 */
+	private Integer sentCount;
+	
+	/**
+	 * 
 	 * @param poolSize
 	 * @param queueSize
 	 */
 	public TaskManager(int poolSize, int queueSize) {
 		this.queue = new Queue<Task>(queueSize);
 		this.threadpool = new ThreadPool(this, poolSize);
+		this.sentCount = 0;
 	}
 	
 	/**
@@ -41,7 +47,6 @@ public final class TaskManager extends Thread {
 	 * @param t
 	 */
 	public void enqueueTask(Task t) {
-		System.out.println("enqueueTask: "+t); // DEBUG
 		try {
 			queue.enqueue(t);
 		} catch (InterruptedException e) {
@@ -59,6 +64,28 @@ public final class TaskManager extends Thread {
 		} catch (InterruptedException e) {
 			System.err.println("TaskManager:: taskComplete() interrupted.");
 		}
+	}
+	
+
+	/**
+	 * 
+	 */
+	public void incrementSent() {
+		synchronized (sentCount) {
+			this.sentCount++;	
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getSent() {
+		String ret = "";
+		synchronized (sentCount) {
+			ret += this.sentCount;
+		}
+		return ret;
 	}
 	
 	/**
