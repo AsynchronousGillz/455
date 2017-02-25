@@ -1,6 +1,5 @@
 package cs455.scaling.task;
 
-import java.io.IOException;
 import java.nio.channels.SelectionKey;
 
 import cs455.scaling.msg.Message;
@@ -40,12 +39,7 @@ public abstract class Task {
 	}
 	
 	final public void closeKey(SelectionKey key) {
-		try {
-			key.channel().close();
-			key.cancel();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		key.cancel();
 	}
 	
 	abstract public void exec(TaskManager manager);

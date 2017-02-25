@@ -84,6 +84,7 @@ public final class TaskManager extends Thread {
 		String ret = "";
 		synchronized (sentCount) {
 			ret += this.sentCount;
+			this.sentCount = 0;
 		}
 		return ret;
 	}

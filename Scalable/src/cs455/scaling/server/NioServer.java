@@ -134,7 +134,7 @@ public class NioServer extends Thread {
 	 * Runs the listening thread that allows clients to connect. Not to be
 	 * called.
 	 */
-	final public void run() {
+	public void run() {
 		// call the hook method to notify that the server is starting
 		serverStarted();
 
@@ -149,7 +149,7 @@ public class NioServer extends Thread {
 				    } else if(key.isAcceptable()) {
 				        this.accept(key);
 				    } else if (key.isReadable() && key.attachment() == null) {
-				    	key.attach(new Object());
+				    	key.attach(this);
 				    	manager.enqueueTask(new ReadTask(key));
 				    }
 				    keyIterator.remove();
@@ -176,14 +176,11 @@ public class NioServer extends Thread {
 		try {
 			socketChannel = serverChannel.accept();
 			socketChannel.configureBlocking(false);
-			socketChannel.register(key.selector(), SelectionKey.OP_READ);
+			socketChannel.register(key.selector(), socketChannel.validOps());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		synchronized (clientCount) {
-			clientCount++;	
-		}
-		System.out.println("A new client has connected.");
+		this.clientConnected();
 	}
 	
 	private void getInfo(Date time) {
@@ -191,7 +188,7 @@ public class NioServer extends Thread {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		String info = "Current Server Throughput: "+manager.getSent()+" messages/s";
 		synchronized (clientCount) {
-			info +=  ", Active Client Connections: "+clientCount;
+			info +=  ", Active Client Connections: "+this.clientCount;
 		}
 		System.out.println("[ "+dateFormat.format(time)+" ] "+info);	
 	}
@@ -200,12 +197,27 @@ public class NioServer extends Thread {
 
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
+		this.date = new Date();
 		this.running = true;
 	}
 
 	public void serverClosed() {
 		this.running = false;
 		System.out.println("Exitting.");
+	}
+	
+	public void clientDisconnected() {
+		synchronized (clientCount) {
+			clientCount--;	
+		}
+		System.err.println("A client has disconnected.");
+	}
+	
+	public void clientConnected() {
+		synchronized (clientCount) {
+			clientCount++;	
+		}
+		System.out.println("A new client has connected.");
 	}
 	
 }

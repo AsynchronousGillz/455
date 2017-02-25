@@ -2,12 +2,10 @@ package cs455.scaling.client;
 
 import java.io.*;
 import java.net.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
+import java.nio.*;
+import java.nio.channels.*;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.Iterator;
+import java.util.*;
 
 import cs455.scaling.msg.Message;
 
@@ -45,6 +43,11 @@ public class Connection extends Thread {
 	/**
 	 * 
 	 */
+	private List<String> hashList;
+	
+	/**
+	 * 
+	 */
 	final private int messageRate;
 	
 	/**
@@ -68,37 +71,44 @@ public class Connection extends Thread {
 		this.selector = SelectorProvider.provider().openSelector();
 		
 		// Create a new non-blocking socket channel
-		this.channel = SocketChannel.open(new InetSocketAddress(serverAddress, serverPort));
+		this.channel = SocketChannel.open();
 		this.channel.configureBlocking(false);
+		this.channel.connect(new InetSocketAddress(serverAddress, serverPort));
 		 
 		// Adjusts this channel's ops
-		channel.register(this.selector, channel.validOps());
-		this.channel.finishConnect();
+//		channel.register(this.selector, channel.validOps());
+		channel.register(this.selector, SelectionKey.OP_CONNECT);
 		this.sentCount = this.receivedCount = 0;
+		this.hashList = new ArrayList<String>();
 	}
 	
-	/**
+	/**finishConnect
 	 * Read bytes from the server. This is the only way that methods should
 	 * communicate with the server.
 	 * 
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final private void readFromServer() throws IOException {
+	final private void readFromServer(SelectionKey key) throws IOException {
 		if (channel == null)
 			throw new SocketException("Connection error when sending.");
 		int read = 0;
 		ByteBuffer bytes = ByteBuffer.allocate(8192);
 		try {
-			while (bytes.hasRemaining() && read != -1){
+			while (bytes.hasRemaining() && read != -1 && channel != null){
 				read = channel.read(bytes);
-				System.out.println("TEST-read: "+read);
 			}
 			if (read == -1)
 				throw new IOException();
+			if (channel == null)
+				throw new Exception();
 		} catch (IOException e) {
-			System.err.println("An error occured when reading.");
+			this.close(0);
+		} catch (Exception e) {
+			this.close(1);
 		}
+		System.out.println("HOLY SHIT THIS WILL NEVER PRINT");
+		hashList.remove(new Message(bytes).toHash());
 		this.incrementReceived();
 	}
 	
@@ -111,9 +121,10 @@ public class Connection extends Thread {
 	 * @exception IOException
 	 *                if an I/O error occurs when sending
 	 */
-	final private void sendToServer(Message msg) throws IOException {
+	final private void sendToServer(SelectionKey key, Message msg) throws IOException {
 		if (channel == null)
 			throw new SocketException("Connection error when sending.");
+		this.hashList.add(msg.toHash());
 		synchronized (channel) {
 			channel.write(msg.getMessage());
 		}
@@ -153,10 +164,12 @@ public class Connection extends Thread {
 	final public String getInfo() {
 		String ret = "Total Sent Count: ";
 		synchronized (this.sentCount) {
-			ret += this.sentCount + ", Total Received Count:";
+			ret += this.sentCount + ", Total Received Count: ";
+			this.sentCount = 0;
 		}
 		synchronized (this.receivedCount) {
-			ret += this.receivedCount;	
+			ret += this.receivedCount;
+			this.receivedCount = 0;
 		}
 		// Total Sent Count: x, Total Received Count: y 
 		return ret;
@@ -189,10 +202,13 @@ public class Connection extends Thread {
 				    SelectionKey key = keyIterator.next();
 				    if (key.isValid() == false) {
 				    	continue;
+				    } else if (key.isConnectable()) {
+						this.channel.finishConnect();
+						key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 				    } else if (key.isReadable()) {
-				    	this.readFromServer();
+				    	this.readFromServer(key);
 				    } else if (key.isWritable()) {
-			    		this.sendToServer(new Message());
+			    		this.sendToServer(key, new Message());
 				    }
 					this.sleep(1000 / messageRate);
 					// generate packets is messageRate per-second;
@@ -248,6 +264,8 @@ public class Connection extends Thread {
 	final private void close(int mode) {
 		if (mode == 0)
 			System.out.println("Disconnecting from the server. Exitting.");
+		else if (mode == 1)
+			System.out.println("An error occured. Exitting.");
 		else
 			System.err.println("An error occured connecting to the server. Exitting.");
 

@@ -6,6 +6,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 import cs455.scaling.msg.Message;
+import cs455.scaling.server.NioServer;
 import cs455.scaling.server.TaskManager;
 
 public class ReadTask extends Task {
@@ -25,7 +26,7 @@ public class ReadTask extends Task {
 			if (read == -1)
 				throw new IOException();
 		} catch (IOException e) {
-			System.err.println("An error occured when reading.");
+			((NioServer) key.attachment()).clientDisconnected();
 			super.closeKey(key);
 			return;
 		}
