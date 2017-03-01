@@ -22,6 +22,11 @@ public final class ThreadPool {
 	 * 
 	 */
 	final private int size;
+	
+	/**
+	 * 
+	 */
+	final private Object lock;
 
 	/**
 	 * 
@@ -29,7 +34,8 @@ public final class ThreadPool {
 	 */
 	public ThreadPool(TaskManager manager, int size) {
 		this.size = size;
-		queue = new LinkedList<Processor>();
+		this.lock = new Object();
+		this.queue = new LinkedList<Processor>();
 		for (int i = 0; i < size; i++) {
 			Processor p = new Processor(manager);
 			queue.add(p);
@@ -37,28 +43,34 @@ public final class ThreadPool {
 		}
 	}
 	
-	synchronized public int getCount() {
-		return queue.size();
+	public int getCount() {
+		synchronized (lock) {
+			return queue.size();
+		}
 	}
 
-	synchronized public void enqueue(Processor item) throws InterruptedException {
-		while (this.queue.size() == this.size) {
-			this.wait();
+	public void enqueue(Processor item) throws InterruptedException {
+		synchronized (lock) {
+			while (this.queue.size() == this.size) {
+				this.lock.wait();
+			}
+			if (this.queue.size() == 0) {
+				this.lock.notifyAll();
+			}
+			this.queue.add(item);
 		}
-		if (this.queue.size() == 0) {
-			this.notifyAll();
-		}
-		this.queue.add(item);
 	}
 
-	synchronized public Processor dequeue() throws InterruptedException {
-		while (this.queue.size() == 0) {
-			this.wait();
+	public Processor dequeue() throws InterruptedException {
+		synchronized (lock) {
+			while (this.queue.size() == 0) {
+				this.lock.wait();
+			}
+			if (this.queue.size() == this.size) {
+				this.lock.notifyAll();
+			}
+			return this.queue.remove(0);
 		}
-		if (this.queue.size() == this.size) {
-			this.notifyAll();
-		}
-		return this.queue.remove(0);
 	}
 	
 }

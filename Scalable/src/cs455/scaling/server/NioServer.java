@@ -79,7 +79,7 @@ public class NioServer extends Thread {
 		 
 		// Adjusts this channel's blocking mode.
 		this.serverChannel.configureBlocking(false);
-		serverChannel.register(this.selector, serverChannel.validOps());
+		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
 		
 		this.manager = new TaskManager(poolSize, 10000);
 		this.manager.start();
@@ -140,23 +140,23 @@ public class NioServer extends Thread {
 
 		try {
 			while (running == true) { 
-				this.selector.select();				
+				this.selector.select();
+				Date current = new Date();
+				if ((current.getTime() - this.date.getTime()) > 5000)
+					this.getInfo(current);
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
 				while(keyIterator.hasNext()) {
 				    SelectionKey key = keyIterator.next();
+				    keyIterator.remove();
 				    if (key.isValid() == false) {
 				    	continue;
 				    } else if(key.isAcceptable()) {
 				        this.accept(key);
 				    } else if (key.isReadable() && key.attachment() == null) {
-				    	key.attach(this);
-				    	manager.enqueueTask(new ReadTask(key));
+				    	key.attach(new Object());
+				    	this.manager.enqueueTask(new ReadTask(key, this));
 				    }
-				    keyIterator.remove();
 				}
-				Date current = new Date();
-				if ((current.getTime() - this.date.getTime()) > 5000)
-					this.getInfo(current);
 			}
 		} catch (Exception exception) {
 			if (running == true)
@@ -170,13 +170,13 @@ public class NioServer extends Thread {
 	// PRIVATE METHODS -----------------------------------
 	
 	private void accept(SelectionKey key) {
-		serverChannel = (ServerSocketChannel) key.channel();
+		this.serverChannel = (ServerSocketChannel) key.channel();
 		// Accept the connection and make it non-blocking
-		SocketChannel socketChannel;
+		SocketChannel socketChannel = null;
 		try {
 			socketChannel = serverChannel.accept();
 			socketChannel.configureBlocking(false);
-			socketChannel.register(key.selector(), socketChannel.validOps());
+			socketChannel.register(key.selector(), SelectionKey.OP_READ);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -186,8 +186,8 @@ public class NioServer extends Thread {
 	private void getInfo(Date time) {
 		this.date = time;
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String info = "Current Server Throughput: "+manager.getSent()+" messages/s";
-		synchronized (clientCount) {
+		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
+		synchronized (this.clientCount) {
 			info +=  ", Active Client Connections: "+this.clientCount;
 		}
 		System.out.println("[ "+dateFormat.format(time)+" ] "+info);	
@@ -207,15 +207,15 @@ public class NioServer extends Thread {
 	}
 	
 	public void clientDisconnected() {
-		synchronized (clientCount) {
-			clientCount--;	
+		synchronized (this.clientCount) {
+			this.clientCount--;	
 		}
 		System.err.println("A client has disconnected.");
 	}
 	
 	public void clientConnected() {
-		synchronized (clientCount) {
-			clientCount++;	
+		synchronized (this.clientCount) {
+			this.clientCount++;	
 		}
 		System.out.println("A new client has connected.");
 	}

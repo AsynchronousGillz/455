@@ -20,6 +20,11 @@ public final class Queue<T> {
 	 * 
 	 */
 	final private int size;
+	
+	/**
+	 * 
+	 */
+	final private Object lock;
 
 	/**
 	 * 
@@ -27,31 +32,38 @@ public final class Queue<T> {
 	 */
 	public Queue(int size) {
 		this.size = size;
-		queue = new LinkedList<T>();
+		this.queue = new LinkedList<T>();
+		this.lock = new Object();
 	}
 	
-	synchronized public int getCount() {
-		return queue.size();
+	public int getCount() {
+		synchronized (this.lock) {
+			return queue.size();
+		}
 	}
 
-	synchronized public void enqueue(T item) throws InterruptedException {
-		while (this.queue.size() == this.size) {
-			this.wait();
+	public void enqueue(T item) throws InterruptedException {
+		synchronized (this.lock) {
+			while (this.queue.size() == this.size) {
+				this.lock.wait();
+			}
+			if (this.queue.size() == 0) {
+				this.lock.notify();
+			}
+			this.queue.add(item);	
 		}
-		if (this.queue.size() == 0) {
-			this.notify();
-		}
-		this.queue.add(item);
 	}
 
-	synchronized public T dequeue() throws InterruptedException {
-		while (this.queue.size() == 0) {
-			this.wait();
+	public T dequeue() throws InterruptedException {
+		synchronized (this.lock) {
+			while (this.queue.size() == 0) {
+				this.lock.wait();
+			}
+			if (this.queue.size() == this.size) {
+				this.lock.notify();
+			}
+			return this.queue.remove(0);
 		}
-		if (this.queue.size() == this.size) {
-			this.notify();
-		}
-		return this.queue.remove(0);
 	}
 	
 }

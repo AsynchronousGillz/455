@@ -5,14 +5,16 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-import cs455.scaling.msg.Message;
 import cs455.scaling.server.NioServer;
 import cs455.scaling.server.TaskManager;
 
 public class ReadTask extends Task {
 	
-	public ReadTask(SelectionKey key) {
+	final private NioServer server;
+	
+	public ReadTask(SelectionKey key, NioServer server) {
 		super(TaskType.READ, key);
+		this.server = server;
 	}
 
 	public void exec(TaskManager manager) {
@@ -26,12 +28,12 @@ public class ReadTask extends Task {
 			if (read == -1)
 				throw new IOException();
 		} catch (IOException e) {
-			((NioServer) key.attachment()).clientDisconnected();
-			super.closeKey(key);
+			this.server.clientDisconnected();
+			super.closeKey();
 			return;
 		}
-		manager.enqueueTask(new HashTask(key, new Message(bytes)));
 		key.attach(null);
+		manager.enqueueTask(new SendTask(key, bytes));
 	}
 
 }

@@ -49,8 +49,6 @@ public final class Processor extends Thread {
 	}
 	
 	public void addTask(Task task) throws InterruptedException {
-		while (this.currentTask != null)
-			this.lock.wait();
 		synchronized (this.lock) {
 			this.currentTask = task;
 			this.lock.notify();
@@ -65,11 +63,10 @@ public final class Processor extends Thread {
 				synchronized (this.lock) {
 					while (this.currentTask == null)
 						this.lock.wait();
-					this.currentTask.exec(this.manager);
-					this.currentTask = null;
-					this.lock.notify();
-					this.manager.taskComplete(this);
 				}
+				this.currentTask.exec(this.manager);
+				this.currentTask = null;
+				this.manager.taskComplete(this);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

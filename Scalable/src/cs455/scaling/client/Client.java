@@ -1,6 +1,11 @@
 package cs455.scaling.client;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +25,27 @@ public class Client {
 	/**
 	 * 
 	 */
-	private final Connection receiver;
+	private Selector selector;
+	
+	/**
+	 * 
+	 */
+	private SelectionKey key;
+	
+	/**
+	 * 
+	 */
+	private SocketChannel channel;
+	
+	/**
+	 * 
+	 */
+	private final Sender sender;
+	
+	/**
+	 * 
+	 */
+	private final Receiver receiver;
 	
 	// Constructors ****************************************************
 
@@ -33,10 +58,36 @@ public class Client {
 	 * 		The server for the messaging nodes to connect to.
 	 */
 
-	public Client(Connection receiver) {
-		this.receiver = receiver;
-	}
+	public Client(String serverAddress, int serverPort, int messageRate) throws IOException {
+		// Selector: multiplexor of SelectableChannel objects
+		this.selector = SelectorProvider.provider().openSelector();
+		
+		// Create a new non-blocking socket channel
+		this.channel = SocketChannel.open();
+		this.channel.configureBlocking(false);
+		this.channel.connect(new InetSocketAddress(serverAddress, serverPort));
+		 
+		// Adjusts this channel's ops
+		this.channel.register(this.selector, SelectionKey.OP_CONNECT);
+		
+		//
+		this.selector.select();
+		this.key = selector.selectedKeys().iterator().next();
+		// Finish the connection. If the connection operation failed
+		// this will raise an IOException.
+		if (this.key.isConnectable() == false || this.channel.finishConnect() == false)
+			throw new IOException("Failed to connect to server.");
 
+		// Register an interest in read on this channel
+		this.key.interestOps(SelectionKey.OP_READ);
+		
+		// key is readable
+		this.receiver = new Receiver(this.key);
+		this.receiver.start();
+		this.sender = new Sender(this.key, messageRate);
+		this.sender.start();
+	}
+	
 	// Instance methods ************************************************
 	
 	public void exec() {
@@ -45,7 +96,7 @@ public class Client {
 		while (true) {
 			Date time = new Date();
 			if ((time.getTime() - current.getTime()) > 5000) {
-				System.out.println("[ "+dateFormat.format(time)+" ] "+receiver.getInfo());
+				System.out.println("[ "+dateFormat.format(time)+" ] "+sender.getInfo()+receiver.getInfo());
 				// [timestamp] Total Sent Count: x, Total Received Count: y 
 				current = time;
 			}
@@ -75,18 +126,15 @@ public class Client {
 		} catch (IndexOutOfBoundsException ex) {
 			messageRate = 1;
 		}
-		
-		Connection nodeClient = null;
+
+		Client node = null;
 		try {
-			nodeClient = new Connection(registryIP, registryPort, messageRate);
+			node = new Client(registryIP, registryPort, messageRate);
 		} catch (IOException e) {
 			System.err.println("An error occured while connecting to server.");
 			System.exit(1);
 		}
 		System.out.println("Client has succsesfully connected to server and will now send messages.");
-		nodeClient.start();
-		
-		Client node = new Client(nodeClient);
 		node.exec();
 		
 	}
