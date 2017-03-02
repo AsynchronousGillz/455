@@ -1,5 +1,0 @@
-
-# for i in `seq 1 10`; do java cs455.scaling.client.Client saturn 60100 3 > /tmp/ganvana_${i}_${k}.log & done
-
-# for l in $m; do echo $l; ssh $l "rm -v /tmp/ganvana*"; done
-
