@@ -5,6 +5,8 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.util.Iterator;
 
+import cs455.scaling.msg.Hash;
+
 /**
  * 
  * @author G van Andel
@@ -50,6 +52,7 @@ public class Receiver extends Thread {
 		this.selector = key.selector();
 		this.key = key;
 		this.receivedCount = 0;
+		super.setName("Receiver-"+super.getId());
 	}
 
 	// METHODS -------------------------------------------------------
@@ -64,7 +67,7 @@ public class Receiver extends Thread {
 	final private void readFromServer(SelectionKey key) throws IOException {
 		SocketChannel channel = (SocketChannel) key.channel();
 		int read = 0;
-		ByteBuffer bytes = ByteBuffer.allocate(8192);
+		ByteBuffer bytes = ByteBuffer.allocate(Hash.size);
 		try {
 			while (bytes.hasRemaining() && read != -1 && channel != null) {
 				read = channel.read(bytes);

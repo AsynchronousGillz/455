@@ -52,6 +52,7 @@ public class Sender extends Thread {
 		this.key = key;
 		this.messageRate = messageRate;
 		this.sentCount = 0;
+		super.setName("Sender-"+super.getId());
 	}
 
 	/**

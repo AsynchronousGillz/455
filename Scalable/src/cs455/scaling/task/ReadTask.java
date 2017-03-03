@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
+import cs455.scaling.msg.Message;
 import cs455.scaling.server.NioServer;
 import cs455.scaling.server.TaskManager;
 
@@ -19,7 +20,7 @@ public class ReadTask extends Task {
 
 	public void exec(TaskManager manager) {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
-		ByteBuffer bytes = ByteBuffer.allocate(8192);
+		ByteBuffer bytes = ByteBuffer.allocate(Message.size);
 		int read = 0;
 		try {
 			while (bytes.hasRemaining() && read != -1){
@@ -33,6 +34,7 @@ public class ReadTask extends Task {
 			return;
 		}
 		key.attach(null);
+		bytes.rewind();
 		manager.enqueueTask(new SendTask(key, bytes));
 	}
 

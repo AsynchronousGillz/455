@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hash {
+	
+	final static public int size = 40;
 
 	public static String toHash(byte[] bytes) {
 		MessageDigest digest = null;

@@ -48,11 +48,6 @@ public class NioServer extends Thread {
 	 * To stop the run loop.
 	 */
 	private boolean running;
-	
-	/**
-	 * For debug purposes
-	 */
-	public final boolean debug = true;
 
 	// CONSTRUCTOR ******************************************************
 
@@ -159,8 +154,8 @@ public class NioServer extends Thread {
 				}
 			}
 		} catch (Exception exception) {
-			if (running == true)
-				exception.printStackTrace();
+//			if (running == true)
+//				exception.printStackTrace();
 		} finally {
 			this.close();
 		} 

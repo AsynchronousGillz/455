@@ -64,12 +64,12 @@ for i in $(seq 1 $HOST); do
 	machine=$(sed -n "${i}p" $mFile)
 	echo -en "$machine "
 	for k in $(seq 1 $NUM); do
-		ssh $machine "$C > /tmp/${USER}_${RANDOM}_${i}.log &"
+		ssh $machine "$C > /tmp/${USER}_${k}_${i}.log &"
 	done
 done
 echo ""
 
-TOTAL=60
+TOTAL=80
 
 for i in $(seq 1 $TOTAL); do
 	echo -n "[running] ["
