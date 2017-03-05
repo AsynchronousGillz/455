@@ -181,7 +181,7 @@ public class NioServer extends Thread {
 		System.out.println("Exitting.");
 	}
 	
-	public String getInfo(Date time) {
+	public String getInfo() {
 		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
 		synchronized (this.clientCount) {
 			info +=  ", Active Client Connections: "+this.clientCount;

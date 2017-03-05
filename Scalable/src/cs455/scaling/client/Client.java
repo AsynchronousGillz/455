@@ -8,8 +8,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * 
@@ -51,7 +51,7 @@ public class Client {
 	/**
 	 * 
 	 */
-	private final ArrayList<String> hashList;
+	private final LinkedList<String> hashList;
 	
 	// Constructors ****************************************************
 
@@ -86,7 +86,7 @@ public class Client {
 
 		// Register an interest in read on this channel
 		this.key.interestOps(SelectionKey.OP_READ);
-		this.hashList = new ArrayList<>();
+		this.hashList = new LinkedList<>();
 		
 		// key is readable
 		this.receiver = new Receiver(this.hashList, this.key);

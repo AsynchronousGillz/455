@@ -40,7 +40,7 @@ public class Server {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		while (true) {
 			Date current = new Date();
-			System.out.println("[ "+dateFormat.format(current)+" ] "+this.server.getInfo(current));
+			System.out.println("[ "+dateFormat.format(current)+" ] "+this.server.getInfo());
 			// [timestamp] Total Sent Count: x, Total Received Count: y 
 			if (debug)
 				System.out.println(this.server.getQueueStatus());

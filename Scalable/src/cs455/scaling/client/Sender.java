@@ -5,7 +5,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import cs455.scaling.msg.Hash;
 import cs455.scaling.msg.Message;
@@ -39,7 +39,7 @@ public class Sender extends Thread {
 	/**
 	 * 
 	 */
-	final private ArrayList<String> hashList;
+	final private LinkedList<String> hashList;
 	
 	/**
 	 * 
@@ -57,7 +57,7 @@ public class Sender extends Thread {
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public Sender(ArrayList<String> hashList, SelectionKey key, int messageRate) {
+	public Sender(LinkedList<String> hashList, SelectionKey key, int messageRate) {
 		this.hashList = hashList;
 		this.key = key;
 		this.messageRate = messageRate;
@@ -77,7 +77,7 @@ public class Sender extends Thread {
 	final private void sendToServer() throws IOException {
 		SocketChannel channel = (SocketChannel) this.key.channel();
 		if (channel == null)
-			throw new SocketException("Connection error when sending.");
+			throw new SocketException("[ ERROR ] invaid channel could not send.");
 		ByteBuffer bytes = Message.makeMessage();
 		synchronized (this.hashList) {
 			this.hashList.add(Hash.toHash(bytes.array()));
@@ -86,7 +86,7 @@ public class Sender extends Thread {
 			channel.write(bytes);
 		}
 		if (bytes.remaining() > 0)
-			throw new IOException("Server buffer is full could not send.");
+			throw new IOException("[ ERROR ] Server buffer is full could not send.");
 		
 		this.incrementSent();
 	}

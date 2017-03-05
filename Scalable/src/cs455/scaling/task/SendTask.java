@@ -14,7 +14,7 @@ public class SendTask extends Task {
 		super(TaskType.WRITE, key);
 		super.msg = msg;
 		super.hash = Hash.toHash(msg.array());
-		System.out.println("[HASH] "+super.hash);
+//		System.out.println("[ HASH ] "+super.hash); // PRINT HASH
 	}
 
 	public void exec(TaskManager manager) {
@@ -25,11 +25,11 @@ public class SendTask extends Task {
 			if (bytes.remaining() > 0)
 				throw new Exception();
 		} catch (IOException e) {
-			System.err.println("An error occured while sending.");
+			System.err.println("[ ERROR ] Fail to send.");
 			super.closeKey();
 			return;
 		} catch (Exception e) {
-			System.err.println("Client buffer is full could not send.");
+			System.err.println("[ ERROR ] Client buffer is full.");
 			return;
 		}
 		manager.incrementSent();
