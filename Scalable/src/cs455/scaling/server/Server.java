@@ -38,16 +38,15 @@ public class Server {
 	
 	public void exec() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date time = new Date();
 		while (true) {
 			Date current = new Date();
-			if ((current.getTime() - time.getTime()) > 5000) {
-				System.out.println("[ "+dateFormat.format(current)+" ] "+this.server.getInfo(current));
-				// [timestamp] Total Sent Count: x, Total Received Count: y 
-				if (debug)
-					System.out.println(this.server.getQueueStatus());
-				current = time;
-			}
+			System.out.println("[ "+dateFormat.format(current)+" ] "+this.server.getInfo(current));
+			// [timestamp] Total Sent Count: x, Total Received Count: y 
+			if (debug)
+				System.out.println(this.server.getQueueStatus());
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {}
 		}
 	}
 	

@@ -8,6 +8,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -47,6 +48,11 @@ public class Client {
 	 */
 	private final Receiver receiver;
 	
+	/**
+	 * 
+	 */
+	private final ArrayList<String> hashList;
+	
 	// Constructors ****************************************************
 
 	/**
@@ -80,11 +86,12 @@ public class Client {
 
 		// Register an interest in read on this channel
 		this.key.interestOps(SelectionKey.OP_READ);
+		this.hashList = new ArrayList<>();
 		
 		// key is readable
-		this.receiver = new Receiver(this.key);
+		this.receiver = new Receiver(this.hashList, this.key);
 		this.receiver.start();
-		this.sender = new Sender(this.key, messageRate);
+		this.sender = new Sender(this.hashList, this.key, messageRate);
 		this.sender.start();
 	}
 	
@@ -92,14 +99,13 @@ public class Client {
 	
 	public void exec() {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date current = new Date();
 		while (true) {
-			Date time = new Date();
-			if ((time.getTime() - current.getTime()) > 5000) {
-				System.out.println("[ "+dateFormat.format(time)+" ] "+sender.getInfo()+receiver.getInfo());
-				// [timestamp] Total Sent Count: x, Total Received Count: y 
-				current = time;
-			}
+			Date current = new Date();
+			System.out.println("[ "+dateFormat.format(current)+" ] "+sender.getInfo()+receiver.getInfo());
+			// [timestamp] Total Sent Count: x, Total Received Count: y 
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {}
 		}
 	}
 	

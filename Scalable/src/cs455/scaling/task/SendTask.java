@@ -14,7 +14,7 @@ public class SendTask extends Task {
 		super(TaskType.WRITE, key);
 		super.msg = msg;
 		super.hash = Hash.toHash(msg.array());
-		System.out.println("Message hash: "+super.hash);
+		System.out.println("[HASH] "+super.hash);
 	}
 
 	public void exec(TaskManager manager) {

@@ -2,9 +2,12 @@ package cs455.scaling.client;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 
+import cs455.scaling.msg.Hash;
 import cs455.scaling.msg.Message;
 
 /**
@@ -36,19 +39,26 @@ public class Sender extends Thread {
 	/**
 	 * 
 	 */
+	final private ArrayList<String> hashList;
+	
+	/**
+	 * 
+	 */
 	private Integer sentCount;
 	
 	// CONSTRUCTORS *****************************************************
 
 	/**
 	 * Constructs the node.
+	 * @param hashList 
 	 * 
 	 * @param serverAddress
 	 *            the server's host name.
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public Sender(SelectionKey key, int messageRate) {
+	public Sender(ArrayList<String> hashList, SelectionKey key, int messageRate) {
+		this.hashList = hashList;
 		this.key = key;
 		this.messageRate = messageRate;
 		this.sentCount = 0;
@@ -68,9 +78,16 @@ public class Sender extends Thread {
 		SocketChannel channel = (SocketChannel) this.key.channel();
 		if (channel == null)
 			throw new SocketException("Connection error when sending.");
-		synchronized (channel) {
-			channel.write(Message.makeMessage());
+		ByteBuffer bytes = Message.makeMessage();
+		synchronized (this.hashList) {
+			this.hashList.add(Hash.toHash(bytes.array()));
 		}
+		synchronized (channel) {
+			channel.write(bytes);
+		}
+		if (bytes.remaining() > 0)
+			throw new IOException("Server buffer is full could not send.");
+		
 		this.incrementSent();
 	}
 

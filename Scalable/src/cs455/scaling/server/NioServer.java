@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.nio.channels.*;
 import java.nio.channels.spi.*;
-import java.text.*;
 import java.util.*;
 
 import cs455.scaling.task.*;
@@ -173,7 +172,7 @@ public class NioServer extends Thread {
 	// METHODS --------------------------------------------
 
 	public void serverStarted() {
-		System.out.println("Registry server started "+getName());
+		System.out.println("[INFO] NIO server started "+getName());
 		this.running = true;
 	}
 
@@ -183,26 +182,25 @@ public class NioServer extends Thread {
 	}
 	
 	public String getInfo(Date time) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
 		synchronized (this.clientCount) {
 			info +=  ", Active Client Connections: "+this.clientCount;
 		}
-		return "[ "+dateFormat.format(time)+" ] "+info;	
+		return info;	
 	}
 	
 	public void clientDisconnected() {
 		synchronized (this.clientCount) {
 			this.clientCount--;	
 		}
-		System.err.println("A client has disconnected.");
+		System.err.println("[INFO] A client has disconnected.");
 	}
 	
 	public void clientConnected() {
 		synchronized (this.clientCount) {
 			this.clientCount++;	
 		}
-		System.out.println("A new client has connected.");
+		System.out.println("[INFO] A new client has connected.");
 	}
 	
 }

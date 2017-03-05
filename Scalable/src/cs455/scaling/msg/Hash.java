@@ -15,6 +15,10 @@ public class Hash {
 		} catch (NoSuchAlgorithmException e) {}
 		byte[] hash = digest.digest(bytes);
 		BigInteger hashInt = new BigInteger(1, hash);
-		return hashInt.toString(16);
+		String ret = hashInt.toString(16);
+		if (ret.length() == size)
+			return ret;
+		else
+			return "0"+ret;
 	}
 }

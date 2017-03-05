@@ -3,6 +3,7 @@ package cs455.scaling.client;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import cs455.scaling.msg.Hash;
@@ -22,6 +23,11 @@ public class Receiver extends Thread {
 	 * 
 	 */
 	final private Selector selector;
+	
+	/**
+	 * 
+	 */
+	final private ArrayList<String> hashList;
 
 	/**
 	 * 
@@ -42,15 +48,17 @@ public class Receiver extends Thread {
 
 	/**
 	 * Constructs the node.
+	 * @param hashList 
 	 * 
 	 * @param serverAddress
 	 *            the server's host name.
 	 * @param serverPort
 	 *            the port number.
 	 */
-	public Receiver(SelectionKey key) throws IOException {
-		this.selector = key.selector();
+	public Receiver(ArrayList<String> hashList, SelectionKey key) throws IOException {
+		this.hashList = hashList;
 		this.key = key;
+		this.selector = key.selector();
 		this.receivedCount = 0;
 		super.setName("Receiver-"+super.getId());
 	}
@@ -80,6 +88,13 @@ public class Receiver extends Thread {
 			this.close(0);
 		} catch (Exception e) {
 			this.close(1);
+		}
+		String hash = new String(bytes.array());
+		synchronized (this.hashList) {
+			if (this.hashList.contains(hash) == false)
+				System.out.println("[ ERROR ] invalid hash from server.");
+			else
+				this.hashList.remove(hash);
 		}
 		this.incrementReceived();
 	}
