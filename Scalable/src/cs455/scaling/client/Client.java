@@ -117,12 +117,18 @@ public class Client {
 		
 		try {
 			registryPort = Integer.parseInt(args[1]);
+		} catch (NumberFormatException ex) {
+			System.err.println("Error: registry port must be a number.");
+			System.exit(1);
 		} catch (IndexOutOfBoundsException ex) {
 			registryPort = 60100;
 		}
 		
 		try {
 			messageRate = Integer.parseInt(args[2]);
+		} catch (NumberFormatException ex) {
+			System.err.println("Error: massage rate must be a number. Ex 3.");
+			System.exit(1);
 		} catch (IndexOutOfBoundsException ex) {
 			messageRate = 1;
 		}

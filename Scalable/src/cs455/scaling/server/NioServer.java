@@ -40,11 +40,6 @@ public class NioServer extends Thread {
 	private Integer clientCount;
 	
 	/**
-	 * 
-	 */
-	private Date date;
-	
-	/**
 	 * To stop the run loop.
 	 */
 	private boolean running;
@@ -136,9 +131,6 @@ public class NioServer extends Thread {
 		try {
 			while (running == true) { 
 				this.selector.select();
-				Date current = new Date();
-				if ((current.getTime() - this.date.getTime()) > 5000)
-					this.getInfo(current);
 				Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
 				while(keyIterator.hasNext()) {
 				    SelectionKey key = keyIterator.next();
@@ -177,28 +169,26 @@ public class NioServer extends Thread {
 		}
 		this.clientConnected();
 	}
-	
-	private void getInfo(Date time) {
-		this.date = time;
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
-		synchronized (this.clientCount) {
-			info +=  ", Active Client Connections: "+this.clientCount;
-		}
-		System.out.println("[ "+dateFormat.format(time)+" ] "+info);	
-	}
 
 	// METHODS --------------------------------------------
 
 	public void serverStarted() {
 		System.out.println("Registry server started "+getName());
-		this.date = new Date();
 		this.running = true;
 	}
 
 	public void serverClosed() {
 		this.running = false;
 		System.out.println("Exitting.");
+	}
+	
+	public String getInfo(Date time) {
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
+		synchronized (this.clientCount) {
+			info +=  ", Active Client Connections: "+this.clientCount;
+		}
+		return "[ "+dateFormat.format(time)+" ] "+info;	
 	}
 	
 	public void clientDisconnected() {

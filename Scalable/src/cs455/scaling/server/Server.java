@@ -1,7 +1,5 @@
 package cs455.scaling.server;
 
-import java.io.BufferedReader;
-
 /**
  * 
  * @author G van Andel
@@ -9,13 +7,15 @@ import java.io.BufferedReader;
  */
 
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Server {
 	
 	// Class variables *************************************************
 
-	final public static boolean debug = false;
+	final public boolean debug = false;
 
 	// Instance variables **********************************************
 
@@ -36,74 +36,20 @@ public class Server {
 
 	// Instance methods ************************************************
 	
-	public void runConsole() {
-		try {
-			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
-			String message;
-			while (true) {
-				message = fromConsole.readLine();
-				if (message.trim().equals(""))
-					continue;
-				
-				getAction(message);
-				
+	public void exec() {
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date time = new Date();
+		while (true) {
+			Date current = new Date();
+			if ((current.getTime() - time.getTime()) > 5000) {
+				System.out.println("[ "+dateFormat.format(current)+" ] "+this.server.getInfo(current));
+				// [timestamp] Total Sent Count: x, Total Received Count: y 
+				if (debug)
+					System.out.println(this.server.getQueueStatus());
+				current = time;
 			}
-		} catch(Exception e) {
-			System.out.println("Unexpected error while reading from console!");
 		}
 	}
-	
-	/**
-	 *            
-	 * This method implements the commands for the server. Called when a command 
-	 * is entered into the server while listening for connections.
-	 *
-	 * @param message
-	 *            The message received from the client with a # at index 0.
-	 */
-
-	private void getAction(String message){
-		String[] tokens = message.split(" ");
-		switch(tokens[0]){
-			case "info":
-				if (tokens.length == 1) {
-					System.out.println(server.getQueueStatus());
-				} else {
-					this.invalid(message);
-				}
-				break;
-			case "get-port":
-				if (tokens.length == 1) {
-					System.out.println(server.getPort());
-				} else {
-					this.invalid(message);
-				}
-				break;
-			case "get-host":
-				if (tokens.length == 1) {
-					System.out.println(server.getName());
-				} else {
-					this.invalid(message);
-				}
-				break;
-			default:
-				this.invalid(message);
-		}
-	}
-	
-	/**
-	 * It displays small help onto the screen.
-	 *
-	 * @param message
-	 *            The string to be displayed with error format.
-	 */
-	public void invalid(String message) {
-		String info = "invalid command \"" + message + "\" try:\n";
-		info += "\t[ info ]\n";
-		info += "\t[ get-port | get-host ]";
-		System.err.println(info);
-	}
-
 	
 	/**
 	 * It closes the server.
@@ -117,7 +63,7 @@ public class Server {
 		try {
 			port = Integer.parseInt(args[0]);
 		} catch (NumberFormatException ex) {
-			System.err.println("Port argument must be a number.");
+			System.err.println("Error: Port argument must be a number.");
 			System.exit(1);
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			port = 60100;
@@ -127,7 +73,7 @@ public class Server {
 		try {
 			poolSize = Integer.parseInt(args[1]);
 		} catch (NumberFormatException ex) {
-			System.err.println("Thread pool size argument must be a number.");
+			System.err.println("Error: Thread pool size argument must be a number.");
 			System.exit(1);
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			poolSize = 100;
@@ -144,7 +90,7 @@ public class Server {
 		}
 		
 		Server r = new Server(server);
-		r.runConsole();
+		r.exec();
 	}
 	
 }
