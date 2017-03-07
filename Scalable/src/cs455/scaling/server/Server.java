@@ -75,7 +75,7 @@ public class Server {
 			System.err.println("Error: Thread pool size argument must be a number.");
 			System.exit(1);
 		} catch (ArrayIndexOutOfBoundsException ex) {
-			poolSize = 100;
+			poolSize = 16;
 		}
 		
 		NioServer server = null;
@@ -84,8 +84,8 @@ public class Server {
 			server = new NioServer(port, poolSize);
 			server.start();
 		} catch (IOException ex) {
-			System.out.println(ex.toString());
-			ex.printStackTrace();
+			System.err.println("[ ERROR ] Could not setup server.");
+			System.exit(1);
 		}
 		
 		Server r = new Server(server);

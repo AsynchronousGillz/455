@@ -172,17 +172,17 @@ public class NioServer extends Thread {
 	// METHODS --------------------------------------------
 
 	public void serverStarted() {
-		System.out.println("[INFO] NIO server started "+getName());
+		System.out.println("[ INFO ] NIO server started "+getName());
 		this.running = true;
 	}
 
 	public void serverClosed() {
 		this.running = false;
-		System.out.println("Exitting.");
+		System.out.println("[ INFO ] Exitting.");
 	}
 	
 	public String getInfo() {
-		String info = "Current Server Throughput: "+this.manager.getSent()+" messages/s";
+		String info = "Current Server Throughput: "+this.manager.getSent()+" messages";
 		synchronized (this.clientCount) {
 			info +=  ", Active Client Connections: "+this.clientCount;
 		}
@@ -193,14 +193,14 @@ public class NioServer extends Thread {
 		synchronized (this.clientCount) {
 			this.clientCount--;	
 		}
-		System.err.println("[INFO] A client has disconnected.");
+		System.err.println("[ INFO ] A client has disconnected.");
 	}
 	
 	public void clientConnected() {
 		synchronized (this.clientCount) {
 			this.clientCount++;	
 		}
-		System.out.println("[INFO] A new client has connected.");
+		System.out.println("[ INFO ] A new client has connected.");
 	}
 	
 }

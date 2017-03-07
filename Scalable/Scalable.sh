@@ -52,7 +52,7 @@ javaKill
 DIR=$(pwd)
 HOSTNAME=$(hostname)
 
-C="cd $DIR; java cs455.scaling.client.Client ${HOSTNAME} 60100 3"
+C="cd $DIR; java cs455.scaling.client.Client ${HOSTNAME} 60100 4"
 
 java cs455.scaling.server.Server 60100 $THREAD_NUM > /tmp/${USER}_$$_server.log &
 
@@ -98,7 +98,7 @@ echo -en "Host: "
 for i in $(seq 1 $HOST); do
 	machine=$(sed -n "${i}p" $mFile)
 	echo -en "$machine "
-	ssh $machine "$C"
+	echo -e $(ssh $machine "$C")
 done
 echo ""
 
