@@ -18,7 +18,8 @@ public class Hash {
 		String ret = hashInt.toString(16);
 		if (ret.length() == size)
 			return ret;
-		else
-			return "0"+ret;
+		for (int i = ret.length(); i < size; i++)
+			ret = "0" + ret;
+		return ret;
 	}
 }
