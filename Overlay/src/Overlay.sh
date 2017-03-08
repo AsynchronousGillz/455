@@ -10,24 +10,21 @@ if [ "$TMUX" == "" ];then
 	exit 1
 fi
 
-read -p "Proceed with changing tmux layout? [yes or no]? " yn
-case $yn in
-	[Yy]* ) break;;
-	* ) echo "Will now exit."; exit 1;;
-esac
-
 if [ $# -ne 1 ];then
 	echo "Usage: $0 <#>" >&2
 	exit 1
 fi
 
+read -p "Proceed with changing tmux layout? [yes or no]? " yn
+case $yn in
+	[Yy]* ) ;;
+	* ) echo "Will now exit."; exit 1;;
+esac
 
 if ! [ -f $mFile ]; then
-	echo "[ $RED ERROR $NC ] server list file not found. Will make one for you." >&2
-	wget -q "https://www.cs.colostate.edu/~info/machines" -O machines
+	echo -e "[ $RED ERROR $NC ] server list file not found. Will make one for you." >&2
 	touch $mFile
-	grep "120" machines | head -n50 | awk -F"\t" '{ print $1".cs.colostate.edu" }' | shuf -n50 > $mFile
-	rm machines
+	wget -q "https://www.cs.colostate.edu/~info/machines" -O - | grep "120" | head -n50 | awk -F"\t" '{ print $1".cs.colostate.edu" }' | shuf -n50 > $mFile
 fi
 	
 # Login and kick up all messaging nodes
