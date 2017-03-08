@@ -14,8 +14,8 @@ all :
 	$(JC) $(JF) src/cs455/scaling/*/*.java
 
 clean :
-	rm bin/cs455/scaling/*/*.class 
+	rm -f bin/cs455/scaling/*/*.class
+	rm -f cs455/scaling/*/*.class 
 
-package :
-	rm bin/cs455/scaling/*/*.class 
+package : clean
 	tar -cvf van_Andel-Gerhard-HW2-PC.tar --exclude='bin' --exclude='.[^/]*' *

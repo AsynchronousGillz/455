@@ -34,17 +34,17 @@ HOST="$1"
 NUM="$2"
 THREAD_NUM="$2"
 
-read -p "Proceed with run config? [yes or no]? " yn
-case $yn in
-	[Yy]* ) ;;
-	* ) echo "Will now exit."; exit 1;;
-esac
-
 if ! [ -f $mFile ]; then
 	echo -e "[ $RED ERROR $NC ] server list file not found. Will make one for you." >&2
 	touch $mFile
 	wget -q "https://www.cs.colostate.edu/~info/machines" -O - | grep "120" | head -n50 | awk -F"\t" '{ print $1".cs.colostate.edu" }' | shuf -n50 > $mFile
 fi
+
+read -p "Proceed with run config? [yes or no]? " yn
+case $yn in
+	[Yy]* ) ;;
+	* ) echo "Will now exit."; exit 1;;
+esac
 
 pkill java* > /dev/null 2>&1
 javaKill
@@ -52,7 +52,7 @@ javaKill
 DIR=$(pwd)
 HOSTNAME=$(hostname)
 
-C="cd $DIR; java cs455.scaling.client.Client ${HOSTNAME} 60100 4"
+C="cd $DIR; java cs455.scaling.client.Client ${HOSTNAME} 60100 5"
 
 java cs455.scaling.server.Server 60100 $THREAD_NUM > /tmp/${USER}_$$_server.log &
 
