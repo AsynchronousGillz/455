@@ -1,6 +1,10 @@
 README
 ======
 
+ASSIGNMENT
+==========
+https://www.cs.colostate.edu/~cs455/CS455-Spring17-HW2-PC.pdf
+
 This package includes the following files.
 
 README.txt [This file]
