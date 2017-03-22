@@ -4,11 +4,12 @@ As part of this assignment you will be working with datasets released by the Uni
 
 ASSIGNMENT
 ==========
+https://www.cs.colostate.edu/~cs455/CS455-Spring17-HW3-PC.pdf
 
 This package includes the following files.
 
 README.txt [This file]
-Makefile
+build.xml
 
 To compile:
     make all
