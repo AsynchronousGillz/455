@@ -19,8 +19,12 @@ public final class WQ3 implements Writable {
 	private IntWritable F_3_AGE;
 	
 	public WQ3() {
-		this.M_1_AGE = this.M_2_AGE = this.M_3_AGE = new IntWritable(-1);
-    	this.F_1_AGE = this.F_2_AGE = this.F_3_AGE = new IntWritable(-1);
+		this.M_1_AGE = new IntWritable(0);
+		this.M_2_AGE = new IntWritable(0);
+		this.M_3_AGE = new IntWritable(0);
+    	this.F_1_AGE = new IntWritable(0);
+    	this.F_2_AGE = new IntWritable(0);
+    	this.F_3_AGE = new IntWritable(0);
 	}
 	
 	@Override
@@ -55,9 +59,15 @@ public final class WQ3 implements Writable {
 		return M_3_AGE;
 	}
 
-	public void set_M_Q3(String AGE_1, String AGE_2, String AGE_3) {
+	public void set_M_AGE_1(String AGE_1) {
 		this.M_1_AGE = new IntWritable(Integer.parseInt(AGE_1));
+	}
+	
+	public void set_M_AGE_2(String AGE_2) {
 		this.M_2_AGE = new IntWritable(Integer.parseInt(AGE_2));
+	}
+	
+	public void set_M_AGE_3(String AGE_3) {
 		this.M_3_AGE = new IntWritable(Integer.parseInt(AGE_3));
 	}
 	
@@ -72,11 +82,23 @@ public final class WQ3 implements Writable {
 	public IntWritable get_F_AGE_3() {
 		return F_3_AGE;
 	}
-
-	public void set_F_Q3(String AGE_1, String AGE_2, String AGE_3) {
+	
+	public void set_F_AGE_1(String AGE_1) {
 		this.F_1_AGE = new IntWritable(Integer.parseInt(AGE_1));
+	}
+	
+	public void set_F_AGE_2(String AGE_2) {
 		this.F_2_AGE = new IntWritable(Integer.parseInt(AGE_2));
+	}
+	
+	public void set_F_AGE_3(String AGE_3) {
 		this.F_3_AGE = new IntWritable(Integer.parseInt(AGE_3));
+	}
+
+	@Override
+	public String toString() {
+		return "WQ3 [M_1_AGE=" + M_1_AGE + ", M_2_AGE=" + M_2_AGE + ", M_3_AGE=" + M_3_AGE + ", F_1_AGE=" + F_1_AGE
+				+ ", F_2_AGE=" + F_2_AGE + ", F_3_AGE=" + F_3_AGE + "]";
 	}
 
 }

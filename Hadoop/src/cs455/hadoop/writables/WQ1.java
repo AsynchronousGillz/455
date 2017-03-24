@@ -14,7 +14,8 @@ public final class WQ1 implements Writable {
 	private IntWritable Q1_OWN;
 	
 	public WQ1() {
-		this.Q1_RENT = this.Q1_OWN = new IntWritable(-1);
+		this.Q1_RENT = new IntWritable(-1);
+		this.Q1_OWN = new IntWritable(-1);
 	}
 	
 	@Override
@@ -36,9 +37,16 @@ public final class WQ1 implements Writable {
 		return Q1_OWN;
 	}
 	
-	public void set_Q1(String Q1_RENT, String Q1_OWN) {
+	public void set_R(String Q1_RENT) {
 		this.Q1_RENT = new IntWritable(Integer.parseInt(Q1_RENT));
+	}
+	
+	public void set_O(String Q1_OWN) {
 		this.Q1_OWN = new IntWritable(Integer.parseInt(Q1_OWN));
+	}
+
+	public String toString() {
+		return "WQ1 [Q1_RENT=" + Q1_RENT + ", Q1_OWN=" + Q1_OWN + "]";
 	}
 
 }

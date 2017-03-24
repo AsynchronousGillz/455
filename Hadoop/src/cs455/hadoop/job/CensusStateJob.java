@@ -42,7 +42,6 @@ public final class CensusStateJob {
             FileInputFormat.addInputPath(job, new Path(args[0]));
             // path to output in HDFS
             FileOutputFormat.setOutputPath(job, new Path(args[1]));
-            
             // Block until the job is completed.
             System.exit(job.waitForCompletion(true) ? 0 : 1);
         } catch (IOException e) {

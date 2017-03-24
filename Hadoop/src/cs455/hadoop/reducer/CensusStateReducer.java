@@ -17,16 +17,29 @@ public final class CensusStateReducer extends Reducer<Text, WritableData, Text, 
     protected void reduce(Text key, Iterable<WritableData> values, Context context) throws IOException, InterruptedException {
         ReduceData data = new ReduceData();
     	// calculate the total count
+        System.out.println("SHIT IS CRAZY");
         for(WritableData val : values){
-        	if (val.get_SEGMENT().get() == 1) {
-        		data.add_Q2_F_MARRIED(val.get_F_MARRIED().get());
-        		data.add_Q2_M_MARRIED(val.get_M_MARRIED().get());
-        	}
-        	if (val.get_SEGMENT().get() == 2) {
-        		data.add_Q1_OWN(val.get_OWN().get());
-        		data.add_Q1_RENT(val.get_RENT().get());
+        	switch (val.get_SEGMENT().get()) {
+	    		case 1:
+	        		data.Q2.add_F_MARRIED(val.Q2.get_F_MARRIED().get());
+	        		data.Q2.add_M_MARRIED(val.Q2.get_M_MARRIED().get());
+	        		data.Q2.add_POP(val.get_POPULATION().get());
+	        		
+	        		data.Q3.add_F_1_AGE(val.Q3.get_F_AGE_1().get());
+	        		data.Q3.add_F_2_AGE(val.Q3.get_F_AGE_2().get());
+	        		data.Q3.add_F_3_AGE(val.Q3.get_F_AGE_3().get());
+	        		
+	        		data.Q3.add_M_1_AGE(val.Q3.get_M_AGE_1().get());
+	        		data.Q3.add_M_2_AGE(val.Q3.get_M_AGE_2().get());
+	        		data.Q3.add_M_3_AGE(val.Q3.get_M_AGE_3().get());
+	        		data.Q3.add_POP(val.get_POPULATION().get());
+	        		break;
+	    		case 2:
+	        		data.Q1.add_OWN(val.Q1.get_OWN().get());
+	        		data.Q1.add_RENT(val.Q1.get_RENT().get());
+	        		break;
         	}
         }
-        context.write(key, new Text(data.toString()));
+        context.write(key, data.toText());
     }
 }

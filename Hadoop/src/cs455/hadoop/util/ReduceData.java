@@ -1,30 +1,27 @@
 package cs455.hadoop.util;
 
+import org.apache.hadoop.io.Text;
+
 import cs455.hadoop.data.*;
 
 public final class ReduceData {
 
-    private DQ1 DQ1;
-    private DQ2 DQ2;
-    private DQ3 DQ3;
+    public DQ1 Q1;
+    public DQ2 Q2;
+    public DQ3 Q3;
 	
 	public ReduceData() {
-		this.DQ1 = new DQ1();
-		this.DQ2 = new DQ2();
-		this.DQ3 = new DQ3();
+		this.Q1 = new DQ1();
+		this.Q2 = new DQ2();
+		this.Q3 = new DQ3();
 	}
 	
-	
-	
-	
-	
-
 	public String toString() {
-		String ret = "\n";
-		ret += DQ1.toString();
-		ret += DQ2.toString();
-		ret += DQ3.toString();
-        return ret;
+        return "\n" + Q1.toString() + Q2.toString() + Q3.toString();
+	}
+	
+	public Text toText() {
+        return new Text("\n" + Q1.toString() + Q2.toString() + Q3.toString());
 	}
 	
 }

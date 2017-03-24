@@ -8,7 +8,9 @@ public final class DQ1 {
 	private Double TOTAL;
 	
 	public DQ1() {
-		this.RENT = this.OWN = this.TOTAL = Double.valueOf(0);
+		this.RENT = Double.valueOf(0);
+		this.OWN = Double.valueOf(0);
+		this.TOTAL = Double.valueOf(0);
 	}
 	
 	public void add_RENT(int _RENT) {

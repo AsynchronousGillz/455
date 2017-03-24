@@ -12,4 +12,8 @@ public final class CollectData {
 		return TOTAL.toString();
 	}
 	
+	public static String getValue(Text value, int start, int size) {
+		return value.toString().substring(start, (start+size+1));
+	}
+	
 }
