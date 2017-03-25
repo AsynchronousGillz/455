@@ -7,6 +7,10 @@ import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
+/**
+ * On a per-state basis provide a breakdown of the percentage of residences that were rented vs. owned.
+ */
+
 public final class WQ1 implements Writable {
 	
 	// 
@@ -14,8 +18,8 @@ public final class WQ1 implements Writable {
 	private IntWritable Q1_OWN;
 	
 	public WQ1() {
-		this.Q1_RENT = new IntWritable(-1);
-		this.Q1_OWN = new IntWritable(-1);
+		this.Q1_RENT = new IntWritable(0);
+		this.Q1_OWN = new IntWritable(0);
 	}
 	
 	@Override

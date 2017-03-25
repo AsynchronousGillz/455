@@ -7,6 +7,12 @@ import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
+/**
+ * On a per-state basis what percentage of the population never married?  
+ * Report this for both males and females.  
+ * Note: The US Census data tracks this information for persons with ages 15 years and over. 
+ */
+
 public final class WQ2 implements Writable {
 	
 	// 
@@ -14,8 +20,8 @@ public final class WQ2 implements Writable {
 	private IntWritable M_MARRIED;
 	
 	public WQ2() {
-		this.F_MARRIED = new IntWritable(-1);
-		this.M_MARRIED = new IntWritable(-1);
+		this.F_MARRIED = new IntWritable(0);
+		this.M_MARRIED = new IntWritable(0);
 	}
 	
 	@Override

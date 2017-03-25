@@ -16,8 +16,12 @@ public final class DQ3 {
 	private Double POP;
 	
 	public DQ3() {
-		this.F_1_AGE = this.F_2_AGE = this.F_3_AGE = Double.valueOf(0);
-		this.M_1_AGE = this.M_2_AGE = this.M_3_AGE = Double.valueOf(0);
+		this.F_1_AGE = Double.valueOf(0);
+		this.F_2_AGE = Double.valueOf(0);
+		this.F_3_AGE = Double.valueOf(0);
+		this.M_1_AGE = Double.valueOf(0);
+		this.M_2_AGE = Double.valueOf(0);
+		this.M_3_AGE = Double.valueOf(0);
 		this.POP = Double.valueOf(0);
 	}
 	
@@ -52,13 +56,13 @@ public final class DQ3 {
 	public String toString() {
 		String ret = "";
 		if (this.POP != Double.valueOf(0)) {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 18:", (this.M_1_AGE/this.POP)*100)+"%\n");
+			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 00-18:", (this.M_1_AGE/this.POP)*100)+"%\n");
 			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 19-29:", (this.M_2_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 30-39", (this.M_3_AGE/this.POP)*100)+"%\n");
+			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 30-39:", (this.M_3_AGE/this.POP)*100)+"%\n");
 			
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 18:", (this.F_1_AGE/this.POP)*100)+"%\n");
+        	ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 00-18:", (this.F_1_AGE/this.POP)*100)+"%\n");
 			ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 19-29:", (this.F_2_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 30-39", (this.F_3_AGE/this.POP)*100)+"%\n");
+			ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 30-39:", (this.F_3_AGE/this.POP)*100)+"%\n");
 		} else {
 			ret += new String(String.format("   %1$-20s", "Population not recorded.")+"\n");
 		}

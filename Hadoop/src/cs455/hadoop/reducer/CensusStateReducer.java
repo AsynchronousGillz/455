@@ -17,7 +17,6 @@ public final class CensusStateReducer extends Reducer<Text, WritableData, Text, 
     protected void reduce(Text key, Iterable<WritableData> values, Context context) throws IOException, InterruptedException {
         ReduceData data = new ReduceData();
     	// calculate the total count
-        System.out.println("SHIT IS CRAZY");
         for(WritableData val : values){
         	switch (val.get_SEGMENT().get()) {
 	    		case 1:

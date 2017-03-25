@@ -7,6 +7,13 @@ import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
+/**
+ * On a per-state basis, analyze the age distribution (of the population that identifies themselves as Hispanic) based on gender. 
+ * (a). Percentage of people below 18 years (inclusive) old.
+ * (b). Percentage of people between 19 (inclusive) and 29 (inclusive) years old.
+ * (c). Percentage of people between 30 (inclusive) and 39 (inclusive) years old. 
+ */
+
 public final class WQ3 implements Writable {
 
 	// 
