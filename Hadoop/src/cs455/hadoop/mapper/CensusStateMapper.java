@@ -46,6 +46,8 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    			data.Q4.set_EXTRA(CollectData.getTotal(value, 1849, 1, 9));
 	    			
 	    			data.Q5.set_Median(CollectData.getMedian(value, 2928, 20, 9));
+	    			
+	    			data.Q6.set_Median(CollectData.getMedian(value, 3450, 17, 9));
 			        break;
 	    		default:
 	    			write = false;

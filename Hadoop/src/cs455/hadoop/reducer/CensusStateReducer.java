@@ -42,6 +42,8 @@ public final class CensusStateReducer extends Reducer<Text, WritableData, Text, 
 	        		data.Q4.add_EXTRA(val.Q4.get_EXTRA().get());
 	        		
 	        		data.Q5.add_Median(val.Q5.get_Median().get());
+	        		
+	        		data.Q6.add_Median(val.Q6.get_Median().get());
 	        		break;
         	}
         }

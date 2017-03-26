@@ -87,7 +87,8 @@ public final class WritableData implements Writable {
 	}
 	
 	public String toText() {
-        return "\n" + Q1.toString() + Q2.toString() + Q3.toString();
+        return "\n" + Q1.toString() + Q2.toString() + Q3.toString() + Q4.toString()
+        + Q5.toString() + Q6.toString() + Q7.toString();
 	}
 	
 }
