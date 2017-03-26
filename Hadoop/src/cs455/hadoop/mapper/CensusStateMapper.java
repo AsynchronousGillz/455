@@ -19,7 +19,7 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
     	if (Integer.parseInt(value.toString().substring(10, 13)) == 100) {
-    		StringTokenizer state = new StringTokenizer(CollectData.getTotal(value, 8, 1, 2));
+    		StringTokenizer state = new StringTokenizer(value.toString().substring(8, 10));
     		WritableData data = new WritableData();
     		data.set_SEGMENT(CollectData.getTotal(value, 24, 1, 4));
     		boolean write = true;
@@ -40,6 +40,12 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    		case 2:
 	    			data.Q1.set_R(CollectData.getTotal(value, 1803, 1, 9));
 	    			data.Q1.set_O(CollectData.getTotal(value, 1812, 1, 9));
+	    			
+	    			data.Q4.set_URBAN(CollectData.getTotal(value, 1821, 2, 9));
+	    			data.Q4.set_RURAL(CollectData.getTotal(value, 1839, 1, 9));
+	    			data.Q4.set_EXTRA(CollectData.getTotal(value, 1849, 1, 9));
+	    			
+	    			data.Q5.set_Median(CollectData.getMedian(value, 2928, 20, 9));
 			        break;
 	    		default:
 	    			write = false;

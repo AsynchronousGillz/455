@@ -25,6 +25,11 @@ public final class WritableData implements Writable {
 	public WQ1 Q1;
 	public WQ2 Q2;
 	public WQ3 Q3;
+	public WQ4 Q4;
+	public WQ5 Q5;
+	public WQ6 Q6;
+	public WQ7 Q7;
+	public WQ8 Q8;
 
     public WritableData() {
     	this.SEGMENT = new IntWritable(0);
@@ -32,6 +37,11 @@ public final class WritableData implements Writable {
     	this.Q1 = new WQ1();
     	this.Q2 = new WQ2();
     	this.Q3 = new WQ3();
+    	this.Q4 = new WQ4();
+    	this.Q5 = new WQ5();
+    	this.Q6 = new WQ6();
+    	this.Q7 = new WQ7();
+       	this.Q8 = new WQ8();
     }
 
     public void write(DataOutput dataOutput) throws IOException {
@@ -40,6 +50,11 @@ public final class WritableData implements Writable {
     	this.Q1.write(dataOutput);
     	this.Q2.write(dataOutput);
     	this.Q3.write(dataOutput);
+    	this.Q4.write(dataOutput);
+    	this.Q5.write(dataOutput);
+    	this.Q6.write(dataOutput);
+    	this.Q7.write(dataOutput);
+    	this.Q8.write(dataOutput);
     }
 
 	public void readFields(DataInput dataInput) throws IOException {
@@ -48,6 +63,11 @@ public final class WritableData implements Writable {
     	this.Q1.readFields(dataInput);
     	this.Q2.readFields(dataInput);
     	this.Q3.readFields(dataInput);
+    	this.Q4.readFields(dataInput);
+    	this.Q5.readFields(dataInput);
+    	this.Q6.readFields(dataInput);
+    	this.Q7.readFields(dataInput);
+    	this.Q8.readFields(dataInput);
     }
 
     public IntWritable get_SEGMENT() {

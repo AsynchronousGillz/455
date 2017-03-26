@@ -36,6 +36,12 @@ public final class CensusStateReducer extends Reducer<Text, WritableData, Text, 
 	    		case 2:
 	        		data.Q1.add_OWN(val.Q1.get_OWN().get());
 	        		data.Q1.add_RENT(val.Q1.get_RENT().get());
+	        		
+	        		data.Q4.add_RURAL(val.Q4.get_RURAL().get());
+	        		data.Q4.add_URBAN(val.Q4.get_URBAN().get());
+	        		data.Q4.add_EXTRA(val.Q4.get_EXTRA().get());
+	        		
+	        		data.Q5.add_Median(val.Q5.get_Median().get());
 	        		break;
         	}
         }
