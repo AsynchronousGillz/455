@@ -14,6 +14,10 @@ import org.apache.hadoop.io.Writable;
 public class WQ5 implements Writable {
 	
 	private IntWritable MEDIAN;
+	
+	public WQ5() {
+		this.MEDIAN = new IntWritable(0);
+	}
 
 	@Override
 	public void readFields(DataInput arg0) throws IOException {

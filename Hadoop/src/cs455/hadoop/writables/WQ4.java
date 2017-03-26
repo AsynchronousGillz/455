@@ -16,6 +16,12 @@ public class WQ4 implements Writable {
 	private IntWritable URBAN;
 	private IntWritable RURAL;
 	private IntWritable EXTRA;
+	
+	public WQ4() {
+		this.URBAN = new IntWritable(0);
+		this.RURAL = new IntWritable(0);
+		this.EXTRA = new IntWritable(0);
+	}
 
 	@Override
 	public void readFields(DataInput arg0) throws IOException {
