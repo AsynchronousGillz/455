@@ -1,5 +1,7 @@
 package cs455.hadoop.data;
 
+import cs455.hadoop.util.CollectData;
+
 public final class DQ3 {
 
 	// 
@@ -56,13 +58,13 @@ public final class DQ3 {
 	public String toString() {
 		String ret = "";
 		if (this.POP != Double.valueOf(0)) {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 00-18:", (this.M_1_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 19-29:", (this.M_2_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "MALE 30-39:", (this.M_3_AGE/this.POP)*100)+"%\n");
+			ret += CollectData.printPrecent("HISPANIC MALE 00-18:", (this.M_1_AGE/this.POP));
+			ret += CollectData.printPrecent("HISPANIC MALE 19-29:", (this.M_2_AGE/this.POP));
+			ret += CollectData.printPrecent("HISPANIC MALE 30-39:", (this.M_3_AGE/this.POP));
 			
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 00-18:", (this.F_1_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 19-29:", (this.F_2_AGE/this.POP)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "FEMALE 30-39:", (this.F_3_AGE/this.POP)*100)+"%\n");
+        	ret += CollectData.printPrecent("HISPANIC FEMALE 00-18:", (this.F_1_AGE/this.POP));
+			ret += CollectData.printPrecent("HISPANIC FEMALE 19-29:", (this.F_2_AGE/this.POP));
+			ret += CollectData.printPrecent("HISPANIC FEMALE 30-39:", (this.F_3_AGE/this.POP));
 		} else {
 			ret += new String(String.format("   %1$-20s", "Population not recorded.")+"\n");
 		}

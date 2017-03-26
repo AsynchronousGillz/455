@@ -1,5 +1,7 @@
 package cs455.hadoop.data;
 
+import cs455.hadoop.util.CollectData;
+
 public final class DQ4 {
 
 	// 
@@ -35,9 +37,9 @@ public final class DQ4 {
 	public String toString() {
 		String ret = "";
 		if (this.TOTAL != Double.valueOf(0)) {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "URBAN:", (this.URBAN/this.TOTAL)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "RURAL:", (this.RURAL/this.TOTAL)*100)+"%\n");
-			ret += new String(String.format("   %1$-20s %2$3.2f", "UNDEFINED:", (this.EXTRA/this.TOTAL)*100)+"%\n");
+			ret += CollectData.printPrecent("URBAN:", (this.URBAN/this.TOTAL));
+			ret += CollectData.printPrecent("RURAL:", (this.RURAL/this.TOTAL));
+			ret += CollectData.printPrecent("UNDEFINED:", (this.EXTRA/this.TOTAL));
 		} else {
 			ret += new String(String.format("   %1$-20s", "Housing Status not recorded.")+"\n");
 		}

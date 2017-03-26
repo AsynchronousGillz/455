@@ -1,5 +1,7 @@
 package cs455.hadoop.data;
 
+import cs455.hadoop.util.CollectData;
+
 public final class DQ1 {
 
 	// 
@@ -26,11 +28,11 @@ public final class DQ1 {
 	public String toString() {
 		String ret = "";
 		if (this.TOTAL != Double.valueOf(0)) {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "RENT:", (this.RENT/this.TOTAL)*100)+"%\n");
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "OWN:", (this.OWN/this.TOTAL)*100)+"%\n");
+			ret += CollectData.printPrecent("RENT:", (this.RENT/this.TOTAL));
+        	ret += CollectData.printPrecent("OWN:", (this.OWN/this.TOTAL));
 		} else {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "RENT:", Double.valueOf(0))+"%\n");
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "OWN:",  Double.valueOf(0))+"%\n");
+			ret += CollectData.printPrecent("RENT:", Double.valueOf(0));
+        	ret += CollectData.printPrecent("OWN:",  Double.valueOf(0));
 		}
 		return ret;
 	}

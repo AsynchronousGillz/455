@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import org.apache.hadoop.io.Text;
 
 public final class CollectData {
+	
+	public static String printPrecent(String CAT, Double VALUE) {
+		return new String(String.format("   %1$-25s %2$3.2f", CAT, VALUE*100)+"%\n");
+	}
+	
+	public static String printValue(String CAT, Integer VALUE) {
+		return new String(String.format("   %1$-25s %2$3.2f", CAT, VALUE)+"\n");
+	}
 
 	public static String getTotal(Text value, int start, int count, int size) {
 		Integer TOTAL = 0;

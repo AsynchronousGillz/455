@@ -2,6 +2,8 @@ package cs455.hadoop.data;
 
 import java.util.ArrayList;
 
+import cs455.hadoop.util.CollectData;
+
 public final class DQ5 {
 
 	ArrayList<Integer> list;
@@ -19,10 +21,11 @@ public final class DQ5 {
 		int half = this.list.size() / 2;
 		Integer ret = 0;
 		if (half % 2 == 0)
-			ret = this.list.get(half);
-		else 
 			ret = this.list.get((this.list.get(half) / this.list.get(1+half)) / 2);
-		return new String(String.format("   %1$-20s %2$3.2f", "URBAN:", ret)+"%\n");
+		else
+			ret = this.list.get(half);
+			
+		return CollectData.printValue("OWNER MEDIAN COST:", ret);
 	}
 	
 }

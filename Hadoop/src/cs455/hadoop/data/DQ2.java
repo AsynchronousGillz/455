@@ -1,5 +1,7 @@
 package cs455.hadoop.data;
 
+import cs455.hadoop.util.CollectData;
+
 public final class DQ2 {
 
 	// 
@@ -28,11 +30,11 @@ public final class DQ2 {
 	public String toString() {
 		String ret = "";
 		if (this.TOTAL_POP != Double.valueOf(0)) {
-			ret += new String(String.format("   %1$-20s %2$3.2f", "F NEVER MARRIED: ", (this.F_MARRIED/this.TOTAL_POP)*100)+"%\n");
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "M NEVER MARRIED: ", (this.M_MARRIED/this.TOTAL_POP)*100)+"%\n");
+			ret += CollectData.printPrecent("F NEVER MARRIED: ", (this.F_MARRIED/this.TOTAL_POP));
+        	ret += CollectData.printPrecent("M NEVER MARRIED: ", (this.M_MARRIED/this.TOTAL_POP));
 		} else { 	
-			ret += new String(String.format("   %1$-20s %2$3.2f", "F NEVER MARRIED: ", Double.valueOf(0))+"%\n");
-        	ret += new String(String.format("   %1$-20s %2$3.2f", "M NEVER MARRIED: ", Double.valueOf(0))+"%\n");
+			ret += CollectData.printPrecent("F NEVER MARRIED: ", Double.valueOf(0));
+        	ret += CollectData.printPrecent("M NEVER MARRIED: ", Double.valueOf(0));
 		}
 		return ret;
 	}
