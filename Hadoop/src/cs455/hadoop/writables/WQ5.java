@@ -8,13 +8,14 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
 /**
- * On a per-state basis, what is the median value of the house that occupied by owners? 
+ * On a per-state basis, what is the median value of the house that occupied by
+ * owners?
  */
 
 public class WQ5 implements Writable {
-	
+
 	private IntWritable MEDIAN;
-	
+
 	public WQ5() {
 		this.MEDIAN = new IntWritable(0);
 	}
@@ -28,7 +29,7 @@ public class WQ5 implements Writable {
 	public void write(DataOutput arg0) throws IOException {
 		this.MEDIAN.write(arg0);
 	}
-	
+
 	public IntWritable get_Median() {
 		return this.MEDIAN;
 	}

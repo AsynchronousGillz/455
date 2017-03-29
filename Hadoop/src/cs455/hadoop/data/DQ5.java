@@ -1,31 +1,43 @@
 package cs455.hadoop.data;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import cs455.hadoop.util.CollectData;
 
 public final class DQ5 {
-
-	ArrayList<Integer> list;
+	
+	private Map<String, Integer> map;
 	//
 	
 	public DQ5() {
-		list = new ArrayList<>();
+		this.map = new TreeMap<>();
 	}
 	
 	public void add_Median(int _MEDIAN) {
-		this.list.add(_MEDIAN);
+		String _VAL = CollectData.rent[_MEDIAN];
+		if (this.map.get(_VAL) != null) {
+			this.map.put(_VAL, this.map.get(_VAL) + 1);
+		} else {
+			this.map.put(_VAL, 1);
+		}
 	}
 	
 	public String toString() {
-		int half = this.list.size() / 2;
-		Double ret = Double.valueOf(0);
-		if (half % 2 == 0)
-			ret += (this.list.get(half) + this.list.get(1+half)) / 2;
-		else
-			ret += this.list.get(half);
-			
-		return CollectData.printValue("OWNER MEDIAN COST:", ret);
+		int listTotal = 0;
+		for(Map.Entry<String,Integer> entry : map.entrySet()) {
+			listTotal += entry.getValue();
+		}
+		int valueIndex = listTotal / 2;
+		int index = 0;
+		for(Map.Entry<String,Integer> entry : map.entrySet()) {
+			valueIndex -= entry.getValue();
+			if (valueIndex <= 0) {
+				break;
+			}
+			index++;
+		}
+		return CollectData.printText("RENT MEDIAN COST:", CollectData.owner[index]);
 	}
 	
 }
