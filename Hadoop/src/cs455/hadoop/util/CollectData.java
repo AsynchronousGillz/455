@@ -1,8 +1,5 @@
 package cs455.hadoop.util;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.hadoop.io.Text;
 
 public final class CollectData {
@@ -46,22 +43,21 @@ public final class CollectData {
 	};
 	
 	public static String getMedian(Text value, int start, int count, int size) {
-		int total = 0;
-		Map<Integer, Integer> map = new TreeMap<>();
+		double total = 0;
+		int[] list = new int[count];
 		for (int i = 0; i < count; i++, start += size) {
-			map.put(new Integer(i), Integer.parseInt(value.toString().substring(start, (start + size))));
-			total += map.get(i);
+			list[i] += Integer.parseInt(value.toString().substring(start, (start + size)));
+			total += list[i];
 		}
 		Integer index = 0;
-		Integer indexValue = total / 2;
-		for(Map.Entry<Integer,Integer> entry : map.entrySet()) {
-			indexValue -= entry.getValue();
-			if (indexValue <= 0) {
+		double indexValue = total / 2;
+		for(int i : list) {
+			indexValue -= i;
+			if (indexValue <= 0)
 				break;
-			}
 			index++;
 		}
 		return index.toString();
 	}
-
+	
 }
