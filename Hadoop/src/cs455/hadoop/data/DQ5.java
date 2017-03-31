@@ -11,22 +11,23 @@ public final class DQ5 {
 		this.list = new int[CollectData.owner.length];
 	}
 	
-	public void add_Median(int _MEDIAN) {
-		list[_MEDIAN] += 1;
+	public void add_Median(int[] _MEDIAN) {
+		int index = 0;
+		for (int i : _MEDIAN)
+			list[index++] += i;
 	}
 	
 	public String toString() {
-		int listTotal = 0;
+		double listTotal = 0;
 		for(int i : list) {
 			listTotal += i;
 		}
-		int valueIndex = listTotal / 2;
+		double valueIndex = listTotal / 2;
 		int index = 0;
 		for(int i : list) {
 			valueIndex -= i;
-			if (valueIndex <= 0) {
+			if (valueIndex <= 0)
 				break;
-			}
 			index++;
 		}
 		return CollectData.printText("OWNER MEDIAN COST:", CollectData.owner[index]);

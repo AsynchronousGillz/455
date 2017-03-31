@@ -11,8 +11,10 @@ public final class DQ6 {
 		this.list = new int[CollectData.rent.length];
 	}
 	
-	public void add_Median(int _MEDIAN) {
-		list[_MEDIAN] += 1;
+	public void add_Median(int[] _MEDIAN) {
+		int index = 0;
+		for (int i : _MEDIAN)
+			list[index++] += i;
 	}
 	
 	public String toString() {

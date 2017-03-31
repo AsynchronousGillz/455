@@ -20,18 +20,25 @@ public final class WQ3 implements Writable {
 	private IntWritable M_1_AGE;
 	private IntWritable M_2_AGE;
 	private IntWritable M_3_AGE;
+	//
+	private IntWritable M_TOTAL;
+	
 	// 
 	private IntWritable F_1_AGE;
 	private IntWritable F_2_AGE;
 	private IntWritable F_3_AGE;
+	//
+	private IntWritable F_TOTAL;
 	
 	public WQ3() {
 		this.M_1_AGE = new IntWritable(0);
 		this.M_2_AGE = new IntWritable(0);
 		this.M_3_AGE = new IntWritable(0);
+		this.M_TOTAL = new IntWritable(0);
     	this.F_1_AGE = new IntWritable(0);
     	this.F_2_AGE = new IntWritable(0);
     	this.F_3_AGE = new IntWritable(0);
+    	this.F_TOTAL = new IntWritable(0);
 	}
 	
 	@Override
@@ -39,9 +46,11 @@ public final class WQ3 implements Writable {
 		this.M_1_AGE.readFields(arg0);
 		this.M_2_AGE.readFields(arg0);
 		this.M_3_AGE.readFields(arg0);
+		this.M_TOTAL.readFields(arg0);
 		this.F_1_AGE.readFields(arg0);
 		this.F_2_AGE.readFields(arg0);
 		this.F_3_AGE.readFields(arg0);
+		this.F_TOTAL.readFields(arg0);
 	}
 
 	@Override
@@ -49,9 +58,11 @@ public final class WQ3 implements Writable {
 		this.M_1_AGE.write(arg0);
 		this.M_2_AGE.write(arg0);
 		this.M_3_AGE.write(arg0);
+		this.M_TOTAL.write(arg0);
 		this.F_1_AGE.write(arg0);
 		this.F_2_AGE.write(arg0);
 		this.F_3_AGE.write(arg0);
+		this.F_TOTAL.write(arg0);
 	}
 	
 	public IntWritable get_M_AGE_1() {
@@ -64,6 +75,10 @@ public final class WQ3 implements Writable {
 	
 	public IntWritable get_M_AGE_3() {
 		return M_3_AGE;
+	}
+	
+	public IntWritable get_M_TOTAL() {
+		return M_TOTAL;
 	}
 
 	public void set_M_AGE_1(String AGE_1) {
@@ -78,6 +93,10 @@ public final class WQ3 implements Writable {
 		this.M_3_AGE = new IntWritable(Integer.parseInt(AGE_3));
 	}
 	
+	public void set_M_TOTAL(String TOTAL) {
+		this.M_TOTAL = new IntWritable(Integer.parseInt(TOTAL));
+	}
+	
 	public IntWritable get_F_AGE_1() {
 		return F_1_AGE;
 	}
@@ -88,6 +107,10 @@ public final class WQ3 implements Writable {
 	
 	public IntWritable get_F_AGE_3() {
 		return F_3_AGE;
+	}
+	
+	public IntWritable get_F_TOTAL() {
+		return F_TOTAL;
 	}
 	
 	public void set_F_AGE_1(String AGE_1) {
@@ -101,11 +124,16 @@ public final class WQ3 implements Writable {
 	public void set_F_AGE_3(String AGE_3) {
 		this.F_3_AGE = new IntWritable(Integer.parseInt(AGE_3));
 	}
+	
+	public void set_F_TOTAL(String TOTAL) {
+		this.F_TOTAL = new IntWritable(Integer.parseInt(TOTAL));
+	}
 
 	@Override
 	public String toString() {
-		return "WQ3 [M_1_AGE=" + M_1_AGE + ", M_2_AGE=" + M_2_AGE + ", M_3_AGE=" + M_3_AGE + ", F_1_AGE=" + F_1_AGE
-				+ ", F_2_AGE=" + F_2_AGE + ", F_3_AGE=" + F_3_AGE + "]";
+		return "WQ3 [M_1_AGE=" + M_1_AGE + ", M_2_AGE=" + M_2_AGE + ", M_3_AGE=" + M_3_AGE + ", M_TOTAL=" + M_TOTAL
+				+ ", F_1_AGE=" + F_1_AGE + ", F_2_AGE=" + F_2_AGE + ", F_3_AGE=" + F_3_AGE + ", F_TOTAL=" + F_TOTAL
+				+ "]";
 	}
 
 }

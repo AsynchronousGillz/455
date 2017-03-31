@@ -41,23 +41,5 @@ public final class CollectData {
 		"$650 to $699", "$700 to $749", "$750 to $999", "$1000 or more", 
 		"No cash rent"
 	};
-	
-	public static String getMedian(Text value, int start, int count, int size) {
-		double total = 0;
-		int[] list = new int[count];
-		for (int i = 0; i < count; i++, start += size) {
-			list[i] += Integer.parseInt(value.toString().substring(start, (start + size)));
-			total += list[i];
-		}
-		Integer index = 0;
-		double indexValue = total / 2;
-		for(int i : list) {
-			indexValue -= i;
-			if (indexValue <= 0)
-				break;
-			index++;
-		}
-		return index.toString();
-	}
-	
+
 }
