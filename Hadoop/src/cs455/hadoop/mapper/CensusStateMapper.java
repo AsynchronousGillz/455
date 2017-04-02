@@ -32,10 +32,12 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    			data.Q3.set_M_AGE_1(CollectData.getTotal(value, 3864, 13, 9));
 	    			data.Q3.set_M_AGE_2(CollectData.getTotal(value, 3981, 5, 9)); 
 	    			data.Q3.set_M_AGE_3(CollectData.getTotal(value, 4026, 2, 9));
+	    			data.Q3.set_M_TOTAL(CollectData.getTotal(value, 4044, 11, 9));
 	    			
 	    			data.Q3.set_F_AGE_1(CollectData.getTotal(value, 4143, 13, 9));
 	    			data.Q3.set_F_AGE_2(CollectData.getTotal(value, 4260, 5, 9)); 
 	    			data.Q3.set_F_AGE_3(CollectData.getTotal(value, 4305, 2, 9));
+	    			data.Q3.set_F_TOTAL(CollectData.getTotal(value, 4323, 11, 9));
 	    	        break;
 	    		case 2:
 	    			data.Q1.set_R(CollectData.getTotal(value, 1803, 1, 9));

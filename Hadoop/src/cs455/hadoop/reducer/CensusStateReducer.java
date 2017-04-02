@@ -27,11 +27,12 @@ public final class CensusStateReducer extends Reducer<Text, WritableData, Text, 
 	        		data.Q3.add_F_1_AGE(val.Q3.get_F_AGE_1().get());
 	        		data.Q3.add_F_2_AGE(val.Q3.get_F_AGE_2().get());
 	        		data.Q3.add_F_3_AGE(val.Q3.get_F_AGE_3().get());
+	        		data.Q3.add_F_POP(val.Q3.get_F_TOTAL().get());
 	        		
 	        		data.Q3.add_M_1_AGE(val.Q3.get_M_AGE_1().get());
 	        		data.Q3.add_M_2_AGE(val.Q3.get_M_AGE_2().get());
 	        		data.Q3.add_M_3_AGE(val.Q3.get_M_AGE_3().get());
-	        		data.Q3.add_POP(val.Q3.get_M_TOTAL().get());
+	        		data.Q3.add_M_POP(val.Q3.get_M_TOTAL().get());
 	        		break;
 	    		case 2:
 	        		data.Q1.add_OWN(val.Q1.get_OWN().get());
