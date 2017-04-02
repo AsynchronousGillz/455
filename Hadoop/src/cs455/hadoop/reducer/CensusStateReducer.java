@@ -3,8 +3,8 @@ package cs455.hadoop.reducer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import cs455.hadoop.util.ReduceData;
-import cs455.hadoop.util.WritableData;
+import cs455.hadoop.util.ReduceStateData;
+import cs455.hadoop.util.WritableStateData;
 
 import java.io.IOException;
 
@@ -12,12 +12,12 @@ import java.io.IOException;
  * Reducer: Input to the reducer is the output from the mapper. It receives word, list<own|rent> pairs.
  * Sums up on per state basis a breakdown of the percentage of residences that were rented vs. owned
  */
-public final class CensusStateReducer extends Reducer<Text, WritableData, Text, Text> {
+public final class CensusStateReducer extends Reducer<Text, WritableStateData, Text, Text> {
     @Override
-    protected void reduce(Text key, Iterable<WritableData> values, Context context) throws IOException, InterruptedException {
-        ReduceData data = new ReduceData();
+    protected void reduce(Text key, Iterable<WritableStateData> values, Context context) throws IOException, InterruptedException {
+        ReduceStateData data = new ReduceStateData();
     	// calculate the total count
-        for(WritableData val : values){
+        for(WritableStateData val : values){
         	switch (val.get_SEGMENT().get()) {
 	    		case 1:
 	        		data.Q2.add_F_MARRIED(val.Q2.get_F_MARRIED().get());

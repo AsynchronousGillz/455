@@ -18,9 +18,8 @@ public final class CollectData {
 
 	public static String getTotal(Text value, int start, int count, int size) {
 		Integer TOTAL = 0;
-		for (int i = 0; i < count; i++, start += size) {
+		for (int i = 0; i < count; i++, start += size)
 			TOTAL += Integer.parseInt(value.toString().substring(start, (start+size)));
-		}
 		return TOTAL.toString();
 	}
 
@@ -40,6 +39,11 @@ public final class CollectData {
 		"$450 to $499",	"$500 to $549", "$550 to $599", "$600 to $649",
 		"$650 to $699", "$700 to $749", "$750 to $999", "$1000 or more", 
 		"No cash rent"
+	};
+	
+	public static String[] room = {
+		"1 room", "2 rooms", "3 rooms", "4 rooms", "5 rooms", "6 rooms",
+		"7 rooms", "8 rooms", "9 rooms"
 	};
 
 }

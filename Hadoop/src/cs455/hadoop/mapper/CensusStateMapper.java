@@ -5,22 +5,22 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import cs455.hadoop.util.CollectData;
-import cs455.hadoop.util.WritableData;
+import cs455.hadoop.util.WritableStateData;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
 
 /**
- * Mapper: Reads line by line, gets the state. Emit <Text, {@link WritableData}> pairs.
+ * Mapper: Reads line by line, gets the state. Emit <Text, {@link WritableStateData}> pairs.
  */
-public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, WritableData> {
+public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, WritableStateData> {
 
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
     	if (Integer.parseInt(value.toString().substring(10, 13)) == 100) {
     		StringTokenizer state = new StringTokenizer(value.toString().substring(8, 10));
-    		WritableData data = new WritableData();
+    		WritableStateData data = new WritableStateData();
     		data.set_SEGMENT(CollectData.getTotal(value, 24, 1, 4));
     		boolean write = true;
     		switch (data.get_SEGMENT().get()) {
