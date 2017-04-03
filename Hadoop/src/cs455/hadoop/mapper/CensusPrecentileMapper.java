@@ -23,9 +23,11 @@ public final class CensusPrecentileMapper extends Mapper<LongWritable, Text, Tex
     		data.set_SEGMENT(CollectData.getTotal(value, 24, 1, 4));
     		switch (data.get_SEGMENT().get()) {
 	    		case 1:
+//	    			data.Q7.set_Percentile(value, start, size);
 	    			context.write(new Text("1"), data);
 	    	        break;
 	    		case 2:
+//	    			data.Q8
 	    			context.write(new Text("2"), data);
 			        break;
     		} // switch
