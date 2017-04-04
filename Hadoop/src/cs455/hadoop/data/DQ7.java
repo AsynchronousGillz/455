@@ -30,7 +30,7 @@ public final class DQ7 {
 			this.map.put(state, _MEDIAN);
 		}
 		
-		if (this.map.get(state) != null)
+		if (this.count.get(state) != null)
 			this.count.put(state, this.count.get(state) + 1);
 		else
 			this.count.put(state, 1);
