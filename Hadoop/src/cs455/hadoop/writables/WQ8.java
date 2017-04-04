@@ -13,43 +13,42 @@ import org.apache.hadoop.io.Writable;
 
 public class WQ8 implements Writable {
 
-	// 
-		private IntWritable OLD_POP;
-		private IntWritable TOTAL_POP;
-		
-		public WQ8() {
-			this.OLD_POP = new IntWritable(0);
-			this.TOTAL_POP = new IntWritable(0);
-		}
-		
-		@Override
-		public void readFields(DataInput arg0) throws IOException {
-			this.OLD_POP.readFields(arg0);
-			this.TOTAL_POP.readFields(arg0);
-		}
-		
-		@Override
-		public void write(DataOutput arg0) throws IOException {
-			this.OLD_POP.write(arg0);
-			this.TOTAL_POP.write(arg0);
-		}
-		
-		
-		public IntWritable get_OLD_POP() {
-			return OLD_POP;
-		}
+	//
+	private IntWritable OLD_POP;
+	private IntWritable TOTAL_POP;
 
-		public IntWritable get_TOTAL_POP() {
-			return TOTAL_POP;
-		}
+	public WQ8() {
+		this.OLD_POP = new IntWritable(0);
+		this.TOTAL_POP = new IntWritable(0);
+	}
 
-		public void set_OLD_POP(String _OLD_POP) {
-			this.OLD_POP = new IntWritable(Integer.parseInt(_OLD_POP));
-		}
-		
-		public void set_TOTAL_POP(String _TOTAL_POP) {
-			this.TOTAL_POP = new IntWritable(Integer.parseInt(_TOTAL_POP));
-		}
+	@Override
+	public void readFields(DataInput arg0) throws IOException {
+		this.OLD_POP.readFields(arg0);
+		this.TOTAL_POP.readFields(arg0);
+	}
+
+	@Override
+	public void write(DataOutput arg0) throws IOException {
+		this.OLD_POP.write(arg0);
+		this.TOTAL_POP.write(arg0);
+	}
+
+	public IntWritable get_OLD_POP() {
+		return OLD_POP;
+	}
+
+	public IntWritable get_TOTAL_POP() {
+		return TOTAL_POP;
+	}
+
+	public void set_OLD_POP(String _OLD_POP) {
+		this.OLD_POP = new IntWritable(Integer.parseInt(_OLD_POP));
+	}
+
+	public void set_TOTAL_POP(String _TOTAL_POP) {
+		this.TOTAL_POP = new IntWritable(Integer.parseInt(_TOTAL_POP));
+	}
 
 
 }

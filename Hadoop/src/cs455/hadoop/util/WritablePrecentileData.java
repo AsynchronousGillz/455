@@ -26,6 +26,13 @@ public final class WritablePrecentileData implements Writable {
 	public WQ7 Q7;
 	public WQ8 Q8;
 
+	public WritablePrecentileData() {
+    	this.STATE = new Text("");
+    	this.SEGMENT = new IntWritable(0);
+    	this.Q7 = new WQ7();
+    	this.Q8 = new WQ8();
+    }
+	
     public WritablePrecentileData(String state) {
     	this.STATE = new Text(state);
     	this.SEGMENT = new IntWritable(0);
@@ -59,8 +66,8 @@ public final class WritablePrecentileData implements Writable {
 		return this.STATE.toString();
 	}
 	
-	public String toText() {
-        return "\n" + Q7.toString() + Q8.toString();
+	public Text toText() {
+        return new Text("\n" + Q7.toString() + Q8.toString());
 	}
 	
 }

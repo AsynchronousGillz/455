@@ -40,8 +40,8 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    			data.Q3.set_F_TOTAL(CollectData.getTotal(value, 4323, 11, 9));
 	    	        break;
 	    		case 2:
-	    			data.Q1.set_R(CollectData.getTotal(value, 1803, 1, 9));
-	    			data.Q1.set_O(CollectData.getTotal(value, 1812, 1, 9));
+	    			data.Q1.set_O(CollectData.getTotal(value, 1803, 1, 9));
+	    			data.Q1.set_R(CollectData.getTotal(value, 1812, 1, 9));
 	    			
 	    			data.Q4.set_URBAN(CollectData.getTotal(value, 1821, 2, 9));
 	    			data.Q4.set_RURAL(CollectData.getTotal(value, 1839, 1, 9));

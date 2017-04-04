@@ -23,15 +23,15 @@ public final class CensusPrecentileMapper extends Mapper<LongWritable, Text, Tex
     		data.set_SEGMENT(CollectData.getTotal(value, 24, 1, 4));
     		switch (data.get_SEGMENT().get()) {
 	    		case 1:
-//	    			data.Q7.set_Percentile(value, start, size);
-	    			context.write(new Text("1"), data);
+	    			data.Q7.set_Percentile(value, 2388, 9);
+	    			context.write(new Text("7"), data);
 	    	        break;
 	    		case 2:
-//	    			data.Q8
-	    			context.write(new Text("2"), data);
+	    			data.Q8.set_OLD_POP(CollectData.getTotal(value, 1065, 1, 9));
+	    			data.Q8.set_TOTAL_POP(CollectData.getTotal(value, 300, 1, 9));
+	    			context.write(new Text("8"), data);
 			        break;
     		} // switch
-   			
     	} // summary 100 
     }
 }

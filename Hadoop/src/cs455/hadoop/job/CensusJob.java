@@ -55,7 +55,7 @@ public final class CensusJob {
             percentile.setOutputValueClass(Text.class);
             
             FileInputFormat.addInputPath(percentile, new Path(args[0]));
-            FileOutputFormat.setOutputPath(percentile, new Path(args[1]));
+            FileOutputFormat.setOutputPath(percentile, new Path(args[2]));
             
             // Block until the job is completed.
             System.exit(percentile.waitForCompletion(true) ? 0 : 1);

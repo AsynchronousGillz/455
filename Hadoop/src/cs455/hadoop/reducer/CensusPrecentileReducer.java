@@ -20,10 +20,10 @@ public final class CensusPrecentileReducer extends Reducer<Text, WritablePrecent
         for(WritablePrecentileData val : values){
         	switch (val.get_SEGMENT().get()) {
 	    		case 1:
-	        		
+	        		data.Q7.add_Data(val.get_STATE(), val.Q7.get_Percentile());
 	        		break;
 	    		case 2:
-	    			
+	    			data.Q8.add_Data(val.get_STATE(), val.Q8.get_OLD_POP().get(), val.Q8.get_TOTAL_POP().get());
 	        		break;
         	}
         }
