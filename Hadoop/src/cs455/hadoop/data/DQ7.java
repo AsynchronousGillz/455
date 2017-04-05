@@ -24,7 +24,7 @@ public final class DQ7 {
 		int len = CollectData.room.length;
 		double avg = 0;
 		for(int i : this.VALUES)
-			avg += ((double)(0 + i) / this.COUNT);
+			avg += i;
 		return CollectData.printValue("95TH PERCENTILE: ", (avg/len)*100);
 	}
 	

@@ -8,7 +8,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 
 /**
- * Which state has the highest percentage of elderly people (age > 85) in their population? 
+ * Gender precent of elderly people (age > 85) in each state? 
  */
 
 public class WQ9 implements Writable {
