@@ -8,7 +8,6 @@ import cs455.hadoop.util.CollectData;
 import cs455.hadoop.util.WritableStateData;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 /**
  * Mapper: Reads line by line, gets the state. Emit <Text, {@link WritableStateData}> pairs.
@@ -19,7 +18,7 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
     	if (Integer.parseInt(value.toString().substring(10, 13)) == 100) {
-    		StringTokenizer state = new StringTokenizer(value.toString().substring(8, 10));
+    		Text state = new Text(value.toString().substring(8, 10));
     		WritableStateData data = new WritableStateData();
     		data.set_SEGMENT(CollectData.getTotal(value, 24, 1, 4));
     		boolean write = true;
@@ -38,6 +37,8 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    			data.Q3.set_F_AGE_2(CollectData.getTotal(value, 4260, 5, 9)); 
 	    			data.Q3.set_F_AGE_3(CollectData.getTotal(value, 4305, 2, 9));
 	    			data.Q3.set_F_TOTAL(CollectData.getTotal(value, 4323, 11, 9));
+	    			
+	    			data.Q7.set_Percentile(value, 2388, 9);
 	    	        break;
 	    		case 2:
 	    			data.Q1.set_O(CollectData.getTotal(value, 1803, 1, 9));
@@ -50,12 +51,15 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 	    			data.Q5.set_Median(value, 2928, 9);
 	    			
 	    			data.Q6.set_Median(value, 3450, 9);
+	    			
+	    			data.Q8.set_OLD_POP(CollectData.getTotal(value, 1065, 1, 9));
+	    			data.Q8.set_TOTAL_POP(CollectData.getTotal(value, 300, 1, 9));
 			        break;
 	    		default:
 	    			write = false;
     		} // switch
     		if (write)
-    			context.write(new Text(state.nextToken()), data);
+    			context.write(state, data);
     	} // summary 100 
     }
 }

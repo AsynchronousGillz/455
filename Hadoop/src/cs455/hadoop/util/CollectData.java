@@ -15,6 +15,10 @@ public final class CollectData {
 	public static String printText(String CAT, String VALUE) {
 		return new String(String.format("   %1$-25s %2$-7s ", CAT, VALUE)+"\n");
 	}
+	
+	public static String printSingle(Double VALUE) {
+		return new String(VALUE*100+"");
+	}
 
 	public static String getTotal(Text value, int start, int count, int size) {
 		Integer TOTAL = 0;

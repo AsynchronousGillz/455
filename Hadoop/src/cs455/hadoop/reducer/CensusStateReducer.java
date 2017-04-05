@@ -33,6 +33,8 @@ public final class CensusStateReducer extends Reducer<Text, WritableStateData, T
 	        		data.Q3.add_M_2_AGE(val.Q3.get_M_AGE_2().get());
 	        		data.Q3.add_M_3_AGE(val.Q3.get_M_AGE_3().get());
 	        		data.Q3.add_M_POP(val.Q3.get_M_TOTAL().get());
+	        		
+	        		data.Q7.add_Data(val.Q7.get_Percentile());
 	        		break;
 	    		case 2:
 	        		data.Q1.add_OWN(val.Q1.get_OWN().get());
@@ -45,6 +47,9 @@ public final class CensusStateReducer extends Reducer<Text, WritableStateData, T
 	        		data.Q5.add_Median(val.Q5.get_Median());
 	        		
 	        		data.Q6.add_Median(val.Q6.get_Median());
+	        		
+	        		data.Q8.add_OLD_POP(val.Q8.get_OLD_POP().get());
+	        		data.Q8.add_POP(val.Q8.get_TOTAL_POP().get());
 	        		break;
         	}
         }

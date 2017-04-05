@@ -7,11 +7,8 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import cs455.hadoop.mapper.CensusPrecentileMapper;
 import cs455.hadoop.mapper.CensusStateMapper;
-import cs455.hadoop.reducer.CensusPrecentileReducer;
 import cs455.hadoop.reducer.CensusStateReducer;
-import cs455.hadoop.util.WritablePrecentileData;
 import cs455.hadoop.util.WritableStateData;
 
 import java.io.IOException;
@@ -39,26 +36,7 @@ public final class CensusJob {
             FileInputFormat.addInputPath(state, new Path(args[0]));
             FileOutputFormat.setOutputPath(state, new Path(args[1]));
             
-            state.waitForCompletion(true);
-            
-            Job percentile = Job.getInstance(conf, "ganvana_PercentileJob");
-            percentile.setJarByClass(CensusJob.class);
-            // Mapper
-            percentile.setMapperClass(CensusPrecentileMapper.class);
-            // Reducer
-            percentile.setReducerClass(CensusPrecentileReducer.class);
-            
-            percentile.setMapOutputKeyClass(Text.class);
-            percentile.setMapOutputValueClass(WritablePrecentileData.class);
-            
-            percentile.setOutputKeyClass(Text.class);
-            percentile.setOutputValueClass(Text.class);
-            
-            FileInputFormat.addInputPath(percentile, new Path(args[0]));
-            FileOutputFormat.setOutputPath(percentile, new Path(args[2]));
-            
-            // Block until the job is completed.
-            System.exit(percentile.waitForCompletion(true) ? 0 : 1);
+            System.exit(state.waitForCompletion(true) ? 0 : 1);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         } catch (InterruptedException e) {
