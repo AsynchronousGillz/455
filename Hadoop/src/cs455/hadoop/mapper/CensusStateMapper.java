@@ -38,7 +38,7 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 					data.Q3.set_F_AGE_3(CollectData.getTotal(value, 4305, 2, 9));
 					data.Q3.set_F_TOTAL(CollectData.getTotal(value, 4323, 11, 9));
 
-					data.Q7.set_Percentile(value, 2388, 9);
+					data.Q8.set_OLD_POP(CollectData.getTotal(value, 1065, 1, 9));
 					break;
 				case 2:
 					data.set_POPULATION(CollectData.getTotal(value, 300, 1, 9));
@@ -53,7 +53,7 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 
 					data.Q6.set_Median(value, 3450, 9);
 
-					data.Q8.set_OLD_POP(CollectData.getTotal(value, 1065, 1, 9));
+					data.Q7.set_Percentile(value, 2388, 9);
 					break;
 				default:
 					write = false;

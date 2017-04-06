@@ -22,7 +22,7 @@ public final class DQ8 {
 	}
 
 	public String toString() {
-		return CollectData.printValue("PERCENTAGE OF 85+:", (this.OLD_POP / this.TOTAL_POP)*100);
+		return CollectData.printPrecent("PERCENTAGE OF 85+:", (this.OLD_POP / this.TOTAL_POP));
 	}
 
 }

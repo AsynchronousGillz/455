@@ -5,27 +5,27 @@ import cs455.hadoop.util.CollectData;
 public final class DQ7 {
 	
 	private int[] VALUES;
-	private int COUNT;
 	
 	public DQ7() {
 		int len = CollectData.room.length;
 		this.VALUES = new int[len];
-		this.COUNT = 0;
 	}
 	
 	public void add_Data(int[] _MEDIAN) {
 		int index = 0;
 		for (int i : _MEDIAN)
 			this.VALUES[index++] += i;
-		this.COUNT += 1;
 	}
 
 	public String toString() {
-		int len = CollectData.room.length;
-		double avg = 0;
-		for(int i : this.VALUES)
-			avg += i;
-		return CollectData.printValue("95TH PERCENTILE: ", (avg/len)*100);
+		double T = 0;
+		double B = 0;
+		int I = 0;
+		for(int i : this.VALUES) {
+			T += i * ++I;
+			B += i;
+		}
+		return CollectData.printValue("95TH PERCENTILE: ", (T / B));
 	}
 	
 }

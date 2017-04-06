@@ -47,7 +47,8 @@ public class WQ7 implements Writable {
 
 	public void set_Percentile(Text value, int start, int size) {
 		int len = CollectData.room.length;
-		for (int i = 0; i < len; i++, start += size) 
+		this.VALUES = new IntWritable[len];
+		for (int i = 0; i < len; i++, start += size)
 			this.VALUES[i] = new IntWritable(Integer.parseInt(value.toString().substring(start, (start + size))));
 	}
 
