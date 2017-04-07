@@ -50,6 +50,17 @@ public final class CensusStateReducer extends Reducer<Text, WritableStateData, T
 					data.Q6.add_Median(val.Q6.get_Median());
 					
 					data.Q7.add_Data(val.Q7.get_Percentile());
+					
+					data.Q9.add_ASIAN_OWN(val.Q9.get_ASIAN_OWN().get());
+					data.Q9.add_ASIAN_RENT(val.Q9.get_ASIAN_RENT().get());
+					data.Q9.add_BLACK_OWN(val.Q9.get_BLACK_OWN().get());
+					data.Q9.add_BLACK_RENT(val.Q9.get_BLACK_RENT().get());
+					data.Q9.add_NATIV_OWN(val.Q9.get_NATIV_OWN().get());
+					data.Q9.add_NATIV_RENT(val.Q9.get_NATIV_RENT().get());
+					data.Q9.add_OTHER_OWN(val.Q9.get_OTHER_OWN().get());
+					data.Q9.add_NATIV_RENT(val.Q9.get_OTHER_RENT().get());
+					data.Q9.add_WHITE_OWN(val.Q9.get_WHITE_OWN().get());
+					data.Q9.add_WHITE_RENT(val.Q9.get_WHITE_RENT().get());
 					break;
 			}
 		}

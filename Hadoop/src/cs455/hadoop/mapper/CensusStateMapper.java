@@ -54,6 +54,18 @@ public final class CensusStateMapper extends Mapper<LongWritable, Text, Text, Wr
 					data.Q6.set_Median(value, 3450, 9);
 
 					data.Q7.set_Percentile(value, 2388, 9);
+					
+					data.Q9.set_WHITE_OWN(CollectData.getTotal(value, 3150, 1, 9));
+					data.Q9.set_BLACK_OWN(CollectData.getTotal(value, 3159, 1, 9));
+					data.Q9.set_NATIV_OWN(CollectData.getTotal(value, 3168, 1, 9));
+					data.Q9.set_ASIAN_OWN(CollectData.getTotal(value, 3177, 1, 9));
+					data.Q9.set_OTHER_OWN(CollectData.getTotal(value, 3187, 1, 9));
+
+					data.Q9.set_WHITE_RENT(CollectData.getTotal(value, 3645, 1, 9));
+					data.Q9.set_BLACK_RENT(CollectData.getTotal(value, 3654, 1, 9));
+					data.Q9.set_NATIV_RENT(CollectData.getTotal(value, 3663, 1, 9));
+					data.Q9.set_ASIAN_RENT(CollectData.getTotal(value, 3672, 1, 9));
+					data.Q9.set_OTHER_RENT(CollectData.getTotal(value, 3681, 1, 9));
 					break;
 				default:
 					write = false;

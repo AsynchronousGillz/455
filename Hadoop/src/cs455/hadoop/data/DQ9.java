@@ -23,6 +23,12 @@ public final class DQ9 {
 	private Double[] TOTAL;
 	
 	public DQ9() {
+		this.WHITE = new Double[2];
+		this.BLACK = new Double[2];
+		this.NATIV = new Double[2];
+		this.ASIAN = new Double[2];
+		this.OTHER = new Double[2];
+		this.TOTAL = new Double[2];
 		this.WHITE[0] = Double.valueOf(0);
 		this.BLACK[0] = Double.valueOf(0);
 		this.NATIV[0] = Double.valueOf(0);
@@ -81,6 +87,7 @@ public final class DQ9 {
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("\n");
 		sb.append(CollectData.printPrecent("WHITE OWN:",  (this.WHITE[0]/this.TOTAL[0])));
 		sb.append(CollectData.printPrecent("BLACK OWN:",  (this.BLACK[0]/this.TOTAL[0])));
 		sb.append(CollectData.printPrecent("NATIVE OWN:", (this.NATIV[0]/this.TOTAL[0])));
