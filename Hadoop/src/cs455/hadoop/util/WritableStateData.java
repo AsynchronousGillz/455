@@ -91,8 +91,8 @@ public final class WritableStateData implements Writable {
 	}
 	
 	public String toText() {
-        return "\n" + Q1.toString() + Q2.toString() + Q3.toString() + Q4.toString()
-        + Q5.toString() + Q6.toString() + Q7.toString() + Q8.toString() + Q9.toString();
+        return new StringBuilder().append("\n").append(Q1.toString()).append(Q2.toString()).append(Q3.toString()).append(Q4.toString())
+        .append(Q5.toString()).append(Q6.toString()).append(Q7.toString()).append(Q8.toString()).append(Q9.toString()).toString();
 	}
 	
 }
