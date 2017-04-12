@@ -17,16 +17,16 @@ AK
    95TH PERCENTILE:          4.68  
    PERCENTAGE OF 85+:        0.23  %
 
-   WHITE OWN:                78.26 %
-   BLACK OWN:                1.81  %
-   NATIVE OWN:               13.26 %
-   ASIAN OWN:                1.77  %
-   OTHER OWN:                4.91  %
+   WHITE OWN:                41.84 %
+   BLACK OWN:                0.97  %
+   NATIVE OWN:               7.09  %
+   ASIAN OWN:                0.94  %
+   OTHER OWN:                2.62  %
 
-   WHITE RENT:               78.40 %
-   BLACK RENT:               5.50  %
-   NATIVE RENT:              12.62 %
-   ASIAN RENT:               3.49  %
+   WHITE RENT:               36.48 %
+   BLACK RENT:               2.56  %
+   NATIVE RENT:              5.87  %
+   ASIAN RENT:               1.62  %
    OTHER RENT:               0.00  %
 
 AL	
@@ -48,16 +48,16 @@ AL
    95TH PERCENTILE:          5.41  
    PERCENTAGE OF 85+:        1.20  %
 
-   WHITE OWN:                79.82 %
-   BLACK OWN:                19.06 %
-   NATIVE OWN:               0.30  %
-   ASIAN OWN:                0.27  %
-   OTHER OWN:                0.56  %
+   WHITE OWN:                52.87 %
+   BLACK OWN:                12.62 %
+   NATIVE OWN:               0.20  %
+   ASIAN OWN:                0.18  %
+   OTHER OWN:                0.37  %
 
-   WHITE RENT:               65.45 %
-   BLACK RENT:               33.08 %
-   NATIVE RENT:              0.58  %
-   ASIAN RENT:               0.89  %
+   WHITE RENT:               22.10 %
+   BLACK RENT:               11.17 %
+   NATIVE RENT:              0.20  %
+   ASIAN RENT:               0.30  %
    OTHER RENT:               0.00  %
 
 AR	
@@ -79,16 +79,16 @@ AR
    95TH PERCENTILE:          5.07  
    PERCENTAGE OF 85+:        1.50  %
 
-   WHITE OWN:                86.45 %
-   BLACK OWN:                11.82 %
-   NATIVE OWN:               0.38  %
-   ASIAN OWN:                0.31  %
-   OTHER OWN:                1.03  %
+   WHITE OWN:                56.60 %
+   BLACK OWN:                7.74  %
+   NATIVE OWN:               0.25  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                0.67  %
 
-   WHITE RENT:               76.43 %
-   BLACK RENT:               21.80 %
-   NATIVE RENT:              1.12  %
-   ASIAN RENT:               0.65  %
+   WHITE RENT:               26.39 %
+   BLACK RENT:               7.53  %
+   NATIVE RENT:              0.39  %
+   ASIAN RENT:               0.22  %
    OTHER RENT:               0.00  %
 
 AZ	
@@ -110,16 +110,16 @@ AZ
    95TH PERCENTILE:          4.80  
    PERCENTAGE OF 85+:        1.03  %
 
-   WHITE OWN:                59.36 %
-   BLACK OWN:                1.35  %
-   NATIVE OWN:               2.12  %
-   ASIAN OWN:                0.73  %
-   OTHER OWN:                36.44 %
+   WHITE OWN:                40.68 %
+   BLACK OWN:                0.93  %
+   NATIVE OWN:               1.45  %
+   ASIAN OWN:                0.50  %
+   OTHER OWN:                24.98 %
 
-   WHITE RENT:               81.65 %
-   BLACK RENT:               4.47  %
-   NATIVE RENT:              12.30 %
-   ASIAN RENT:               1.58  %
+   WHITE RENT:               25.69 %
+   BLACK RENT:               1.41  %
+   NATIVE RENT:              3.87  %
+   ASIAN RENT:               0.50  %
    OTHER RENT:               0.00  %
 
 CA	
@@ -141,16 +141,16 @@ CA
    95TH PERCENTILE:          4.81  
    PERCENTAGE OF 85+:        1.01  %
 
-   WHITE OWN:                52.61 %
-   BLACK OWN:                3.30  %
-   NATIVE OWN:               0.38  %
-   ASIAN OWN:                5.07  %
-   OTHER OWN:                38.64 %
+   WHITE OWN:                32.64 %
+   BLACK OWN:                2.05  %
+   NATIVE OWN:               0.24  %
+   ASIAN OWN:                3.14  %
+   OTHER OWN:                23.97 %
 
-   WHITE RENT:               68.26 %
-   BLACK RENT:               10.53 %
-   NATIVE RENT:              13.50 %
-   ASIAN RENT:               7.71  %
+   WHITE RENT:               25.91 %
+   BLACK RENT:               4.00  %
+   NATIVE RENT:              5.13  %
+   ASIAN RENT:               2.93  %
    OTHER RENT:               0.00  %
 
 CO	
@@ -172,16 +172,16 @@ CO
    95TH PERCENTILE:          5.47  
    PERCENTAGE OF 85+:        1.00  %
 
-   WHITE OWN:                72.88 %
-   BLACK OWN:                2.06  %
-   NATIVE OWN:               0.36  %
-   ASIAN OWN:                0.91  %
-   OTHER OWN:                23.79 %
+   WHITE OWN:                46.77 %
+   BLACK OWN:                1.32  %
+   NATIVE OWN:               0.23  %
+   ASIAN OWN:                0.58  %
+   OTHER OWN:                15.27 %
 
-   WHITE RENT:               84.70 %
-   BLACK RENT:               6.45  %
-   NATIVE RENT:              7.03  %
-   ASIAN RENT:               1.82  %
+   WHITE RENT:               30.34 %
+   BLACK RENT:               2.31  %
+   NATIVE RENT:              2.52  %
+   ASIAN RENT:               0.65  %
    OTHER RENT:               0.00  %
 
 CT	
@@ -203,16 +203,16 @@ CT
    95TH PERCENTILE:          5.57  
    PERCENTAGE OF 85+:        1.43  %
 
-   WHITE OWN:                92.40 %
-   BLACK OWN:                2.81  %
-   NATIVE OWN:               0.11  %
-   ASIAN OWN:                0.83  %
-   OTHER OWN:                3.86  %
+   WHITE OWN:                57.68 %
+   BLACK OWN:                1.76  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.52  %
+   OTHER OWN:                2.41  %
 
-   WHITE RENT:               77.35 %
-   BLACK RENT:               15.26 %
-   NATIVE RENT:              5.78  %
-   ASIAN RENT:               1.61  %
+   WHITE RENT:               29.06 %
+   BLACK RENT:               5.73  %
+   NATIVE RENT:              2.17  %
+   ASIAN RENT:               0.60  %
    OTHER RENT:               0.00  %
 
 DC	
@@ -234,16 +234,16 @@ DC
    95TH PERCENTILE:          4.42  
    PERCENTAGE OF 85+:        1.29  %
 
-   WHITE OWN:                31.44 %
-   BLACK OWN:                62.49 %
-   NATIVE OWN:               0.21  %
-   ASIAN OWN:                0.83  %
-   OTHER OWN:                5.03  %
+   WHITE OWN:                10.54 %
+   BLACK OWN:                20.95 %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.28  %
+   OTHER OWN:                1.69  %
 
-   WHITE RENT:               30.98 %
-   BLACK RENT:               64.42 %
-   NATIVE RENT:              2.71  %
-   ASIAN RENT:               1.89  %
+   WHITE RENT:               20.59 %
+   BLACK RENT:               42.82 %
+   NATIVE RENT:              1.80  %
+   ASIAN RENT:               1.26  %
    OTHER RENT:               0.00  %
 
 DE	
@@ -265,16 +265,16 @@ DE
    95TH PERCENTILE:          5.84  
    PERCENTAGE OF 85+:        1.07  %
 
-   WHITE OWN:                84.76 %
-   BLACK OWN:                10.16 %
-   NATIVE OWN:               0.20  %
-   ASIAN OWN:                0.96  %
-   OTHER OWN:                3.91  %
+   WHITE OWN:                57.31 %
+   BLACK OWN:                6.87  %
+   NATIVE OWN:               0.14  %
+   ASIAN OWN:                0.65  %
+   OTHER OWN:                2.65  %
 
-   WHITE RENT:               69.94 %
-   BLACK RENT:               26.54 %
-   NATIVE RENT:              2.15  %
-   ASIAN RENT:               1.37  %
+   WHITE RENT:               22.64 %
+   BLACK RENT:               8.59  %
+   NATIVE RENT:              0.70  %
+   ASIAN RENT:               0.44  %
    OTHER RENT:               0.00  %
 
 FL	
@@ -296,16 +296,16 @@ FL
    95TH PERCENTILE:          4.88  
    PERCENTAGE OF 85+:        1.62  %
 
-   WHITE OWN:                82.07 %
-   BLACK OWN:                8.57  %
-   NATIVE OWN:               0.19  %
-   ASIAN OWN:                0.81  %
-   OTHER OWN:                8.36  %
+   WHITE OWN:                50.70 %
+   BLACK OWN:                5.29  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                0.50  %
+   OTHER OWN:                5.17  %
 
-   WHITE RENT:               78.53 %
-   BLACK RENT:               17.66 %
-   NATIVE RENT:              2.71  %
-   ASIAN RENT:               1.10  %
+   WHITE RENT:               30.02 %
+   BLACK RENT:               6.75  %
+   NATIVE RENT:              1.04  %
+   ASIAN RENT:               0.42  %
    OTHER RENT:               0.00  %
 
 GA	
@@ -327,16 +327,16 @@ GA
    95TH PERCENTILE:          5.43  
    PERCENTAGE OF 85+:        0.88  %
 
-   WHITE OWN:                79.49 %
-   BLACK OWN:                17.84 %
-   NATIVE OWN:               0.15  %
-   ASIAN OWN:                0.72  %
-   OTHER OWN:                1.79  %
+   WHITE OWN:                48.00 %
+   BLACK OWN:                10.77 %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.43  %
+   OTHER OWN:                1.08  %
 
-   WHITE RENT:               59.31 %
-   BLACK RENT:               38.13 %
-   NATIVE RENT:              1.21  %
-   ASIAN RENT:               1.35  %
+   WHITE RENT:               23.50 %
+   BLACK RENT:               15.11 %
+   NATIVE RENT:              0.48  %
+   ASIAN RENT:               0.53  %
    OTHER RENT:               0.00  %
 
 HI	
@@ -358,16 +358,16 @@ HI
    95TH PERCENTILE:          4.39  
    PERCENTAGE OF 85+:        0.94  %
 
-   WHITE OWN:                26.51 %
-   BLACK OWN:                0.38  %
-   NATIVE OWN:               0.20  %
-   ASIAN OWN:                63.77 %
-   OTHER OWN:                9.14  %
+   WHITE OWN:                14.06 %
+   BLACK OWN:                0.20  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                33.83 %
+   OTHER OWN:                4.85  %
 
-   WHITE RENT:               45.34 %
-   BLACK RENT:               3.14  %
-   NATIVE RENT:              3.12  %
-   ASIAN RENT:               48.40 %
+   WHITE RENT:               21.28 %
+   BLACK RENT:               1.48  %
+   NATIVE RENT:              1.47  %
+   ASIAN RENT:               22.72 %
    OTHER RENT:               0.00  %
 
 IA	
@@ -389,16 +389,16 @@ IA
    95TH PERCENTILE:          5.65  
    PERCENTAGE OF 85+:        1.99  %
 
-   WHITE OWN:                96.46 %
-   BLACK OWN:                0.94  %
-   NATIVE OWN:               0.12  %
-   ASIAN OWN:                0.31  %
-   OTHER OWN:                2.17  %
+   WHITE OWN:                65.86 %
+   BLACK OWN:                0.64  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                1.48  %
 
-   WHITE RENT:               93.95 %
-   BLACK RENT:               3.49  %
-   NATIVE RENT:              1.09  %
-   ASIAN RENT:               1.47  %
+   WHITE RENT:               29.80 %
+   BLACK RENT:               1.11  %
+   NATIVE RENT:              0.35  %
+   ASIAN RENT:               0.47  %
    OTHER RENT:               0.00  %
 
 ID	
@@ -420,16 +420,16 @@ ID
    95TH PERCENTILE:          5.48  
    PERCENTAGE OF 85+:        1.13  %
 
-   WHITE OWN:                87.88 %
-   BLACK OWN:                0.18  %
-   NATIVE OWN:               0.76  %
-   ASIAN OWN:                0.59  %
-   OTHER OWN:                10.59 %
+   WHITE OWN:                59.62 %
+   BLACK OWN:                0.12  %
+   NATIVE OWN:               0.52  %
+   ASIAN OWN:                0.40  %
+   OTHER OWN:                7.18  %
 
-   WHITE RENT:               93.22 %
-   BLACK RENT:               0.59  %
-   NATIVE RENT:              5.13  %
-   ASIAN RENT:               1.06  %
+   WHITE RENT:               29.98 %
+   BLACK RENT:               0.19  %
+   NATIVE RENT:              1.65  %
+   ASIAN RENT:               0.34  %
    OTHER RENT:               0.00  %
 
 IL	
@@ -451,16 +451,16 @@ IL
    95TH PERCENTILE:          5.38  
    PERCENTAGE OF 85+:        1.29  %
 
-   WHITE OWN:                82.57 %
-   BLACK OWN:                6.64  %
-   NATIVE OWN:               0.10  %
-   ASIAN OWN:                1.39  %
-   OTHER OWN:                9.30  %
+   WHITE OWN:                50.89 %
+   BLACK OWN:                4.09  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.85  %
+   OTHER OWN:                5.73  %
 
-   WHITE RENT:               68.34 %
-   BLACK RENT:               23.49 %
-   NATIVE RENT:              5.51  %
-   ASIAN RENT:               2.66  %
+   WHITE RENT:               26.22 %
+   BLACK RENT:               9.01  %
+   NATIVE RENT:              2.11  %
+   ASIAN RENT:               1.02  %
    OTHER RENT:               0.00  %
 
 IN	
@@ -482,16 +482,16 @@ IN
    95TH PERCENTILE:          5.48  
    PERCENTAGE OF 85+:        1.29  %
 
-   WHITE OWN:                90.44 %
-   BLACK OWN:                5.15  %
-   NATIVE OWN:               0.17  %
-   ASIAN OWN:                0.37  %
-   OTHER OWN:                3.88  %
+   WHITE OWN:                61.51 %
+   BLACK OWN:                3.50  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                0.25  %
+   OTHER OWN:                2.64  %
 
-   WHITE RENT:               83.99 %
-   BLACK RENT:               13.73 %
-   NATIVE RENT:              1.25  %
-   ASIAN RENT:               1.03  %
+   WHITE RENT:               26.87 %
+   BLACK RENT:               4.39  %
+   NATIVE RENT:              0.40  %
+   ASIAN RENT:               0.33  %
    OTHER RENT:               0.00  %
 
 KS	
@@ -513,16 +513,16 @@ KS
    95TH PERCENTILE:          5.52  
    PERCENTAGE OF 85+:        1.70  %
 
-   WHITE OWN:                86.11 %
-   BLACK OWN:                3.41  %
-   NATIVE OWN:               0.51  %
-   ASIAN OWN:                0.54  %
-   OTHER OWN:                9.44  %
+   WHITE OWN:                57.60 %
+   BLACK OWN:                2.28  %
+   NATIVE OWN:               0.34  %
+   ASIAN OWN:                0.36  %
+   OTHER OWN:                6.32  %
 
-   WHITE RENT:               85.34 %
-   BLACK RENT:               9.53  %
-   NATIVE RENT:              3.45  %
-   ASIAN RENT:               1.68  %
+   WHITE RENT:               28.25 %
+   BLACK RENT:               3.16  %
+   NATIVE RENT:              1.14  %
+   ASIAN RENT:               0.56  %
    OTHER RENT:               0.00  %
 
 KY	
@@ -544,16 +544,16 @@ KY
    95TH PERCENTILE:          5.37  
    PERCENTAGE OF 85+:        1.26  %
 
-   WHITE OWN:                94.03 %
-   BLACK OWN:                5.10  %
-   NATIVE OWN:               0.10  %
-   ASIAN OWN:                0.26  %
-   OTHER OWN:                0.52  %
+   WHITE OWN:                61.54 %
+   BLACK OWN:                3.34  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                0.34  %
 
-   WHITE RENT:               84.92 %
-   BLACK RENT:               13.87 %
-   NATIVE RENT:              0.51  %
-   ASIAN RENT:               0.69  %
+   WHITE RENT:               29.34 %
+   BLACK RENT:               4.79  %
+   NATIVE RENT:              0.18  %
+   ASIAN RENT:               0.24  %
    OTHER RENT:               0.00  %
 
 LA	
@@ -575,16 +575,16 @@ LA
    95TH PERCENTILE:          5.12  
    PERCENTAGE OF 85+:        1.03  %
 
-   WHITE OWN:                74.81 %
-   BLACK OWN:                21.58 %
-   NATIVE OWN:               0.30  %
-   ASIAN OWN:                0.50  %
-   OTHER OWN:                2.81  %
+   WHITE OWN:                46.74 %
+   BLACK OWN:                13.49 %
+   NATIVE OWN:               0.19  %
+   ASIAN OWN:                0.31  %
+   OTHER OWN:                1.75  %
 
-   WHITE RENT:               58.14 %
-   BLACK RENT:               39.53 %
-   NATIVE RENT:              1.17  %
-   ASIAN RENT:               1.16  %
+   WHITE RENT:               21.81 %
+   BLACK RENT:               14.83 %
+   NATIVE RENT:              0.44  %
+   ASIAN RENT:               0.44  %
    OTHER RENT:               0.00  %
 
 MA	
@@ -606,16 +606,16 @@ MA
    95TH PERCENTILE:          5.41  
    PERCENTAGE OF 85+:        1.53  %
 
-   WHITE OWN:                93.95 %
-   BLACK OWN:                1.46  %
-   NATIVE OWN:               0.11  %
-   ASIAN OWN:                0.98  %
-   OTHER OWN:                3.50  %
+   WHITE OWN:                50.85 %
+   BLACK OWN:                0.79  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.53  %
+   OTHER OWN:                1.89  %
 
-   WHITE RENT:               84.92 %
-   BLACK RENT:               8.15  %
-   NATIVE RENT:              4.33  %
-   ASIAN RENT:               2.60  %
+   WHITE RENT:               38.96 %
+   BLACK RENT:               3.74  %
+   NATIVE RENT:              1.99  %
+   ASIAN RENT:               1.19  %
    OTHER RENT:               0.00  %
 
 MD	
@@ -637,16 +637,16 @@ MD
    95TH PERCENTILE:          5.88  
    PERCENTAGE OF 85+:        0.97  %
 
-   WHITE OWN:                79.21 %
-   BLACK OWN:                15.21 %
-   NATIVE OWN:               0.19  %
-   ASIAN OWN:                2.14  %
-   OTHER OWN:                3.24  %
+   WHITE OWN:                50.32 %
+   BLACK OWN:                9.67  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                1.36  %
+   OTHER OWN:                2.06  %
 
-   WHITE RENT:               58.02 %
-   BLACK RENT:               38.06 %
-   NATIVE RENT:              1.57  %
-   ASIAN RENT:               2.35  %
+   WHITE RENT:               21.16 %
+   BLACK RENT:               13.88 %
+   NATIVE RENT:              0.57  %
+   ASIAN RENT:               0.86  %
    OTHER RENT:               0.00  %
 
 ME	
@@ -668,16 +668,16 @@ ME
    95TH PERCENTILE:          5.31  
    PERCENTAGE OF 85+:        1.48  %
 
-   WHITE OWN:                98.91 %
-   BLACK OWN:                0.14  %
-   NATIVE OWN:               0.30  %
-   ASIAN OWN:                0.25  %
-   OTHER OWN:                0.40  %
+   WHITE OWN:                62.97 %
+   BLACK OWN:                0.09  %
+   NATIVE OWN:               0.19  %
+   ASIAN OWN:                0.16  %
+   OTHER OWN:                0.25  %
 
-   WHITE RENT:               97.94 %
-   BLACK RENT:               0.68  %
-   NATIVE RENT:              0.81  %
-   ASIAN RENT:               0.57  %
+   WHITE RENT:               35.59 %
+   BLACK RENT:               0.25  %
+   NATIVE RENT:              0.29  %
+   ASIAN RENT:               0.21  %
    OTHER RENT:               0.00  %
 
 MI	
@@ -699,16 +699,16 @@ MI
    95TH PERCENTILE:          5.49  
    PERCENTAGE OF 85+:        1.15  %
 
-   WHITE OWN:                85.31 %
-   BLACK OWN:                8.92  %
-   NATIVE OWN:               0.36  %
-   ASIAN OWN:                0.63  %
-   OTHER OWN:                4.79  %
+   WHITE OWN:                58.35 %
+   BLACK OWN:                6.10  %
+   NATIVE OWN:               0.25  %
+   ASIAN OWN:                0.43  %
+   OTHER OWN:                3.27  %
 
-   WHITE RENT:               72.60 %
-   BLACK RENT:               23.94 %
-   NATIVE RENT:              2.01  %
-   ASIAN RENT:               1.45  %
+   WHITE RENT:               22.94 %
+   BLACK RENT:               7.57  %
+   NATIVE RENT:              0.64  %
+   ASIAN RENT:               0.46  %
    OTHER RENT:               0.00  %
 
 MN	
@@ -730,16 +730,16 @@ MN
    95TH PERCENTILE:          5.59  
    PERCENTAGE OF 85+:        1.57  %
 
-   WHITE OWN:                95.95 %
-   BLACK OWN:                0.89  %
-   NATIVE OWN:               0.49  %
-   ASIAN OWN:                0.66  %
-   OTHER OWN:                2.01  %
+   WHITE OWN:                65.12 %
+   BLACK OWN:                0.60  %
+   NATIVE OWN:               0.33  %
+   ASIAN OWN:                0.45  %
+   OTHER OWN:                1.36  %
 
-   WHITE RENT:               90.26 %
-   BLACK RENT:               4.91  %
-   NATIVE RENT:              2.53  %
-   ASIAN RENT:               2.30  %
+   WHITE RENT:               29.01 %
+   BLACK RENT:               1.58  %
+   NATIVE RENT:              0.81  %
+   ASIAN RENT:               0.74  %
    OTHER RENT:               0.00  %
 
 MO	
@@ -761,16 +761,16 @@ MO
    95TH PERCENTILE:          5.33  
    PERCENTAGE OF 85+:        1.59  %
 
-   WHITE OWN:                89.90 %
-   BLACK OWN:                6.97  %
-   NATIVE OWN:               0.27  %
-   ASIAN OWN:                0.45  %
-   OTHER OWN:                2.41  %
+   WHITE OWN:                58.61 %
+   BLACK OWN:                4.54  %
+   NATIVE OWN:               0.18  %
+   ASIAN OWN:                0.29  %
+   OTHER OWN:                1.57  %
 
-   WHITE RENT:               79.96 %
-   BLACK RENT:               17.92 %
-   NATIVE RENT:              1.03  %
-   ASIAN RENT:               1.09  %
+   WHITE RENT:               27.83 %
+   BLACK RENT:               6.24  %
+   NATIVE RENT:              0.36  %
+   ASIAN RENT:               0.38  %
    OTHER RENT:               0.00  %
 
 MS	
@@ -792,16 +792,16 @@ MS
    95TH PERCENTILE:          5.25  
    PERCENTAGE OF 85+:        1.26  %
 
-   WHITE OWN:                72.00 %
-   BLACK OWN:                27.03 %
-   NATIVE OWN:               0.22  %
-   ASIAN OWN:                0.22  %
-   OTHER OWN:                0.52  %
+   WHITE OWN:                48.56 %
+   BLACK OWN:                18.23 %
+   NATIVE OWN:               0.15  %
+   ASIAN OWN:                0.15  %
+   OTHER OWN:                0.35  %
 
-   WHITE RENT:               55.14 %
-   BLACK RENT:               43.47 %
-   NATIVE RENT:              0.55  %
-   ASIAN RENT:               0.84  %
+   WHITE RENT:               17.95 %
+   BLACK RENT:               14.15 %
+   NATIVE RENT:              0.18  %
+   ASIAN RENT:               0.27  %
    OTHER RENT:               0.00  %
 
 MT	
@@ -823,16 +823,16 @@ MT
    95TH PERCENTILE:          5.30  
    PERCENTAGE OF 85+:        1.34  %
 
-   WHITE OWN:                94.45 %
-   BLACK OWN:                0.13  %
-   NATIVE OWN:               2.77  %
-   ASIAN OWN:                0.27  %
-   OTHER OWN:                2.39  %
+   WHITE OWN:                57.87 %
+   BLACK OWN:                0.08  %
+   NATIVE OWN:               1.70  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                1.46  %
 
-   WHITE RENT:               91.21 %
-   BLACK RENT:               0.55  %
-   NATIVE RENT:              7.66  %
-   ASIAN RENT:               0.58  %
+   WHITE RENT:               35.32 %
+   BLACK RENT:               0.21  %
+   NATIVE RENT:              2.97  %
+   ASIAN RENT:               0.23  %
    OTHER RENT:               0.00  %
 
 NC	
@@ -854,16 +854,16 @@ NC
    95TH PERCENTILE:          5.30  
    PERCENTAGE OF 85+:        1.06  %
 
-   WHITE OWN:                83.01 %
-   BLACK OWN:                14.61 %
-   NATIVE OWN:               0.72  %
-   ASIAN OWN:                0.44  %
-   OTHER OWN:                1.21  %
+   WHITE OWN:                52.66 %
+   BLACK OWN:                9.27  %
+   NATIVE OWN:               0.46  %
+   ASIAN OWN:                0.28  %
+   OTHER OWN:                0.77  %
 
-   WHITE RENT:               65.84 %
-   BLACK RENT:               31.55 %
-   NATIVE RENT:              1.65  %
-   ASIAN RENT:               0.96  %
+   WHITE RENT:               24.07 %
+   BLACK RENT:               11.53 %
+   NATIVE RENT:              0.60  %
+   ASIAN RENT:               0.35  %
    OTHER RENT:               0.00  %
 
 ND	
@@ -885,16 +885,16 @@ ND
    95TH PERCENTILE:          5.53  
    PERCENTAGE OF 85+:        1.76  %
 
-   WHITE OWN:                97.31 %
-   BLACK OWN:                0.10  %
-   NATIVE OWN:               1.61  %
-   ASIAN OWN:                0.23  %
-   OTHER OWN:                0.76  %
+   WHITE OWN:                58.32 %
+   BLACK OWN:                0.06  %
+   NATIVE OWN:               0.96  %
+   ASIAN OWN:                0.14  %
+   OTHER OWN:                0.45  %
 
-   WHITE RENT:               93.13 %
-   BLACK RENT:               0.65  %
-   NATIVE RENT:              5.48  %
-   ASIAN RENT:               0.73  %
+   WHITE RENT:               37.31 %
+   BLACK RENT:               0.26  %
+   NATIVE RENT:              2.20  %
+   ASIAN RENT:               0.29  %
    OTHER RENT:               0.00  %
 
 NE	
@@ -916,16 +916,16 @@ NE
    95TH PERCENTILE:          5.66  
    PERCENTAGE OF 85+:        1.85  %
 
-   WHITE OWN:                92.36 %
-   BLACK OWN:                2.14  %
-   NATIVE OWN:               0.25  %
-   ASIAN OWN:                0.32  %
-   OTHER OWN:                4.92  %
+   WHITE OWN:                60.40 %
+   BLACK OWN:                1.40  %
+   NATIVE OWN:               0.17  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                3.22  %
 
-   WHITE RENT:               89.86 %
-   BLACK RENT:               6.51  %
-   NATIVE RENT:              2.56  %
-   ASIAN RENT:               1.07  %
+   WHITE RENT:               31.10 %
+   BLACK RENT:               2.25  %
+   NATIVE RENT:              0.89  %
+   ASIAN RENT:               0.37  %
    OTHER RENT:               0.00  %
 
 NH	
@@ -947,16 +947,16 @@ NH
    95TH PERCENTILE:          5.42  
    PERCENTAGE OF 85+:        1.20  %
 
-   WHITE OWN:                98.36 %
-   BLACK OWN:                0.30  %
-   NATIVE OWN:               0.10  %
-   ASIAN OWN:                0.50  %
-   OTHER OWN:                0.74  %
+   WHITE OWN:                61.21 %
+   BLACK OWN:                0.19  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.31  %
+   OTHER OWN:                0.46  %
 
-   WHITE RENT:               97.13 %
-   BLACK RENT:               1.14  %
-   NATIVE RENT:              0.83  %
-   ASIAN RENT:               0.90  %
+   WHITE RENT:               36.68 %
+   BLACK RENT:               0.43  %
+   NATIVE RENT:              0.31  %
+   ASIAN RENT:               0.34  %
    OTHER RENT:               0.00  %
 
 NJ	
@@ -978,16 +978,16 @@ NJ
    95TH PERCENTILE:          5.58  
    PERCENTAGE OF 85+:        1.24  %
 
-   WHITE OWN:                84.78 %
-   BLACK OWN:                5.87  %
-   NATIVE OWN:               0.12  %
-   ASIAN OWN:                2.22  %
-   OTHER OWN:                7.00  %
+   WHITE OWN:                52.92 %
+   BLACK OWN:                3.67  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                1.39  %
+   OTHER OWN:                4.37  %
 
-   WHITE RENT:               69.09 %
-   BLACK RENT:               21.71 %
-   NATIVE RENT:              6.05  %
-   ASIAN RENT:               3.15  %
+   WHITE RENT:               25.96 %
+   BLACK RENT:               8.16  %
+   NATIVE RENT:              2.27  %
+   ASIAN RENT:               1.18  %
    OTHER RENT:               0.00  %
 
 NM	
@@ -1009,16 +1009,16 @@ NM
    95TH PERCENTILE:          4.97  
    PERCENTAGE OF 85+:        0.94  %
 
-   WHITE OWN:                43.34 %
-   BLACK OWN:                0.74  %
-   NATIVE OWN:               2.91  %
-   ASIAN OWN:                0.32  %
-   OTHER OWN:                52.70 %
+   WHITE OWN:                32.96 %
+   BLACK OWN:                0.56  %
+   NATIVE OWN:               2.22  %
+   ASIAN OWN:                0.24  %
+   OTHER OWN:                40.08 %
 
-   WHITE RENT:               77.28 %
-   BLACK RENT:               3.39  %
-   NATIVE RENT:              18.26 %
-   ASIAN RENT:               1.06  %
+   WHITE RENT:               18.51 %
+   BLACK RENT:               0.81  %
+   NATIVE RENT:              4.37  %
+   ASIAN RENT:               0.25  %
    OTHER RENT:               0.00  %
 
 NV	
@@ -1040,16 +1040,16 @@ NV
    95TH PERCENTILE:          4.78  
    PERCENTAGE OF 85+:        0.62  %
 
-   WHITE OWN:                77.16 %
-   BLACK OWN:                3.60  %
-   NATIVE OWN:               1.03  %
-   ASIAN OWN:                2.08  %
-   OTHER OWN:                16.13 %
+   WHITE OWN:                39.71 %
+   BLACK OWN:                1.85  %
+   NATIVE OWN:               0.53  %
+   ASIAN OWN:                1.07  %
+   OTHER OWN:                8.30  %
 
-   WHITE RENT:               82.91 %
-   BLACK RENT:               8.47  %
-   NATIVE RENT:              5.96  %
-   ASIAN RENT:               2.65  %
+   WHITE RENT:               40.24 %
+   BLACK RENT:               4.11  %
+   NATIVE RENT:              2.89  %
+   ASIAN RENT:               1.29  %
    OTHER RENT:               0.00  %
 
 NY	
@@ -1071,16 +1071,16 @@ NY
    95TH PERCENTILE:          5.05  
    PERCENTAGE OF 85+:        1.38  %
 
-   WHITE OWN:                86.63 %
-   BLACK OWN:                5.53  %
-   NATIVE OWN:               0.18  %
-   ASIAN OWN:                1.69  %
-   OTHER OWN:                5.96  %
+   WHITE OWN:                39.15 %
+   BLACK OWN:                2.50  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.76  %
+   OTHER OWN:                2.69  %
 
-   WHITE RENT:               64.47 %
-   BLACK RENT:               22.97 %
-   NATIVE RENT:              8.51  %
-   ASIAN RENT:               4.05  %
+   WHITE RENT:               35.34 %
+   BLACK RENT:               12.59 %
+   NATIVE RENT:              4.66  %
+   ASIAN RENT:               2.22  %
    OTHER RENT:               0.00  %
 
 OH	
@@ -1102,16 +1102,16 @@ OH
    95TH PERCENTILE:          5.65  
    PERCENTAGE OF 85+:        1.27  %
 
-   WHITE OWN:                90.50 %
-   BLACK OWN:                6.40  %
-   NATIVE OWN:               0.13  %
-   ASIAN OWN:                0.50  %
-   OTHER OWN:                2.47  %
+   WHITE OWN:                58.87 %
+   BLACK OWN:                4.16  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.32  %
+   OTHER OWN:                1.61  %
 
-   WHITE RENT:               79.19 %
-   BLACK RENT:               18.72 %
-   NATIVE RENT:              1.00  %
-   ASIAN RENT:               1.09  %
+   WHITE RENT:               27.68 %
+   BLACK RENT:               6.54  %
+   NATIVE RENT:              0.35  %
+   ASIAN RENT:               0.38  %
    OTHER RENT:               0.00  %
 
 OK	
@@ -1133,16 +1133,16 @@ OK
    95TH PERCENTILE:          5.13  
    PERCENTAGE OF 85+:        1.46  %
 
-   WHITE OWN:                82.94 %
-   BLACK OWN:                4.99  %
-   NATIVE OWN:               5.36  %
-   ASIAN OWN:                0.54  %
-   OTHER OWN:                6.17  %
+   WHITE OWN:                54.47 %
+   BLACK OWN:                3.28  %
+   NATIVE OWN:               3.52  %
+   ASIAN OWN:                0.35  %
+   OTHER OWN:                4.05  %
 
-   WHITE RENT:               78.29 %
-   BLACK RENT:               11.38 %
-   NATIVE RENT:              8.79  %
-   ASIAN RENT:               1.54  %
+   WHITE RENT:               26.88 %
+   BLACK RENT:               3.91  %
+   NATIVE RENT:              3.02  %
+   ASIAN RENT:               0.53  %
    OTHER RENT:               0.00  %
 
 OR	
@@ -1164,16 +1164,16 @@ OR
    95TH PERCENTILE:          5.28  
    PERCENTAGE OF 85+:        1.37  %
 
-   WHITE OWN:                91.45 %
-   BLACK OWN:                0.96  %
-   NATIVE OWN:               0.70  %
-   ASIAN OWN:                1.50  %
-   OTHER OWN:                5.39  %
+   WHITE OWN:                53.68 %
+   BLACK OWN:                0.56  %
+   NATIVE OWN:               0.41  %
+   ASIAN OWN:                0.88  %
+   OTHER OWN:                3.17  %
 
-   WHITE RENT:               91.28 %
-   BLACK RENT:               2.48  %
-   NATIVE RENT:              3.55  %
-   ASIAN RENT:               2.69  %
+   WHITE RENT:               37.70 %
+   BLACK RENT:               1.02  %
+   NATIVE RENT:              1.47  %
+   ASIAN RENT:               1.11  %
    OTHER RENT:               0.00  %
 
 PA	
@@ -1195,16 +1195,16 @@ PA
    95TH PERCENTILE:          5.71  
    PERCENTAGE OF 85+:        1.45  %
 
-   WHITE OWN:                89.32 %
-   BLACK OWN:                6.30  %
-   NATIVE OWN:               0.08  %
-   ASIAN OWN:                0.62  %
-   OTHER OWN:                3.68  %
+   WHITE OWN:                61.36 %
+   BLACK OWN:                4.33  %
+   NATIVE OWN:               0.05  %
+   ASIAN OWN:                0.42  %
+   OTHER OWN:                2.53  %
 
-   WHITE RENT:               82.19 %
-   BLACK RENT:               14.58 %
-   NATIVE RENT:              1.79  %
-   ASIAN RENT:               1.44  %
+   WHITE RENT:               25.73 %
+   BLACK RENT:               4.56  %
+   NATIVE RENT:              0.56  %
+   ASIAN RENT:               0.45  %
    OTHER RENT:               0.00  %
 
 PR	
@@ -1257,16 +1257,16 @@ RI
    95TH PERCENTILE:          5.28  
    PERCENTAGE OF 85+:        1.60  %
 
-   WHITE OWN:                94.42 %
-   BLACK OWN:                1.17  %
-   NATIVE OWN:               0.19  %
-   ASIAN OWN:                0.68  %
-   OTHER OWN:                3.54  %
+   WHITE OWN:                52.37 %
+   BLACK OWN:                0.65  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                0.38  %
+   OTHER OWN:                1.97  %
 
-   WHITE RENT:               87.83 %
-   BLACK RENT:               6.11  %
-   NATIVE RENT:              4.25  %
-   ASIAN RENT:               1.82  %
+   WHITE RENT:               39.11 %
+   BLACK RENT:               2.72  %
+   NATIVE RENT:              1.89  %
+   ASIAN RENT:               0.81  %
    OTHER RENT:               0.00  %
 
 SC	
@@ -1288,16 +1288,16 @@ SC
    95TH PERCENTILE:          5.36  
    PERCENTAGE OF 85+:        0.88  %
 
-   WHITE OWN:                77.59 %
-   BLACK OWN:                20.95 %
-   NATIVE OWN:               0.14  %
-   ASIAN OWN:                0.38  %
-   OTHER OWN:                0.95  %
+   WHITE OWN:                50.52 %
+   BLACK OWN:                13.64 %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.25  %
+   OTHER OWN:                0.62  %
 
-   WHITE RENT:               63.61 %
-   BLACK RENT:               34.93 %
-   NATIVE RENT:              0.71  %
-   ASIAN RENT:               0.75  %
+   WHITE RENT:               22.19 %
+   BLACK RENT:               12.18 %
+   NATIVE RENT:              0.25  %
+   ASIAN RENT:               0.26  %
    OTHER RENT:               0.00  %
 
 SD	
@@ -1319,16 +1319,16 @@ SD
    95TH PERCENTILE:          5.47  
    PERCENTAGE OF 85+:        1.92  %
 
-   WHITE OWN:                96.58 %
-   BLACK OWN:                0.16  %
-   NATIVE OWN:               2.01  %
-   ASIAN OWN:                0.18  %
-   OTHER OWN:                1.08  %
+   WHITE OWN:                58.97 %
+   BLACK OWN:                0.10  %
+   NATIVE OWN:               1.22  %
+   ASIAN OWN:                0.11  %
+   OTHER OWN:                0.66  %
 
-   WHITE RENT:               88.99 %
-   BLACK RENT:               0.77  %
-   NATIVE RENT:              9.68  %
-   ASIAN RENT:               0.56  %
+   WHITE RENT:               34.66 %
+   BLACK RENT:               0.30  %
+   NATIVE RENT:              3.77  %
+   ASIAN RENT:               0.22  %
    OTHER RENT:               0.00  %
 
 TN	
@@ -1350,16 +1350,16 @@ TN
    95TH PERCENTILE:          5.38  
    PERCENTAGE OF 85+:        1.21  %
 
-   WHITE OWN:                87.52 %
-   BLACK OWN:                11.32 %
-   NATIVE OWN:               0.15  %
-   ASIAN OWN:                0.36  %
-   OTHER OWN:                0.66  %
+   WHITE OWN:                56.27 %
+   BLACK OWN:                7.28  %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.23  %
+   OTHER OWN:                0.42  %
 
-   WHITE RENT:               73.87 %
-   BLACK RENT:               24.66 %
-   NATIVE RENT:              0.58  %
-   ASIAN RENT:               0.89  %
+   WHITE RENT:               26.37 %
+   BLACK RENT:               8.80  %
+   NATIVE RENT:              0.21  %
+   ASIAN RENT:               0.32  %
    OTHER RENT:               0.00  %
 
 TX	
@@ -1381,16 +1381,16 @@ TX
    95TH PERCENTILE:          4.99  
    PERCENTAGE OF 85+:        0.98  %
 
-   WHITE OWN:                53.18 %
-   BLACK OWN:                5.77  %
-   NATIVE OWN:               0.20  %
-   ASIAN OWN:                0.82  %
-   OTHER OWN:                40.03 %
+   WHITE OWN:                36.04 %
+   BLACK OWN:                3.91  %
+   NATIVE OWN:               0.13  %
+   ASIAN OWN:                0.56  %
+   OTHER OWN:                27.12 %
 
-   WHITE RENT:               70.98 %
-   BLACK RENT:               16.05 %
-   NATIVE RENT:              10.85 %
-   ASIAN RENT:               2.12  %
+   WHITE RENT:               22.88 %
+   BLACK RENT:               5.17  %
+   NATIVE RENT:              3.50  %
+   ASIAN RENT:               0.68  %
    OTHER RENT:               0.00  %
 
 UT	
@@ -1412,16 +1412,16 @@ UT
    95TH PERCENTILE:          5.77  
    PERCENTAGE OF 85+:        0.79  %
 
-   WHITE OWN:                86.35 %
-   BLACK OWN:                0.35  %
-   NATIVE OWN:               0.49  %
-   ASIAN OWN:                1.07  %
-   OTHER OWN:                11.74 %
+   WHITE OWN:                58.51 %
+   BLACK OWN:                0.24  %
+   NATIVE OWN:               0.33  %
+   ASIAN OWN:                0.72  %
+   OTHER OWN:                7.96  %
 
-   WHITE RENT:               90.77 %
-   BLACK RENT:               1.41  %
-   NATIVE RENT:              5.22  %
-   ASIAN RENT:               2.60  %
+   WHITE RENT:               29.27 %
+   BLACK RENT:               0.45  %
+   NATIVE RENT:              1.68  %
+   ASIAN RENT:               0.84  %
    OTHER RENT:               0.00  %
 
 VA	
@@ -1443,16 +1443,16 @@ VA
    95TH PERCENTILE:          5.73  
    PERCENTAGE OF 85+:        0.97  %
 
-   WHITE OWN:                82.67 %
-   BLACK OWN:                12.74 %
-   NATIVE OWN:               0.18  %
-   ASIAN OWN:                1.73  %
-   OTHER OWN:                2.68  %
+   WHITE OWN:                52.59 %
+   BLACK OWN:                8.11  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                1.10  %
+   OTHER OWN:                1.70  %
 
-   WHITE RENT:               69.85 %
-   BLACK RENT:               26.11 %
-   NATIVE RENT:              1.74  %
-   ASIAN RENT:               2.30  %
+   WHITE RENT:               25.42 %
+   BLACK RENT:               9.50  %
+   NATIVE RENT:              0.63  %
+   ASIAN RENT:               0.84  %
    OTHER RENT:               0.00  %
 
 VI	
@@ -1505,16 +1505,16 @@ VT
    95TH PERCENTILE:          5.51  
    PERCENTAGE OF 85+:        1.34  %
 
-   WHITE OWN:                98.98 %
-   BLACK OWN:                0.15  %
-   NATIVE OWN:               0.17  %
-   ASIAN OWN:                0.27  %
-   OTHER OWN:                0.42  %
+   WHITE OWN:                60.12 %
+   BLACK OWN:                0.09  %
+   NATIVE OWN:               0.10  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                0.26  %
 
-   WHITE RENT:               98.15 %
-   BLACK RENT:               0.57  %
-   NATIVE RENT:              0.68  %
-   ASIAN RENT:               0.61  %
+   WHITE RENT:               38.53 %
+   BLACK RENT:               0.22  %
+   NATIVE RENT:              0.27  %
+   ASIAN RENT:               0.24  %
    OTHER RENT:               0.00  %
 
 WA	
@@ -1536,16 +1536,16 @@ WA
    95TH PERCENTILE:          5.36  
    PERCENTAGE OF 85+:        1.16  %
 
-   WHITE OWN:                86.49 %
-   BLACK OWN:                1.67  %
-   NATIVE OWN:               0.83  %
-   ASIAN OWN:                2.80  %
-   OTHER OWN:                8.21  %
+   WHITE OWN:                51.56 %
+   BLACK OWN:                1.00  %
+   NATIVE OWN:               0.50  %
+   ASIAN OWN:                1.67  %
+   OTHER OWN:                4.90  %
 
-   WHITE RENT:               86.81 %
-   BLACK RENT:               4.84  %
-   NATIVE RENT:              4.27  %
-   ASIAN RENT:               4.08  %
+   WHITE RENT:               35.06 %
+   BLACK RENT:               1.95  %
+   NATIVE RENT:              1.73  %
+   ASIAN RENT:               1.65  %
    OTHER RENT:               0.00  %
 
 WI	
@@ -1567,16 +1567,16 @@ WI
    95TH PERCENTILE:          5.45  
    PERCENTAGE OF 85+:        1.52  %
 
-   WHITE OWN:                94.94 %
-   BLACK OWN:                1.72  %
-   NATIVE OWN:               0.36  %
-   ASIAN OWN:                0.34  %
-   OTHER OWN:                2.64  %
+   WHITE OWN:                59.46 %
+   BLACK OWN:                1.08  %
+   NATIVE OWN:               0.22  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                1.65  %
 
-   WHITE RENT:               86.96 %
-   BLACK RENT:               9.20  %
-   NATIVE RENT:              2.35  %
-   ASIAN RENT:               1.48  %
+   WHITE RENT:               32.51 %
+   BLACK RENT:               3.44  %
+   NATIVE RENT:              0.88  %
+   ASIAN RENT:               0.55  %
    OTHER RENT:               0.00  %
 
 WV	
@@ -1598,16 +1598,16 @@ WV
    95TH PERCENTILE:          5.47  
    PERCENTAGE OF 85+:        1.42  %
 
-   WHITE OWN:                96.56 %
-   BLACK OWN:                2.72  %
-   NATIVE OWN:               0.09  %
-   ASIAN OWN:                0.25  %
-   OTHER OWN:                0.37  %
+   WHITE OWN:                68.20 %
+   BLACK OWN:                1.92  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.18  %
+   OTHER OWN:                0.26  %
 
-   WHITE RENT:               93.10 %
-   BLACK RENT:               5.87  %
-   NATIVE RENT:              0.35  %
-   ASIAN RENT:               0.69  %
+   WHITE RENT:               27.34 %
+   BLACK RENT:               1.72  %
+   NATIVE RENT:              0.10  %
+   ASIAN RENT:               0.20  %
    OTHER RENT:               0.00  %
 
 WY	
@@ -1629,14 +1629,15 @@ WY
    95TH PERCENTILE:          5.47  
    PERCENTAGE OF 85+:        1.00  %
 
-   WHITE OWN:                83.92 %
-   BLACK OWN:                0.44  %
-   NATIVE OWN:               0.81  %
-   ASIAN OWN:                0.34  %
-   OTHER OWN:                14.48 %
+   WHITE OWN:                55.28 %
+   BLACK OWN:                0.29  %
+   NATIVE OWN:               0.54  %
+   ASIAN OWN:                0.22  %
+   OTHER OWN:                9.54  %
 
-   WHITE RENT:               93.07 %
-   BLACK RENT:               1.34  %
-   NATIVE RENT:              4.81  %
-   ASIAN RENT:               0.78  %
+   WHITE RENT:               31.77 %
+   BLACK RENT:               0.46  %
+   NATIVE RENT:              1.64  %
+   ASIAN RENT:               0.27  %
    OTHER RENT:               0.00  %
+

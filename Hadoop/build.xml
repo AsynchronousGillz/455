@@ -4,6 +4,7 @@
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
+  <property name="util" location="util"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
   <property name="lib.dir" location="/usr/local/hadoop-2.7.3/share/hadoop" />
@@ -28,8 +29,7 @@
              debuglevel="lines,vars,source" includeantruntime="false"/>
   </target>
 
-  <target name="dist" depends="compile"
-        description="generate the distribution" >
+  <target name="dist" depends="compile" description="generate the distribution" >
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}"/>
 
@@ -37,10 +37,10 @@
     <jar jarfile="${dist}/HW3-PC.jar" basedir="${build}"/>
   </target>
 
-  <target name="clean"
-        description="clean up" >
+  <target name="clean" description="clean up" >
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>
+
 </project>

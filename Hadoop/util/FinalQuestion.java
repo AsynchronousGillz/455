@@ -17,7 +17,17 @@ public class FinalQuestion {
 		List<Double> nineFive = new ArrayList<>();
 		String stateValue = "";
 		double oldValue = 0;
-		try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
+		FileReader f = null;
+		try {
+			f = new FileReader(args[0]);
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println("Usage: <filename>");
+			System.exit(1);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try (BufferedReader br = new BufferedReader(f)) {
 			String tmpState = "";
 			double tmpOld = 0;
 			for (String line = ""; (line = br.readLine()) != null;) {
@@ -34,9 +44,6 @@ public class FinalQuestion {
 					oldValue = tmpOld;
 				}
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,14 +6,59 @@ ASSIGNMENT
 ==========
 https://www.cs.colostate.edu/~cs455/CS455-Spring17-HW3-PC.pdf
 
-This package includes the following files.
-
-README.txt [This file]
-build.xml
-
 To compile:
-    make all
+    ant
 
 To clean:
-    make clean
+    ant clean
+
+For Q7 and Q8:
+    javac util/FinalQuestion.java
+    java util/FinalQuestion Hadoop_output.txt
+
+For Q9:
+    On a per-state basis, what is the percentage of residences based on race that rented vs. owned.
+
+This package includes the following files.
+
+├── build.xml
+├── README.txt
+├── src
+│   └── cs455
+│       └── hadoop
+│           ├── data
+│           │   ├── DQ1.java
+│           │   ├── DQ2.java
+│           │   ├── DQ3.java
+│           │   ├── DQ4.java
+│           │   ├── DQ5.java
+│           │   ├── DQ6.java
+│           │   ├── DQ7.java
+│           │   ├── DQ8.java
+│           │   └── DQ9.java
+│           ├── job
+│           │   └── CensusJob.java
+│           ├── mapper
+│           │   └── CensusStateMapper.java
+│           ├── reducer
+│           │   └── CensusStateReducer.java
+│           ├── util
+│           │   ├── CollectData.java
+│           │   ├── ReduceStateData.java
+│           │   └── WritableStateData.java
+│           └── writables
+│               ├── WQ1.java
+│               ├── WQ2.java
+│               ├── WQ3.java
+│               ├── WQ4.java
+│               ├── WQ5.java
+│               ├── WQ6.java
+│               ├── WQ7.java
+│               ├── WQ8.java
+│               └── WQ9.java
+└── util
+    ├── FinalQuestion.java
+    ├── large_info.txt
+    ├── Q7_Q8.txt
+    └── small_info.txt
 
