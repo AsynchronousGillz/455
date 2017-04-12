@@ -1,0 +1,1643 @@
+AK	
+   RENT:                     43.90 %
+   OWN:                      56.10 %
+   F NEVER MARRIED:          7.44  %
+   M NEVER MARRIED:          12.33 %
+   HISPANIC MALE 00-18:      38.14 %
+   HISPANIC MALE 19-29:      26.06 %
+   HISPANIC MALE 30-39:      19.57 %
+   HISPANIC FEMALE 00-18:    41.04 %
+   HISPANIC FEMALE 19-29:    21.18 %
+   HISPANIC FEMALE 30-39:    19.59 %
+   URBAN:                    64.09 %
+   RURAL:                    35.91 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $500 to $549 
+   95TH PERCENTILE:          4.68  
+   PERCENTAGE OF 85+:        0.23  %
+
+   WHITE OWN:                41.84 %
+   BLACK OWN:                0.97  %
+   NATIVE OWN:               7.09  %
+   ASIAN OWN:                0.94  %
+   OTHER OWN:                2.62  %
+
+   WHITE RENT:               36.48 %
+   BLACK RENT:               2.56  %
+   NATIVE RENT:              5.87  %
+   ASIAN RENT:               1.62  %
+   OTHER RENT:               0.00  %
+
+AL	
+   RENT:                     29.53 %
+   OWN:                      70.47 %
+   F NEVER MARRIED:          8.63  %
+   M NEVER MARRIED:          10.05 %
+   HISPANIC MALE 00-18:      33.73 %
+   HISPANIC MALE 19-29:      24.64 %
+   HISPANIC MALE 30-39:      18.02 %
+   HISPANIC FEMALE 00-18:    34.53 %
+   HISPANIC FEMALE 19-29:    20.70 %
+   HISPANIC FEMALE 30-39:    16.84 %
+   URBAN:                    60.72 %
+   RURAL:                    39.28 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $200 to $249 
+   95TH PERCENTILE:          5.41  
+   PERCENTAGE OF 85+:        1.20  %
+
+   WHITE OWN:                52.87 %
+   BLACK OWN:                12.62 %
+   NATIVE OWN:               0.20  %
+   ASIAN OWN:                0.18  %
+   OTHER OWN:                0.37  %
+
+   WHITE RENT:               22.10 %
+   BLACK RENT:               11.17 %
+   NATIVE RENT:              0.20  %
+   ASIAN RENT:               0.30  %
+   OTHER RENT:               0.00  %
+
+AR	
+   RENT:                     30.44 %
+   OWN:                      69.56 %
+   F NEVER MARRIED:          7.21  %
+   M NEVER MARRIED:          8.93  %
+   HISPANIC MALE 00-18:      39.14 %
+   HISPANIC MALE 19-29:      25.88 %
+   HISPANIC MALE 30-39:      16.18 %
+   HISPANIC FEMALE 00-18:    39.62 %
+   HISPANIC FEMALE 19-29:    21.06 %
+   HISPANIC FEMALE 30-39:    15.88 %
+   URBAN:                    53.77 %
+   RURAL:                    46.23 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $200 to $249 
+   95TH PERCENTILE:          5.07  
+   PERCENTAGE OF 85+:        1.50  %
+
+   WHITE OWN:                56.60 %
+   BLACK OWN:                7.74  %
+   NATIVE OWN:               0.25  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                0.67  %
+
+   WHITE RENT:               26.39 %
+   BLACK RENT:               7.53  %
+   NATIVE RENT:              0.39  %
+   ASIAN RENT:               0.22  %
+   OTHER RENT:               0.00  %
+
+AZ	
+   RENT:                     35.82 %
+   OWN:                      64.18 %
+   F NEVER MARRIED:          8.56  %
+   M NEVER MARRIED:          11.19 %
+   HISPANIC MALE 00-18:      40.90 %
+   HISPANIC MALE 19-29:      21.68 %
+   HISPANIC MALE 30-39:      15.81 %
+   HISPANIC FEMALE 00-18:    39.96 %
+   HISPANIC FEMALE 19-29:    20.40 %
+   HISPANIC FEMALE 30-39:    15.40 %
+   URBAN:                    86.63 %
+   RURAL:                    13.37 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          4.80  
+   PERCENTAGE OF 85+:        1.03  %
+
+   WHITE OWN:                40.68 %
+   BLACK OWN:                0.93  %
+   NATIVE OWN:               1.45  %
+   ASIAN OWN:                0.50  %
+   OTHER OWN:                24.98 %
+
+   WHITE RENT:               25.69 %
+   BLACK RENT:               1.41  %
+   NATIVE RENT:              3.87  %
+   ASIAN RENT:               0.50  %
+   OTHER RENT:               0.00  %
+
+CA	
+   RENT:                     44.38 %
+   OWN:                      55.62 %
+   F NEVER MARRIED:          9.88  %
+   M NEVER MARRIED:          13.56 %
+   HISPANIC MALE 00-18:      37.09 %
+   HISPANIC MALE 19-29:      26.84 %
+   HISPANIC MALE 30-39:      17.12 %
+   HISPANIC FEMALE 00-18:    38.03 %
+   HISPANIC FEMALE 19-29:    22.76 %
+   HISPANIC FEMALE 30-39:    16.69 %
+   URBAN:                    91.88 %
+   RURAL:                    8.12  %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $175,000 - $199,999 
+   RENT MEDIAN COST:         $550 to $599 
+   95TH PERCENTILE:          4.81  
+   PERCENTAGE OF 85+:        1.01  %
+
+   WHITE OWN:                32.64 %
+   BLACK OWN:                2.05  %
+   NATIVE OWN:               0.24  %
+   ASIAN OWN:                3.14  %
+   OTHER OWN:                23.97 %
+
+   WHITE RENT:               25.91 %
+   BLACK RENT:               4.00  %
+   NATIVE RENT:              5.13  %
+   ASIAN RENT:               2.93  %
+   OTHER RENT:               0.00  %
+
+CO	
+   RENT:                     37.76 %
+   OWN:                      62.24 %
+   F NEVER MARRIED:          8.73  %
+   M NEVER MARRIED:          11.33 %
+   HISPANIC MALE 00-18:      38.40 %
+   HISPANIC MALE 19-29:      20.42 %
+   HISPANIC MALE 30-39:      16.78 %
+   HISPANIC FEMALE 00-18:    37.19 %
+   HISPANIC FEMALE 19-29:    19.77 %
+   HISPANIC FEMALE 30-39:    16.40 %
+   URBAN:                    79.85 %
+   RURAL:                    20.15 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.47  
+   PERCENTAGE OF 85+:        1.00  %
+
+   WHITE OWN:                46.77 %
+   BLACK OWN:                1.32  %
+   NATIVE OWN:               0.23  %
+   ASIAN OWN:                0.58  %
+   OTHER OWN:                15.27 %
+
+   WHITE RENT:               30.34 %
+   BLACK RENT:               2.31  %
+   NATIVE RENT:              2.52  %
+   ASIAN RENT:               0.65  %
+   OTHER RENT:               0.00  %
+
+CT	
+   RENT:                     34.38 %
+   OWN:                      65.62 %
+   F NEVER MARRIED:          10.88 %
+   M NEVER MARRIED:          12.56 %
+   HISPANIC MALE 00-18:      39.51 %
+   HISPANIC MALE 19-29:      23.62 %
+   HISPANIC MALE 30-39:      16.30 %
+   HISPANIC FEMALE 00-18:    36.91 %
+   HISPANIC FEMALE 19-29:    23.08 %
+   HISPANIC FEMALE 30-39:    16.45 %
+   URBAN:                    79.77 %
+   RURAL:                    20.23 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $175,000 - $199,999 
+   RENT MEDIAN COST:         $500 to $549 
+   95TH PERCENTILE:          5.57  
+   PERCENTAGE OF 85+:        1.43  %
+
+   WHITE OWN:                57.68 %
+   BLACK OWN:                1.76  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.52  %
+   OTHER OWN:                2.41  %
+
+   WHITE RENT:               29.06 %
+   BLACK RENT:               5.73  %
+   NATIVE RENT:              2.17  %
+   ASIAN RENT:               0.60  %
+   OTHER RENT:               0.00  %
+
+DC	
+   RENT:                     61.10 %
+   OWN:                      38.90 %
+   F NEVER MARRIED:          20.39 %
+   M NEVER MARRIED:          19.49 %
+   HISPANIC MALE 00-18:      24.85 %
+   HISPANIC MALE 19-29:      32.88 %
+   HISPANIC MALE 30-39:      20.97 %
+   HISPANIC FEMALE 00-18:    23.70 %
+   HISPANIC FEMALE 19-29:    27.77 %
+   HISPANIC FEMALE 30-39:    19.57 %
+   URBAN:                    100.00 %
+   RURAL:                    0.00  %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $100,000 - $124,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          4.42  
+   PERCENTAGE OF 85+:        1.29  %
+
+   WHITE OWN:                10.54 %
+   BLACK OWN:                20.95 %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.28  %
+   OTHER OWN:                1.69  %
+
+   WHITE RENT:               20.59 %
+   BLACK RENT:               42.82 %
+   NATIVE RENT:              1.80  %
+   ASIAN RENT:               1.26  %
+   OTHER RENT:               0.00  %
+
+DE	
+   RENT:                     29.77 %
+   OWN:                      70.23 %
+   F NEVER MARRIED:          10.28 %
+   M NEVER MARRIED:          11.56 %
+   HISPANIC MALE 00-18:      36.79 %
+   HISPANIC MALE 19-29:      25.41 %
+   HISPANIC MALE 30-39:      17.41 %
+   HISPANIC FEMALE 00-18:    37.68 %
+   HISPANIC FEMALE 19-29:    22.92 %
+   HISPANIC FEMALE 30-39:    16.43 %
+   URBAN:                    66.10 %
+   RURAL:                    33.90 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $100,000 - $124,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          5.84  
+   PERCENTAGE OF 85+:        1.07  %
+
+   WHITE OWN:                57.31 %
+   BLACK OWN:                6.87  %
+   NATIVE OWN:               0.14  %
+   ASIAN OWN:                0.65  %
+   OTHER OWN:                2.65  %
+
+   WHITE RENT:               22.64 %
+   BLACK RENT:               8.59  %
+   NATIVE RENT:              0.70  %
+   ASIAN RENT:               0.44  %
+   OTHER RENT:               0.00  %
+
+FL	
+   RENT:                     32.77 %
+   OWN:                      67.23 %
+   F NEVER MARRIED:          8.09  %
+   M NEVER MARRIED:          10.33 %
+   HISPANIC MALE 00-18:      27.79 %
+   HISPANIC MALE 19-29:      20.78 %
+   HISPANIC MALE 30-39:      16.66 %
+   HISPANIC FEMALE 00-18:    25.24 %
+   HISPANIC FEMALE 19-29:    18.53 %
+   HISPANIC FEMALE 30-39:    15.97 %
+   URBAN:                    85.05 %
+   RURAL:                    14.95 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          4.88  
+   PERCENTAGE OF 85+:        1.62  %
+
+   WHITE OWN:                50.70 %
+   BLACK OWN:                5.29  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                0.50  %
+   OTHER OWN:                5.17  %
+
+   WHITE RENT:               30.02 %
+   BLACK RENT:               6.75  %
+   NATIVE RENT:              1.04  %
+   ASIAN RENT:               0.42  %
+   OTHER RENT:               0.00  %
+
+GA	
+   RENT:                     35.07 %
+   OWN:                      64.93 %
+   F NEVER MARRIED:          9.28  %
+   M NEVER MARRIED:          11.05 %
+   HISPANIC MALE 00-18:      30.01 %
+   HISPANIC MALE 19-29:      33.35 %
+   HISPANIC MALE 30-39:      18.76 %
+   HISPANIC FEMALE 00-18:    34.76 %
+   HISPANIC FEMALE 19-29:    24.68 %
+   HISPANIC FEMALE 30-39:    17.88 %
+   URBAN:                    64.47 %
+   RURAL:                    35.53 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.43  
+   PERCENTAGE OF 85+:        0.88  %
+
+   WHITE OWN:                48.00 %
+   BLACK OWN:                10.77 %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.43  %
+   OTHER OWN:                1.08  %
+
+   WHITE RENT:               23.50 %
+   BLACK RENT:               15.11 %
+   NATIVE RENT:              0.48  %
+   ASIAN RENT:               0.53  %
+   OTHER RENT:               0.00  %
+
+HI	
+   RENT:                     46.13 %
+   OWN:                      53.87 %
+   F NEVER MARRIED:          9.63  %
+   M NEVER MARRIED:          13.73 %
+   HISPANIC MALE 00-18:      39.99 %
+   HISPANIC MALE 19-29:      21.81 %
+   HISPANIC MALE 30-39:      16.32 %
+   HISPANIC FEMALE 00-18:    39.83 %
+   HISPANIC FEMALE 19-29:    20.70 %
+   HISPANIC FEMALE 30-39:    16.55 %
+   URBAN:                    87.71 %
+   RURAL:                    12.29 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $200,000 - $249,999 
+   RENT MEDIAN COST:         $650 to $699 
+   95TH PERCENTILE:          4.39  
+   PERCENTAGE OF 85+:        0.94  %
+
+   WHITE OWN:                14.06 %
+   BLACK OWN:                0.20  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                33.83 %
+   OTHER OWN:                4.85  %
+
+   WHITE RENT:               21.28 %
+   BLACK RENT:               1.48  %
+   NATIVE RENT:              1.47  %
+   ASIAN RENT:               22.72 %
+   OTHER RENT:               0.00  %
+
+IA	
+   RENT:                     29.97 %
+   OWN:                      70.03 %
+   F NEVER MARRIED:          8.38  %
+   M NEVER MARRIED:          10.12 %
+   HISPANIC MALE 00-18:      41.31 %
+   HISPANIC MALE 19-29:      23.27 %
+   HISPANIC MALE 30-39:      15.57 %
+   HISPANIC FEMALE 00-18:    41.98 %
+   HISPANIC FEMALE 19-29:    20.39 %
+   HISPANIC FEMALE 30-39:    14.62 %
+   URBAN:                    60.74 %
+   RURAL:                    39.26 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.65  
+   PERCENTAGE OF 85+:        1.99  %
+
+   WHITE OWN:                65.86 %
+   BLACK OWN:                0.64  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                1.48  %
+
+   WHITE RENT:               29.80 %
+   BLACK RENT:               1.11  %
+   NATIVE RENT:              0.35  %
+   ASIAN RENT:               0.47  %
+   OTHER RENT:               0.00  %
+
+ID	
+   RENT:                     29.94 %
+   OWN:                      70.06 %
+   F NEVER MARRIED:          6.65  %
+   M NEVER MARRIED:          9.08  %
+   HISPANIC MALE 00-18:      42.00 %
+   HISPANIC MALE 19-29:      23.65 %
+   HISPANIC MALE 30-39:      16.40 %
+   HISPANIC FEMALE 00-18:    47.56 %
+   HISPANIC FEMALE 19-29:    19.90 %
+   HISPANIC FEMALE 30-39:    14.55 %
+   URBAN:                    55.30 %
+   RURAL:                    44.70 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.48  
+   PERCENTAGE OF 85+:        1.13  %
+
+   WHITE OWN:                59.62 %
+   BLACK OWN:                0.12  %
+   NATIVE OWN:               0.52  %
+   ASIAN OWN:                0.40  %
+   OTHER OWN:                7.18  %
+
+   WHITE RENT:               29.98 %
+   BLACK RENT:               0.19  %
+   NATIVE RENT:              1.65  %
+   ASIAN RENT:               0.34  %
+   OTHER RENT:               0.00  %
+
+IL	
+   RENT:                     35.77 %
+   OWN:                      64.23 %
+   F NEVER MARRIED:          10.36 %
+   M NEVER MARRIED:          12.21 %
+   HISPANIC MALE 00-18:      37.78 %
+   HISPANIC MALE 19-29:      25.49 %
+   HISPANIC MALE 30-39:      17.30 %
+   HISPANIC FEMALE 00-18:    39.74 %
+   HISPANIC FEMALE 19-29:    22.09 %
+   HISPANIC FEMALE 30-39:    16.50 %
+   URBAN:                    84.63 %
+   RURAL:                    15.37 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.38  
+   PERCENTAGE OF 85+:        1.29  %
+
+   WHITE OWN:                50.89 %
+   BLACK OWN:                4.09  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.85  %
+   OTHER OWN:                5.73  %
+
+   WHITE RENT:               26.22 %
+   BLACK RENT:               9.01  %
+   NATIVE RENT:              2.11  %
+   ASIAN RENT:               1.02  %
+   OTHER RENT:               0.00  %
+
+IN	
+   RENT:                     29.75 %
+   OWN:                      70.25 %
+   F NEVER MARRIED:          8.69  %
+   M NEVER MARRIED:          10.27 %
+   HISPANIC MALE 00-18:      39.25 %
+   HISPANIC MALE 19-29:      20.70 %
+   HISPANIC MALE 30-39:      16.48 %
+   HISPANIC FEMALE 00-18:    39.12 %
+   HISPANIC FEMALE 19-29:    20.16 %
+   HISPANIC FEMALE 30-39:    15.74 %
+   URBAN:                    66.33 %
+   RURAL:                    33.67 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.48  
+   PERCENTAGE OF 85+:        1.29  %
+
+   WHITE OWN:                61.51 %
+   BLACK OWN:                3.50  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                0.25  %
+   OTHER OWN:                2.64  %
+
+   WHITE RENT:               26.87 %
+   BLACK RENT:               4.39  %
+   NATIVE RENT:              0.40  %
+   ASIAN RENT:               0.33  %
+   OTHER RENT:               0.00  %
+
+KS	
+   RENT:                     32.07 %
+   OWN:                      67.93 %
+   F NEVER MARRIED:          7.67  %
+   M NEVER MARRIED:          9.88  %
+   HISPANIC MALE 00-18:      40.22 %
+   HISPANIC MALE 19-29:      24.10 %
+   HISPANIC MALE 30-39:      16.79 %
+   HISPANIC FEMALE 00-18:    41.96 %
+   HISPANIC FEMALE 19-29:    21.23 %
+   HISPANIC FEMALE 30-39:    14.95 %
+   URBAN:                    69.20 %
+   RURAL:                    30.80 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.52  
+   PERCENTAGE OF 85+:        1.70  %
+
+   WHITE OWN:                57.60 %
+   BLACK OWN:                2.28  %
+   NATIVE OWN:               0.34  %
+   ASIAN OWN:                0.36  %
+   OTHER OWN:                6.32  %
+
+   WHITE RENT:               28.25 %
+   BLACK RENT:               3.16  %
+   NATIVE RENT:              1.14  %
+   ASIAN RENT:               0.56  %
+   OTHER RENT:               0.00  %
+
+KY	
+   RENT:                     30.39 %
+   OWN:                      69.61 %
+   F NEVER MARRIED:          7.96  %
+   M NEVER MARRIED:          9.80  %
+   HISPANIC MALE 00-18:      34.32 %
+   HISPANIC MALE 19-29:      27.22 %
+   HISPANIC MALE 30-39:      17.08 %
+   HISPANIC FEMALE 00-18:    34.23 %
+   HISPANIC FEMALE 19-29:    21.94 %
+   HISPANIC FEMALE 30-39:    17.04 %
+   URBAN:                    52.94 %
+   RURAL:                    47.06 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.37  
+   PERCENTAGE OF 85+:        1.26  %
+
+   WHITE OWN:                61.54 %
+   BLACK OWN:                3.34  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                0.34  %
+
+   WHITE RENT:               29.34 %
+   BLACK RENT:               4.79  %
+   NATIVE RENT:              0.18  %
+   ASIAN RENT:               0.24  %
+   OTHER RENT:               0.00  %
+
+LA	
+   RENT:                     34.11 %
+   OWN:                      65.89 %
+   F NEVER MARRIED:          9.70  %
+   M NEVER MARRIED:          11.00 %
+   HISPANIC MALE 00-18:      31.48 %
+   HISPANIC MALE 19-29:      21.50 %
+   HISPANIC MALE 30-39:      17.46 %
+   HISPANIC FEMALE 00-18:    29.66 %
+   HISPANIC FEMALE 19-29:    19.18 %
+   HISPANIC FEMALE 30-39:    16.24 %
+   URBAN:                    68.89 %
+   RURAL:                    31.11 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.12  
+   PERCENTAGE OF 85+:        1.03  %
+
+   WHITE OWN:                46.74 %
+   BLACK OWN:                13.49 %
+   NATIVE OWN:               0.19  %
+   ASIAN OWN:                0.31  %
+   OTHER OWN:                1.75  %
+
+   WHITE RENT:               21.81 %
+   BLACK RENT:               14.83 %
+   NATIVE RENT:              0.44  %
+   ASIAN RENT:               0.44  %
+   OTHER RENT:               0.00  %
+
+MA	
+   RENT:                     40.75 %
+   OWN:                      59.25 %
+   F NEVER MARRIED:          12.72 %
+   M NEVER MARRIED:          13.84 %
+   HISPANIC MALE 00-18:      40.55 %
+   HISPANIC MALE 19-29:      25.13 %
+   HISPANIC MALE 30-39:      16.45 %
+   HISPANIC FEMALE 00-18:    38.13 %
+   HISPANIC FEMALE 19-29:    24.58 %
+   HISPANIC FEMALE 30-39:    16.39 %
+   URBAN:                    83.84 %
+   RURAL:                    16.16 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $150,000 - $174,999 
+   RENT MEDIAN COST:         $500 to $549 
+   95TH PERCENTILE:          5.41  
+   PERCENTAGE OF 85+:        1.53  %
+
+   WHITE OWN:                50.85 %
+   BLACK OWN:                0.79  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.53  %
+   OTHER OWN:                1.89  %
+
+   WHITE RENT:               38.96 %
+   BLACK RENT:               3.74  %
+   NATIVE RENT:              1.99  %
+   ASIAN RENT:               1.19  %
+   OTHER RENT:               0.00  %
+
+MD	
+   RENT:                     34.97 %
+   OWN:                      65.03 %
+   F NEVER MARRIED:          10.80 %
+   M NEVER MARRIED:          12.28 %
+   HISPANIC MALE 00-18:      31.38 %
+   HISPANIC MALE 19-29:      27.44 %
+   HISPANIC MALE 30-39:      19.40 %
+   HISPANIC FEMALE 00-18:    30.12 %
+   HISPANIC FEMALE 19-29:    23.52 %
+   HISPANIC FEMALE 30-39:    18.81 %
+   URBAN:                    82.27 %
+   RURAL:                    17.73 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $100,000 - $124,999 
+   RENT MEDIAN COST:         $450 to $499 
+   95TH PERCENTILE:          5.88  
+   PERCENTAGE OF 85+:        0.97  %
+
+   WHITE OWN:                50.32 %
+   BLACK OWN:                9.67  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                1.36  %
+   OTHER OWN:                2.06  %
+
+   WHITE RENT:               21.16 %
+   BLACK RENT:               13.88 %
+   NATIVE RENT:              0.57  %
+   ASIAN RENT:               0.86  %
+   OTHER RENT:               0.00  %
+
+ME	
+   RENT:                     29.53 %
+   OWN:                      70.47 %
+   F NEVER MARRIED:          8.64  %
+   M NEVER MARRIED:          10.34 %
+   HISPANIC MALE 00-18:      38.97 %
+   HISPANIC MALE 19-29:      24.74 %
+   HISPANIC MALE 30-39:      17.66 %
+   HISPANIC FEMALE 00-18:    38.38 %
+   HISPANIC FEMALE 19-29:    21.63 %
+   HISPANIC FEMALE 30-39:    17.60 %
+   URBAN:                    40.33 %
+   RURAL:                    59.67 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.31  
+   PERCENTAGE OF 85+:        1.48  %
+
+   WHITE OWN:                62.97 %
+   BLACK OWN:                0.09  %
+   NATIVE OWN:               0.19  %
+   ASIAN OWN:                0.16  %
+   OTHER OWN:                0.25  %
+
+   WHITE RENT:               35.59 %
+   BLACK RENT:               0.25  %
+   NATIVE RENT:              0.29  %
+   ASIAN RENT:               0.21  %
+   OTHER RENT:               0.00  %
+
+MI	
+   RENT:                     29.00 %
+   OWN:                      71.00 %
+   F NEVER MARRIED:          10.02 %
+   M NEVER MARRIED:          11.61 %
+   HISPANIC MALE 00-18:      40.56 %
+   HISPANIC MALE 19-29:      20.82 %
+   HISPANIC MALE 30-39:      15.81 %
+   HISPANIC FEMALE 00-18:    40.00 %
+   HISPANIC FEMALE 19-29:    20.35 %
+   HISPANIC FEMALE 30-39:    15.63 %
+   URBAN:                    67.85 %
+   RURAL:                    32.15 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          5.49  
+   PERCENTAGE OF 85+:        1.15  %
+
+   WHITE OWN:                58.35 %
+   BLACK OWN:                6.10  %
+   NATIVE OWN:               0.25  %
+   ASIAN OWN:                0.43  %
+   OTHER OWN:                3.27  %
+
+   WHITE RENT:               22.94 %
+   BLACK RENT:               7.57  %
+   NATIVE RENT:              0.64  %
+   ASIAN RENT:               0.46  %
+   OTHER RENT:               0.00  %
+
+MN	
+   RENT:                     28.17 %
+   OWN:                      71.83 %
+   F NEVER MARRIED:          9.62  %
+   M NEVER MARRIED:          11.53 %
+   HISPANIC MALE 00-18:      43.39 %
+   HISPANIC MALE 19-29:      21.89 %
+   HISPANIC MALE 30-39:      16.64 %
+   HISPANIC FEMALE 00-18:    44.08 %
+   HISPANIC FEMALE 19-29:    20.75 %
+   HISPANIC FEMALE 30-39:    15.39 %
+   URBAN:                    67.22 %
+   RURAL:                    32.78 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.59  
+   PERCENTAGE OF 85+:        1.57  %
+
+   WHITE OWN:                65.12 %
+   BLACK OWN:                0.60  %
+   NATIVE OWN:               0.33  %
+   ASIAN OWN:                0.45  %
+   OTHER OWN:                1.36  %
+
+   WHITE RENT:               29.01 %
+   BLACK RENT:               1.58  %
+   NATIVE RENT:              0.81  %
+   ASIAN RENT:               0.74  %
+   OTHER RENT:               0.00  %
+
+MO	
+   RENT:                     31.23 %
+   OWN:                      68.77 %
+   F NEVER MARRIED:          8.61  %
+   M NEVER MARRIED:          10.09 %
+   HISPANIC MALE 00-18:      36.93 %
+   HISPANIC MALE 19-29:      22.56 %
+   HISPANIC MALE 30-39:      16.76 %
+   HISPANIC FEMALE 00-18:    35.99 %
+   HISPANIC FEMALE 19-29:    20.38 %
+   HISPANIC FEMALE 30-39:    16.50 %
+   URBAN:                    68.18 %
+   RURAL:                    31.82 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.33  
+   PERCENTAGE OF 85+:        1.59  %
+
+   WHITE OWN:                58.61 %
+   BLACK OWN:                4.54  %
+   NATIVE OWN:               0.18  %
+   ASIAN OWN:                0.29  %
+   OTHER OWN:                1.57  %
+
+   WHITE RENT:               27.83 %
+   BLACK RENT:               6.24  %
+   NATIVE RENT:              0.36  %
+   ASIAN RENT:               0.38  %
+   OTHER RENT:               0.00  %
+
+MS	
+   RENT:                     28.50 %
+   OWN:                      71.50 %
+   F NEVER MARRIED:          9.53  %
+   M NEVER MARRIED:          10.70 %
+   HISPANIC MALE 00-18:      36.20 %
+   HISPANIC MALE 19-29:      23.28 %
+   HISPANIC MALE 30-39:      15.46 %
+   HISPANIC FEMALE 00-18:    34.55 %
+   HISPANIC FEMALE 19-29:    19.26 %
+   HISPANIC FEMALE 30-39:    15.33 %
+   URBAN:                    48.38 %
+   RURAL:                    51.62 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $200 to $249 
+   95TH PERCENTILE:          5.25  
+   PERCENTAGE OF 85+:        1.26  %
+
+   WHITE OWN:                48.56 %
+   BLACK OWN:                18.23 %
+   NATIVE OWN:               0.15  %
+   ASIAN OWN:                0.15  %
+   OTHER OWN:                0.35  %
+
+   WHITE RENT:               17.95 %
+   BLACK RENT:               14.15 %
+   NATIVE RENT:              0.18  %
+   ASIAN RENT:               0.27  %
+   OTHER RENT:               0.00  %
+
+MT	
+   RENT:                     32.75 %
+   OWN:                      67.25 %
+   F NEVER MARRIED:          7.18  %
+   M NEVER MARRIED:          9.92  %
+   HISPANIC MALE 00-18:      44.99 %
+   HISPANIC MALE 19-29:      17.95 %
+   HISPANIC MALE 30-39:      15.63 %
+   HISPANIC FEMALE 00-18:    42.84 %
+   HISPANIC FEMALE 19-29:    18.20 %
+   HISPANIC FEMALE 30-39:    16.43 %
+   URBAN:                    50.84 %
+   RURAL:                    49.16 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.30  
+   PERCENTAGE OF 85+:        1.34  %
+
+   WHITE OWN:                57.87 %
+   BLACK OWN:                0.08  %
+   NATIVE OWN:               1.70  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                1.46  %
+
+   WHITE RENT:               35.32 %
+   BLACK RENT:               0.21  %
+   NATIVE RENT:              2.97  %
+   ASIAN RENT:               0.23  %
+   OTHER RENT:               0.00  %
+
+NC	
+   RENT:                     31.99 %
+   OWN:                      68.01 %
+   F NEVER MARRIED:          9.10  %
+   M NEVER MARRIED:          10.97 %
+   HISPANIC MALE 00-18:      30.64 %
+   HISPANIC MALE 19-29:      35.85 %
+   HISPANIC MALE 30-39:      17.92 %
+   HISPANIC FEMALE 00-18:    36.56 %
+   HISPANIC FEMALE 19-29:    24.90 %
+   HISPANIC FEMALE 30-39:    17.03 %
+   URBAN:                    49.68 %
+   RURAL:                    50.32 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.30  
+   PERCENTAGE OF 85+:        1.06  %
+
+   WHITE OWN:                52.66 %
+   BLACK OWN:                9.27  %
+   NATIVE OWN:               0.46  %
+   ASIAN OWN:                0.28  %
+   OTHER OWN:                0.77  %
+
+   WHITE RENT:               24.07 %
+   BLACK RENT:               11.53 %
+   NATIVE RENT:              0.60  %
+   ASIAN RENT:               0.35  %
+   OTHER RENT:               0.00  %
+
+ND	
+   RENT:                     34.43 %
+   OWN:                      65.57 %
+   F NEVER MARRIED:          8.25  %
+   M NEVER MARRIED:          11.62 %
+   HISPANIC MALE 00-18:      47.96 %
+   HISPANIC MALE 19-29:      24.21 %
+   HISPANIC MALE 30-39:      14.84 %
+   HISPANIC FEMALE 00-18:    45.84 %
+   HISPANIC FEMALE 19-29:    22.27 %
+   HISPANIC FEMALE 30-39:    15.00 %
+   URBAN:                    50.44 %
+   RURAL:                    49.56 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.53  
+   PERCENTAGE OF 85+:        1.76  %
+
+   WHITE OWN:                58.32 %
+   BLACK OWN:                0.06  %
+   NATIVE OWN:               0.96  %
+   ASIAN OWN:                0.14  %
+   OTHER OWN:                0.45  %
+
+   WHITE RENT:               37.31 %
+   BLACK RENT:               0.26  %
+   NATIVE RENT:              2.20  %
+   ASIAN RENT:               0.29  %
+   OTHER RENT:               0.00  %
+
+NE	
+   RENT:                     33.53 %
+   OWN:                      66.47 %
+   F NEVER MARRIED:          8.42  %
+   M NEVER MARRIED:          10.32 %
+   HISPANIC MALE 00-18:      41.19 %
+   HISPANIC MALE 19-29:      22.01 %
+   HISPANIC MALE 30-39:      16.59 %
+   HISPANIC FEMALE 00-18:    42.47 %
+   HISPANIC FEMALE 19-29:    19.86 %
+   HISPANIC FEMALE 30-39:    15.52 %
+   URBAN:                    64.88 %
+   RURAL:                    35.12 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.66  
+   PERCENTAGE OF 85+:        1.85  %
+
+   WHITE OWN:                60.40 %
+   BLACK OWN:                1.40  %
+   NATIVE OWN:               0.17  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                3.22  %
+
+   WHITE RENT:               31.10 %
+   BLACK RENT:               2.25  %
+   NATIVE RENT:              0.89  %
+   ASIAN RENT:               0.37  %
+   OTHER RENT:               0.00  %
+
+NH	
+   RENT:                     31.81 %
+   OWN:                      68.19 %
+   F NEVER MARRIED:          9.16  %
+   M NEVER MARRIED:          10.88 %
+   HISPANIC MALE 00-18:      36.42 %
+   HISPANIC MALE 19-29:      25.50 %
+   HISPANIC MALE 30-39:      18.77 %
+   HISPANIC FEMALE 00-18:    36.88 %
+   HISPANIC FEMALE 19-29:    22.44 %
+   HISPANIC FEMALE 30-39:    19.06 %
+   URBAN:                    47.37 %
+   RURAL:                    52.63 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $125,000 - $149,999 
+   RENT MEDIAN COST:         $450 to $499 
+   95TH PERCENTILE:          5.42  
+   PERCENTAGE OF 85+:        1.20  %
+
+   WHITE OWN:                61.21 %
+   BLACK OWN:                0.19  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.31  %
+   OTHER OWN:                0.46  %
+
+   WHITE RENT:               36.68 %
+   BLACK RENT:               0.43  %
+   NATIVE RENT:              0.31  %
+   ASIAN RENT:               0.34  %
+   OTHER RENT:               0.00  %
+
+NJ	
+   RENT:                     35.11 %
+   OWN:                      64.89 %
+   F NEVER MARRIED:          10.90 %
+   M NEVER MARRIED:          12.56 %
+   HISPANIC MALE 00-18:      32.66 %
+   HISPANIC MALE 19-29:      23.56 %
+   HISPANIC MALE 30-39:      17.91 %
+   HISPANIC FEMALE 00-18:    31.04 %
+   HISPANIC FEMALE 19-29:    21.78 %
+   HISPANIC FEMALE 30-39:    17.56 %
+   URBAN:                    89.19 %
+   RURAL:                    10.81 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $150,000 - $174,999 
+   RENT MEDIAN COST:         $500 to $549 
+   95TH PERCENTILE:          5.58  
+   PERCENTAGE OF 85+:        1.24  %
+
+   WHITE OWN:                52.92 %
+   BLACK OWN:                3.67  %
+   NATIVE OWN:               0.07  %
+   ASIAN OWN:                1.39  %
+   OTHER OWN:                4.37  %
+
+   WHITE RENT:               25.96 %
+   BLACK RENT:               8.16  %
+   NATIVE RENT:              2.27  %
+   ASIAN RENT:               1.18  %
+   OTHER RENT:               0.00  %
+
+NM	
+   RENT:                     32.57 %
+   OWN:                      67.43 %
+   F NEVER MARRIED:          8.66  %
+   M NEVER MARRIED:          10.69 %
+   HISPANIC MALE 00-18:      37.95 %
+   HISPANIC MALE 19-29:      18.97 %
+   HISPANIC MALE 30-39:      16.05 %
+   HISPANIC FEMALE 00-18:    35.83 %
+   HISPANIC FEMALE 19-29:    18.61 %
+   HISPANIC FEMALE 30-39:    15.97 %
+   URBAN:                    71.93 %
+   RURAL:                    28.07 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          4.97  
+   PERCENTAGE OF 85+:        0.94  %
+
+   WHITE OWN:                32.96 %
+   BLACK OWN:                0.56  %
+   NATIVE OWN:               2.22  %
+   ASIAN OWN:                0.24  %
+   OTHER OWN:                40.08 %
+
+   WHITE RENT:               18.51 %
+   BLACK RENT:               0.81  %
+   NATIVE RENT:              4.37  %
+   ASIAN RENT:               0.25  %
+   OTHER RENT:               0.00  %
+
+NV	
+   RENT:                     45.23 %
+   OWN:                      54.77 %
+   F NEVER MARRIED:          7.41  %
+   M NEVER MARRIED:          11.30 %
+   HISPANIC MALE 00-18:      34.42 %
+   HISPANIC MALE 19-29:      26.00 %
+   HISPANIC MALE 30-39:      17.57 %
+   HISPANIC FEMALE 00-18:    37.29 %
+   HISPANIC FEMALE 19-29:    22.43 %
+   HISPANIC FEMALE 30-39:    15.99 %
+   URBAN:                    88.04 %
+   RURAL:                    11.96 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          4.78  
+   PERCENTAGE OF 85+:        0.62  %
+
+   WHITE OWN:                39.71 %
+   BLACK OWN:                1.85  %
+   NATIVE OWN:               0.53  %
+   ASIAN OWN:                1.07  %
+   OTHER OWN:                8.30  %
+
+   WHITE RENT:               40.24 %
+   BLACK RENT:               4.11  %
+   NATIVE RENT:              2.89  %
+   ASIAN RENT:               1.29  %
+   OTHER RENT:               0.00  %
+
+NY	
+   RENT:                     47.82 %
+   OWN:                      52.18 %
+   F NEVER MARRIED:          12.23 %
+   M NEVER MARRIED:          13.52 %
+   HISPANIC MALE 00-18:      33.89 %
+   HISPANIC MALE 19-29:      22.96 %
+   HISPANIC MALE 30-39:      17.29 %
+   HISPANIC FEMALE 00-18:    30.71 %
+   HISPANIC FEMALE 19-29:    20.84 %
+   HISPANIC FEMALE 30-39:    17.33 %
+   URBAN:                    83.01 %
+   RURAL:                    16.99 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $125,000 - $149,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          5.05  
+   PERCENTAGE OF 85+:        1.38  %
+
+   WHITE OWN:                39.15 %
+   BLACK OWN:                2.50  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.76  %
+   OTHER OWN:                2.69  %
+
+   WHITE RENT:               35.34 %
+   BLACK RENT:               12.59 %
+   NATIVE RENT:              4.66  %
+   ASIAN RENT:               2.22  %
+   OTHER RENT:               0.00  %
+
+OH	
+   RENT:                     32.52 %
+   OWN:                      67.48 %
+   F NEVER MARRIED:          9.34  %
+   M NEVER MARRIED:          10.66 %
+   HISPANIC MALE 00-18:      40.73 %
+   HISPANIC MALE 19-29:      19.99 %
+   HISPANIC MALE 30-39:      15.96 %
+   HISPANIC FEMALE 00-18:    38.53 %
+   HISPANIC FEMALE 19-29:    20.30 %
+   HISPANIC FEMALE 30-39:    16.04 %
+   URBAN:                    76.08 %
+   RURAL:                    23.92 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          5.65  
+   PERCENTAGE OF 85+:        1.27  %
+
+   WHITE OWN:                58.87 %
+   BLACK OWN:                4.16  %
+   NATIVE OWN:               0.08  %
+   ASIAN OWN:                0.32  %
+   OTHER OWN:                1.61  %
+
+   WHITE RENT:               27.68 %
+   BLACK RENT:               6.54  %
+   NATIVE RENT:              0.35  %
+   ASIAN RENT:               0.38  %
+   OTHER RENT:               0.00  %
+
+OK	
+   RENT:                     31.92 %
+   OWN:                      68.08 %
+   F NEVER MARRIED:          7.00  %
+   M NEVER MARRIED:          9.26  %
+   HISPANIC MALE 00-18:      41.05 %
+   HISPANIC MALE 19-29:      24.21 %
+   HISPANIC MALE 30-39:      16.71 %
+   HISPANIC FEMALE 00-18:    43.25 %
+   HISPANIC FEMALE 19-29:    20.92 %
+   HISPANIC FEMALE 30-39:    15.51 %
+   URBAN:                    68.22 %
+   RURAL:                    31.78 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.13  
+   PERCENTAGE OF 85+:        1.46  %
+
+   WHITE OWN:                54.47 %
+   BLACK OWN:                3.28  %
+   NATIVE OWN:               3.52  %
+   ASIAN OWN:                0.35  %
+   OTHER OWN:                4.05  %
+
+   WHITE RENT:               26.88 %
+   BLACK RENT:               3.91  %
+   NATIVE RENT:              3.02  %
+   ASIAN RENT:               0.53  %
+   OTHER RENT:               0.00  %
+
+OR	
+   RENT:                     36.92 %
+   OWN:                      63.08 %
+   F NEVER MARRIED:          7.83  %
+   M NEVER MARRIED:          10.28 %
+   HISPANIC MALE 00-18:      38.63 %
+   HISPANIC MALE 19-29:      26.56 %
+   HISPANIC MALE 30-39:      17.34 %
+   HISPANIC FEMALE 00-18:    43.68 %
+   HISPANIC FEMALE 19-29:    20.66 %
+   HISPANIC FEMALE 30-39:    15.91 %
+   URBAN:                    70.20 %
+   RURAL:                    29.80 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.28  
+   PERCENTAGE OF 85+:        1.37  %
+
+   WHITE OWN:                53.68 %
+   BLACK OWN:                0.56  %
+   NATIVE OWN:               0.41  %
+   ASIAN OWN:                0.88  %
+   OTHER OWN:                3.17  %
+
+   WHITE RENT:               37.70 %
+   BLACK RENT:               1.02  %
+   NATIVE RENT:              1.47  %
+   ASIAN RENT:               1.11  %
+   OTHER RENT:               0.00  %
+
+PA	
+   RENT:                     29.36 %
+   OWN:                      70.64 %
+   F NEVER MARRIED:          10.38 %
+   M NEVER MARRIED:          11.58 %
+   HISPANIC MALE 00-18:      39.71 %
+   HISPANIC MALE 19-29:      22.42 %
+   HISPANIC MALE 30-39:      16.22 %
+   HISPANIC FEMALE 00-18:    38.53 %
+   HISPANIC FEMALE 19-29:    21.40 %
+   HISPANIC FEMALE 30-39:    15.93 %
+   URBAN:                    69.00 %
+   RURAL:                    31.00 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          5.71  
+   PERCENTAGE OF 85+:        1.45  %
+
+   WHITE OWN:                61.36 %
+   BLACK OWN:                4.33  %
+   NATIVE OWN:               0.05  %
+   ASIAN OWN:                0.42  %
+   OTHER OWN:                2.53  %
+
+   WHITE RENT:               25.73 %
+   BLACK RENT:               4.56  %
+   NATIVE RENT:              0.56  %
+   ASIAN RENT:               0.45  %
+   OTHER RENT:               0.00  %
+
+PR	
+   RENT:                     NaN   %
+   OWN:                      NaN   %
+   F NEVER MARRIED:          16723.28 %
+   M NEVER MARRIED:          67602.92 %
+   HISPANIC MALE 00-18:      100.00 %
+   HISPANIC MALE 19-29:      0.00  %
+   HISPANIC MALE 30-39:      0.00  %
+   HISPANIC FEMALE 00-18:    67.02 %
+   HISPANIC FEMALE 19-29:    2.54  %
+   HISPANIC FEMALE 30-39:    23.76 %
+   URBAN:                    NaN   %
+   RURAL:                    NaN   %
+   UNDEFINED:                NaN   %
+   OWNER MEDIAN COST:        Less than $15,000 
+   RENT MEDIAN COST:         Less than $100 
+   95TH PERCENTILE:          NaN   
+   PERCENTAGE OF 85+:        0.86  %
+
+   WHITE OWN:                NaN   %
+   BLACK OWN:                NaN   %
+   NATIVE OWN:               NaN   %
+   ASIAN OWN:                NaN   %
+   OTHER OWN:                NaN   %
+
+   WHITE RENT:               NaN   %
+   BLACK RENT:               NaN   %
+   NATIVE RENT:              NaN   %
+   ASIAN RENT:               NaN   %
+   OTHER RENT:               NaN   %
+
+RI	
+   RENT:                     40.53 %
+   OWN:                      59.47 %
+   F NEVER MARRIED:          11.33 %
+   M NEVER MARRIED:          12.70 %
+   HISPANIC MALE 00-18:      37.92 %
+   HISPANIC MALE 19-29:      25.94 %
+   HISPANIC MALE 30-39:      16.83 %
+   HISPANIC FEMALE 00-18:    36.59 %
+   HISPANIC FEMALE 19-29:    23.60 %
+   HISPANIC FEMALE 30-39:    17.28 %
+   URBAN:                    85.23 %
+   RURAL:                    14.77 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $125,000 - $149,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          5.28  
+   PERCENTAGE OF 85+:        1.60  %
+
+   WHITE OWN:                52.37 %
+   BLACK OWN:                0.65  %
+   NATIVE OWN:               0.11  %
+   ASIAN OWN:                0.38  %
+   OTHER OWN:                1.97  %
+
+   WHITE RENT:               39.11 %
+   BLACK RENT:               2.72  %
+   NATIVE RENT:              1.89  %
+   ASIAN RENT:               0.81  %
+   OTHER RENT:               0.00  %
+
+SC	
+   RENT:                     30.15 %
+   OWN:                      69.85 %
+   F NEVER MARRIED:          9.48  %
+   M NEVER MARRIED:          11.09 %
+   HISPANIC MALE 00-18:      33.28 %
+   HISPANIC MALE 19-29:      30.14 %
+   HISPANIC MALE 30-39:      17.84 %
+   HISPANIC FEMALE 00-18:    35.24 %
+   HISPANIC FEMALE 19-29:    24.26 %
+   HISPANIC FEMALE 30-39:    17.22 %
+   URBAN:                    56.17 %
+   RURAL:                    43.83 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.36  
+   PERCENTAGE OF 85+:        0.88  %
+
+   WHITE OWN:                50.52 %
+   BLACK OWN:                13.64 %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.25  %
+   OTHER OWN:                0.62  %
+
+   WHITE RENT:               22.19 %
+   BLACK RENT:               12.18 %
+   NATIVE RENT:              0.25  %
+   ASIAN RENT:               0.26  %
+   OTHER RENT:               0.00  %
+
+SD	
+   RENT:                     33.92 %
+   OWN:                      66.08 %
+   F NEVER MARRIED:          8.00  %
+   M NEVER MARRIED:          10.50 %
+   HISPANIC MALE 00-18:      46.93 %
+   HISPANIC MALE 19-29:      21.54 %
+   HISPANIC MALE 30-39:      13.84 %
+   HISPANIC FEMALE 00-18:    45.83 %
+   HISPANIC FEMALE 19-29:    19.48 %
+   HISPANIC FEMALE 30-39:    15.21 %
+   URBAN:                    48.88 %
+   RURAL:                    51.12 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.47  
+   PERCENTAGE OF 85+:        1.92  %
+
+   WHITE OWN:                58.97 %
+   BLACK OWN:                0.10  %
+   NATIVE OWN:               1.22  %
+   ASIAN OWN:                0.11  %
+   OTHER OWN:                0.66  %
+
+   WHITE RENT:               34.66 %
+   BLACK RENT:               0.30  %
+   NATIVE RENT:              3.77  %
+   ASIAN RENT:               0.22  %
+   OTHER RENT:               0.00  %
+
+TN	
+   RENT:                     31.97 %
+   OWN:                      68.03 %
+   F NEVER MARRIED:          8.41  %
+   M NEVER MARRIED:          10.02 %
+   HISPANIC MALE 00-18:      32.82 %
+   HISPANIC MALE 19-29:      27.24 %
+   HISPANIC MALE 30-39:      18.33 %
+   HISPANIC FEMALE 00-18:    34.22 %
+   HISPANIC FEMALE 19-29:    21.73 %
+   HISPANIC FEMALE 30-39:    17.59 %
+   URBAN:                    61.95 %
+   RURAL:                    38.05 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.38  
+   PERCENTAGE OF 85+:        1.21  %
+
+   WHITE OWN:                56.27 %
+   BLACK OWN:                7.28  %
+   NATIVE OWN:               0.09  %
+   ASIAN OWN:                0.23  %
+   OTHER OWN:                0.42  %
+
+   WHITE RENT:               26.37 %
+   BLACK RENT:               8.80  %
+   NATIVE RENT:              0.21  %
+   ASIAN RENT:               0.32  %
+   OTHER RENT:               0.00  %
+
+TX	
+   RENT:                     39.13 %
+   OWN:                      60.87 %
+   F NEVER MARRIED:          8.37  %
+   M NEVER MARRIED:          10.73 %
+   HISPANIC MALE 00-18:      39.98 %
+   HISPANIC MALE 19-29:      22.02 %
+   HISPANIC MALE 30-39:      16.18 %
+   HISPANIC FEMALE 00-18:    38.64 %
+   HISPANIC FEMALE 19-29:    20.34 %
+   HISPANIC FEMALE 30-39:    15.75 %
+   URBAN:                    79.10 %
+   RURAL:                    20.90 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $50,000 - $59,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          4.99  
+   PERCENTAGE OF 85+:        0.98  %
+
+   WHITE OWN:                36.04 %
+   BLACK OWN:                3.91  %
+   NATIVE OWN:               0.13  %
+   ASIAN OWN:                0.56  %
+   OTHER OWN:                27.12 %
+
+   WHITE RENT:               22.88 %
+   BLACK RENT:               5.17  %
+   NATIVE RENT:              3.50  %
+   ASIAN RENT:               0.68  %
+   OTHER RENT:               0.00  %
+
+UT	
+   RENT:                     31.88 %
+   OWN:                      68.12 %
+   F NEVER MARRIED:          7.94  %
+   M NEVER MARRIED:          9.62  %
+   HISPANIC MALE 00-18:      43.26 %
+   HISPANIC MALE 19-29:      22.01 %
+   HISPANIC MALE 30-39:      15.63 %
+   HISPANIC FEMALE 00-18:    43.66 %
+   HISPANIC FEMALE 19-29:    20.80 %
+   HISPANIC FEMALE 30-39:    14.77 %
+   URBAN:                    84.63 %
+   RURAL:                    15.37 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          5.77  
+   PERCENTAGE OF 85+:        0.79  %
+
+   WHITE OWN:                58.51 %
+   BLACK OWN:                0.24  %
+   NATIVE OWN:               0.33  %
+   ASIAN OWN:                0.72  %
+   OTHER OWN:                7.96  %
+
+   WHITE RENT:               29.27 %
+   BLACK RENT:               0.45  %
+   NATIVE RENT:              1.68  %
+   ASIAN RENT:               0.84  %
+   OTHER RENT:               0.00  %
+
+VA	
+   RENT:                     33.70 %
+   OWN:                      66.30 %
+   F NEVER MARRIED:          9.67  %
+   M NEVER MARRIED:          11.85 %
+   HISPANIC MALE 00-18:      30.83 %
+   HISPANIC MALE 19-29:      31.36 %
+   HISPANIC MALE 30-39:      19.55 %
+   HISPANIC FEMALE 00-18:    31.51 %
+   HISPANIC FEMALE 19-29:    24.99 %
+   HISPANIC FEMALE 30-39:    19.55 %
+   URBAN:                    69.13 %
+   RURAL:                    30.87 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $400 to $449 
+   95TH PERCENTILE:          5.73  
+   PERCENTAGE OF 85+:        0.97  %
+
+   WHITE OWN:                52.59 %
+   BLACK OWN:                8.11  %
+   NATIVE OWN:               0.12  %
+   ASIAN OWN:                1.10  %
+   OTHER OWN:                1.70  %
+
+   WHITE RENT:               25.42 %
+   BLACK RENT:               9.50  %
+   NATIVE RENT:              0.63  %
+   ASIAN RENT:               0.84  %
+   OTHER RENT:               0.00  %
+
+VI	
+   RENT:                     NaN   %
+   OWN:                      NaN   %
+   F NEVER MARRIED:          0.01  %
+   M NEVER MARRIED:          7.26  %
+   HISPANIC MALE 00-18:      97.35 %
+   HISPANIC MALE 19-29:      1.83  %
+   HISPANIC MALE 30-39:      0.03  %
+   HISPANIC FEMALE 00-18:    10.92 %
+   HISPANIC FEMALE 19-29:    21.05 %
+   HISPANIC FEMALE 30-39:    2.84  %
+   URBAN:                    NaN   %
+   RURAL:                    NaN   %
+   UNDEFINED:                NaN   %
+   OWNER MEDIAN COST:        Less than $15,000 
+   RENT MEDIAN COST:         Less than $100 
+   95TH PERCENTILE:          NaN   
+   PERCENTAGE OF 85+:        0.33  %
+
+   WHITE OWN:                NaN   %
+   BLACK OWN:                NaN   %
+   NATIVE OWN:               NaN   %
+   ASIAN OWN:                NaN   %
+   OTHER OWN:                NaN   %
+
+   WHITE RENT:               NaN   %
+   BLACK RENT:               NaN   %
+   NATIVE RENT:              NaN   %
+   ASIAN RENT:               NaN   %
+   OTHER RENT:               NaN   %
+
+VT	
+   RENT:                     30.99 %
+   OWN:                      69.01 %
+   F NEVER MARRIED:          9.87  %
+   M NEVER MARRIED:          11.76 %
+   HISPANIC MALE 00-18:      33.79 %
+   HISPANIC MALE 19-29:      23.87 %
+   HISPANIC MALE 30-39:      18.15 %
+   HISPANIC FEMALE 00-18:    32.75 %
+   HISPANIC FEMALE 19-29:    23.06 %
+   HISPANIC FEMALE 30-39:    17.96 %
+   URBAN:                    28.13 %
+   RURAL:                    71.87 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.51  
+   PERCENTAGE OF 85+:        1.34  %
+
+   WHITE OWN:                60.12 %
+   BLACK OWN:                0.09  %
+   NATIVE OWN:               0.10  %
+   ASIAN OWN:                0.17  %
+   OTHER OWN:                0.26  %
+
+   WHITE RENT:               38.53 %
+   BLACK RENT:               0.22  %
+   NATIVE RENT:              0.27  %
+   ASIAN RENT:               0.24  %
+   OTHER RENT:               0.00  %
+
+WA	
+   RENT:                     37.43 %
+   OWN:                      62.57 %
+   F NEVER MARRIED:          8.26  %
+   M NEVER MARRIED:          11.09 %
+   HISPANIC MALE 00-18:      40.74 %
+   HISPANIC MALE 19-29:      25.09 %
+   HISPANIC MALE 30-39:      16.87 %
+   HISPANIC FEMALE 00-18:    43.72 %
+   HISPANIC FEMALE 19-29:    21.62 %
+   HISPANIC FEMALE 30-39:    15.91 %
+   URBAN:                    75.80 %
+   RURAL:                    24.20 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $75,000 - $99,999 
+   RENT MEDIAN COST:         $350 to $399 
+   95TH PERCENTILE:          5.36  
+   PERCENTAGE OF 85+:        1.16  %
+
+   WHITE OWN:                51.56 %
+   BLACK OWN:                1.00  %
+   NATIVE OWN:               0.50  %
+   ASIAN OWN:                1.67  %
+   OTHER OWN:                4.90  %
+
+   WHITE RENT:               35.06 %
+   BLACK RENT:               1.95  %
+   NATIVE RENT:              1.73  %
+   ASIAN RENT:               1.65  %
+   OTHER RENT:               0.00  %
+
+WI	
+   RENT:                     33.30 %
+   OWN:                      66.70 %
+   F NEVER MARRIED:          9.59  %
+   M NEVER MARRIED:          11.45 %
+   HISPANIC MALE 00-18:      43.65 %
+   HISPANIC MALE 19-29:      21.61 %
+   HISPANIC MALE 30-39:      16.19 %
+   HISPANIC FEMALE 00-18:    44.77 %
+   HISPANIC FEMALE 19-29:    20.23 %
+   HISPANIC FEMALE 30-39:    15.36 %
+   URBAN:                    62.46 %
+   RURAL:                    37.54 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $300 to $349 
+   95TH PERCENTILE:          5.45  
+   PERCENTAGE OF 85+:        1.52  %
+
+   WHITE OWN:                59.46 %
+   BLACK OWN:                1.08  %
+   NATIVE OWN:               0.22  %
+   ASIAN OWN:                0.21  %
+   OTHER OWN:                1.65  %
+
+   WHITE RENT:               32.51 %
+   BLACK RENT:               3.44  %
+   NATIVE RENT:              0.88  %
+   ASIAN RENT:               0.55  %
+   OTHER RENT:               0.00  %
+
+WV	
+   RENT:                     25.92 %
+   OWN:                      74.08 %
+   F NEVER MARRIED:          7.98  %
+   M NEVER MARRIED:          9.72  %
+   HISPANIC MALE 00-18:      33.88 %
+   HISPANIC MALE 19-29:      20.86 %
+   HISPANIC MALE 30-39:      14.29 %
+   HISPANIC FEMALE 00-18:    31.35 %
+   HISPANIC FEMALE 19-29:    16.25 %
+   HISPANIC FEMALE 30-39:    16.25 %
+   URBAN:                    38.02 %
+   RURAL:                    61.98 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $45,000 - $49,999 
+   RENT MEDIAN COST:         $200 to $249 
+   95TH PERCENTILE:          5.47  
+   PERCENTAGE OF 85+:        1.42  %
+
+   WHITE OWN:                68.20 %
+   BLACK OWN:                1.92  %
+   NATIVE OWN:               0.06  %
+   ASIAN OWN:                0.18  %
+   OTHER OWN:                0.26  %
+
+   WHITE RENT:               27.34 %
+   BLACK RENT:               1.72  %
+   NATIVE RENT:              0.10  %
+   ASIAN RENT:               0.20  %
+   OTHER RENT:               0.00  %
+
+WY	
+   RENT:                     32.16 %
+   OWN:                      67.84 %
+   F NEVER MARRIED:          6.72  %
+   M NEVER MARRIED:          9.50  %
+   HISPANIC MALE 00-18:      41.99 %
+   HISPANIC MALE 19-29:      17.05 %
+   HISPANIC MALE 30-39:      16.68 %
+   HISPANIC FEMALE 00-18:    42.24 %
+   HISPANIC FEMALE 19-29:    17.36 %
+   HISPANIC FEMALE 30-39:    16.15 %
+   URBAN:                    62.43 %
+   RURAL:                    37.57 %
+   UNDEFINED:                0.00  %
+   OWNER MEDIAN COST:        $60,000 - $74,999 
+   RENT MEDIAN COST:         $250 to $299 
+   95TH PERCENTILE:          5.47  
+   PERCENTAGE OF 85+:        1.00  %
+
+   WHITE OWN:                55.28 %
+   BLACK OWN:                0.29  %
+   NATIVE OWN:               0.54  %
+   ASIAN OWN:                0.22  %
+   OTHER OWN:                9.54  %
+
+   WHITE RENT:               31.77 %
+   BLACK RENT:               0.46  %
+   NATIVE RENT:              1.64  %
+   ASIAN RENT:               0.27  %
+   OTHER RENT:               0.00  %
+

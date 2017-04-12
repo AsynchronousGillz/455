@@ -1,2 +1,6 @@
 /bin/
+/JarFiles/
+/build/
+/dist/
 *.tar
+HA512.txt
